@@ -10,7 +10,7 @@ package dominio;
  */
 public class Cliente extends Usuario {
     
-    private int clienteId;
+    private int clienteNro;
     
     public Cliente(String nombreCompleto, String nombre, String password) {
         super(nombreCompleto, nombre, password);

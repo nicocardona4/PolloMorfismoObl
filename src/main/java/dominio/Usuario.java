@@ -12,21 +12,20 @@ package dominio;
 public abstract class Usuario {
 
     public Usuario(String nombreCompleto, String nombre, String password) {
-        this.nombre = nombre;
         this.password = password;
         this.nombreCompleto = nombreCompleto;
     }
 
-    private String nombre;
+    private String nombreDeUsuario;
     private String password;
     private String nombreCompleto;
 
-    public String getNombre() {
-        return nombre;
+    public String getNombreDeUsuario() {
+        return nombreDeUsuario;
     }
 
-    void setNombre(String nombre) {
-        this.nombre = nombre;
+    void setNombreDeUsuario(String nombreDeUsuario) {
+        this.nombreDeUsuario = nombreDeUsuario;
     }
 
     public boolean esValido(String password) {

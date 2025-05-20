@@ -10,6 +10,7 @@ package dominio;
  */
 public class Gestor extends Usuario {
     
+    private String nombreDeUsuario;
     private int gestorId;
     private String tipoGestor; //Ver si luego se hace clase
     

@@ -40,7 +40,7 @@ public class ServicioUsuario {
 
     public void agregar(Usuario usuario) {
         if (usuario != null) {
-            usuarios.put(usuario.getNombre(), usuario);
+            usuarios.put(usuario.getNombreDeUsuario(), usuario);
         }
     }
 
@@ -69,5 +69,10 @@ public class ServicioUsuario {
         return null;
     }
 
+//  private void mostrarTiposDeUsuario() {
+//    cbTipoUsuario.addItem(Cliente.class);
+//    cbTipoUsuario.addItem(Gestor.class);
+//}
 
+}
 }

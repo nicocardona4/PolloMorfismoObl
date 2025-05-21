@@ -39,4 +39,6 @@ public abstract class Usuario {
     public String getNombreCompleto() {
         return nombreCompleto;
     }
+    
+    public abstract boolean esValidoIdentificador(String identificador);
 }

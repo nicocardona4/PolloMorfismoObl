@@ -19,5 +19,11 @@ public class Cliente extends Usuario {
 //    public void abonarServicio(int servicioId){
 //        //ToDo
 //    }
+
+    @Override
+    public boolean esValidoIdentificador(String identificador) {
+        //ToDo:Agregar la excepcion
+        return identificador.matches("\\d+");
+    }
     
 }

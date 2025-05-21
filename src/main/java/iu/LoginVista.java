@@ -12,13 +12,14 @@ import servicios.ServicioUsuario;
  *
  * @author nicolas.cardona
  */
-public class LoginVista extends javax.swing.JDialog {
+public abstract class LoginVista extends javax.swing.JDialog {
 
     /**
      * Creates new form LoginClienteVista
      */
-    public LoginVista(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public LoginVista() {
+//        super(parent, modal);
+        super();
         initComponents();
     }
 
@@ -31,25 +32,30 @@ public class LoginVista extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lvlClienteNro = new javax.swing.JLabel();
-        clienteNro = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        password = new javax.swing.JPasswordField();
+        lblId = new javax.swing.JLabel();
+        txtId = new javax.swing.JTextField();
+        lblPass = new javax.swing.JLabel();
+        txtPass = new javax.swing.JPasswordField();
         btnLoginCliente = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        lvlClienteNro.setText("Número de cliente");
+        lblId.setText("Id");
 
-        jLabel2.setText("Password");
+        lblPass.setText("Password");
 
-        password.addActionListener(new java.awt.event.ActionListener() {
+        txtPass.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                passwordActionPerformed(evt);
+                txtPassActionPerformed(evt);
             }
         });
 
         btnLoginCliente.setText("Login");
+        btnLoginCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginClienteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -60,28 +66,28 @@ public class LoginVista extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(37, 37, 37)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lvlClienteNro, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(37, 37, 37)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(clienteNro, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(lblId)
+                            .addComponent(lblPass, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtId, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                            .addComponent(txtPass)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(74, 74, 74)
                         .addComponent(btnLoginCliente)))
-                .addContainerGap(218, Short.MAX_VALUE))
+                .addContainerGap(163, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lvlClienteNro)
-                    .addComponent(clienteNro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblId)
+                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblPass)
+                    .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(btnLoginCliente)
                 .addContainerGap(183, Short.MAX_VALUE))
@@ -90,67 +96,42 @@ public class LoginVista extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void passwordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordActionPerformed
+    private void txtPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPassActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_passwordActionPerformed
+    }//GEN-LAST:event_txtPassActionPerformed
+
+    private void btnLoginClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginClienteActionPerformed
+        login();
+    }//GEN-LAST:event_btnLoginClienteActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LoginVista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LoginVista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LoginVista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LoginVista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                LoginVista dialog = new LoginVista(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLoginCliente;
-    private javax.swing.JTextField clienteNro;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel lvlClienteNro;
-    private javax.swing.JPasswordField password;
+    private javax.swing.JLabel lblId;
+    private javax.swing.JLabel lblPass;
+    private javax.swing.JTextField txtId;
+    private javax.swing.JPasswordField txtPass;
     // End of variables declaration//GEN-END:variables
 
-private void mostrarTiposDeUsuario() {
-    Collection<> tipos = ServicioUsuario.getTiposUsuario();
-    for (Usuario tipo : tipos) {
-        cbTipoUsuario.addItem(tipo);
+    private void login() {
+        Usuario usuario = loginInterno(txtId.getText(), txtPass.getText());
+        if (usuario != null) {
+            System.out.println("Login exitoso");
+            ejecutarSiguienteCU(usuario);
+            dispose();
+        } else {
+            System.out.println("Identificador / clave inválido");
+        }
     }
-}
+
+    public abstract void ejecutarSiguienteCU(Usuario usuario);
+
+    public abstract Usuario loginInterno(String usuario, String password);
+
+    
 }
 
 

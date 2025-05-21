@@ -17,5 +17,11 @@ public class Gestor extends Usuario {
     public Gestor(String nombreCompleto, String nombre, String password) {
         super(nombreCompleto, nombre, password);
     }
+
+    @Override
+    public boolean esValidoIdentificador(String identificador) {
+        //ToDo:Agregar la excepcion
+        return identificador.matches("[a-zA-Z0-9]+");
+    }
     
 }

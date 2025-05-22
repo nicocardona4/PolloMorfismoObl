@@ -25,18 +25,18 @@ public class Fachada {
     }
     
     public Gestor loginGestor(String usuario, String password) {
-        return servicioUsuario.login(Gestor.class, usuario, password);
+        return servicioUsuario.loginGestor(usuario, password);
     }
 
-    public Cliente loginCliente(String usuario, String password) {
-        return servicioUsuario.login(Cliente.class, usuario, password);
+    public Cliente loginCliente(String clienteNro, String password) {
+        return servicioUsuario.loginCliente(clienteNro, password);
     }
 
     public void agregar(Cliente cliente) {
-        servicioUsuario.agregar(cliente);
+        servicioUsuario.agregarUsuario(cliente);
     }
 
     public void agregar(Gestor gestor) {
-        servicioUsuario.agregar(gestor);
+        servicioUsuario.agregarUsuario(gestor);
     }
 }

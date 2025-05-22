@@ -10,11 +10,17 @@ package dominio;
  */
 public class Cliente extends Usuario {
     
-    private int clienteNro;
-    
-    public Cliente(String nombreCompleto, String nombre, String password) {
-        super(nombreCompleto, nombre, password);
+    private String clienteNro;
+
+    public String getClienteNro() {
+        return clienteNro;
     }
+    
+    public Cliente(String nombreCompleto, String password, String clienteNro) {
+        super(nombreCompleto, password);
+        this.clienteNro = clienteNro;
+    }
+
     
 //    public void abonarServicio(int servicioId){
 //        //ToDo

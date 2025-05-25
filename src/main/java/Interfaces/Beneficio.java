@@ -4,10 +4,13 @@
  */
 package Interfaces;
 
+import dominio.Servicio;
+
 /**
  *
  * @author nicoc
  */
 public interface Beneficio {
-    
+    public int calcularDescuento(Servicio servicio);
+    public String descripcionBeneficio(Servicio servicio);
 }

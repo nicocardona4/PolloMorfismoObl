@@ -14,7 +14,7 @@ import java.util.Collection;
 public class Pedido {
     private static int contadorPedidoId = 0;
     private int pedidoId;
-//    private EstadoPedido estadoPedido;
+    private EstadoPedido estadoPedido;
     private Collection<ItemMenu> items = new ArrayList<ItemMenu>();
     private float costoPëdido;
 
@@ -24,10 +24,32 @@ public class Pedido {
         this.pedidoId = ++contadorPedidoId;
     }
     
+    public void confirmarPedido() {
+        estadoPedido.confirmarPedido(this);
+    }
     
-
-    public void ConfirmarPedido() {
+    public void eliminarPedido() {
+        estadoPedido.eliminarPedido(this);
+    }
+    
+    public void cobrarPedido() {
+        estadoPedido.cobrarPedido(this);
+    }
+    
+    public void entregarPedido() {
+        estadoPedido.entregarPedido(this);
+    }
+    
+    public void finalizarPedido() {
+        estadoPedido.finalizarPedido(this);
     }
 
+    public void setEstado(EstadoPedido estado) {
+        this.estadoPedido = estado;
+    }
+    
+    public String getEstadoActual() {
+        return estadoPedido.getNombreEstado();
+    }
 }
 

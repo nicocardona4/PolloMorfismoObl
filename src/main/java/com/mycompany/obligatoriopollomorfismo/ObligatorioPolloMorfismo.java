@@ -4,6 +4,8 @@
 
 package com.mycompany.obligatoriopollomorfismo;
 
+import iu.LoginPrincipal;
+
 /**
  *
  * @author maurizio
@@ -12,6 +14,6 @@ public class ObligatorioPolloMorfismo {
 
     public static void main(String[] args) {
         PrecargaDatos.cargar();
-//        new MainVista().setVisible(true);
+        new LoginPrincipal().setVisible(true);
     }
 }

@@ -4,14 +4,14 @@
  */
 package dominio.BeneficioCliente;
 
-import Interfaces.Beneficio;
 import dominio.Servicio;
+import Interfaces.TipoCliente;
 
 /**
  *
  * @author maurizio
  */
-public class ClienteComun  implements Beneficio{
+public class ClienteComun  implements TipoCliente{
 
     @Override
     public int calcularDescuento(Servicio servicio) {

@@ -16,7 +16,7 @@ public class Fachada {
     private static Fachada instancia = new Fachada();
 
     private ServicioUsuario servicioUsuario;
-    private ServicioServicios servicios;
+    private ServicioPedidos servicioPedidos;
     
     public static Fachada getInstancia() {
         return instancia;
@@ -43,10 +43,10 @@ public class Fachada {
     }
     
     public void agregarUp(UnidadProcesadora up){
-        servicios.agregarUp(up);
+        servicioPedidos.agregarUp(up);
     }
     
     public void agregarGestorUP(Gestor gestor, UnidadProcesadora up){
-        servicios.agregarGestorUP(gestor,up);
+        servicioPedidos.agregarGestorUP(gestor,up);
     }
 }

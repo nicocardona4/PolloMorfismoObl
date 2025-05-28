@@ -4,6 +4,8 @@
  */
 package dominio;
 
+import Interfaces.TipoCliente;
+
 /**
  *
  * @author maurizio
@@ -12,6 +14,7 @@ public class Cliente extends Usuario {
     
     private String clienteNro;
     private Dispositivo dispositivo;
+    private TipoCliente tipoCliente;
 
     public String getClienteNro() {
         return clienteNro;

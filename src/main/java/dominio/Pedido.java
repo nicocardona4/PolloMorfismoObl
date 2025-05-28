@@ -43,7 +43,12 @@ public class Pedido {
     public void finalizarPedido() {
         estadoPedido.finalizarPedido(this);
     }
-
+    
+    public void agregarItem(ItemMenu item){
+        if (!items.contains(item))//Ver si hay que restringir que no lo tenga
+            items.add(item);
+    }
+    
     public void setEstado(EstadoPedido estado) {
         this.estadoPedido = estado;
     }

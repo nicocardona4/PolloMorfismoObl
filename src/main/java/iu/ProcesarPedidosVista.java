@@ -21,6 +21,14 @@ public class ProcesarPedidosVista extends javax.swing.JDialog {
         initComponents();
         this.gestor = gestor;
         mostrarInfoGestor();
+        
+        //ToDo: en txtAConf teniendo el gestor puedo traer de la up todas esos pedidos
+        //que esten pendientes de asignar.
+        
+        //ToDo: UnidadProcesadora --->>> va a tener que avisar cada vez que un gestor 
+        //tome un pedido para que se le refresque las listas a los demas gestores
+        
+        //ToDo: en tblPedidos mostrar los pedidos que tenga el gestor
     }
 
     /**

@@ -11,6 +11,7 @@ package dominio;
 public class Cliente extends Usuario {
     
     private String clienteNro;
+    private Dispositivo dispositivo;
 
     public String getClienteNro() {
         return clienteNro;
@@ -19,6 +20,7 @@ public class Cliente extends Usuario {
     public Cliente(String nombreCompleto, String password, String clienteNro) {
         super(nombreCompleto, password);
         this.clienteNro = clienteNro;
+        //todo: prceso de asignacion de dispositivo
     }
 
     

@@ -6,6 +6,7 @@ package com.mycompany.obligatoriopollomorfismo;
 
 import dominio.Cliente;
 import dominio.Gestor;
+import dominio.UnidadProcesadora;
 import servicios.Fachada;
 
 
@@ -26,12 +27,15 @@ public class PrecargaDatos {
     Cliente pablo = new Cliente("Pablo Marmol", "pass3","304859");
     f.agregar(pablo);
 
-    Gestor gestorComercial = new Gestor("carlosg", "pass123", "Carlos Gómez", "gestor comercial");
+    UnidadProcesadora up1 = new UnidadProcesadora("Cocina");
+    Gestor gestorComercial = new Gestor("carlosg", "pass123", "Carlos Gómez", "gestor comercial",up1);
     f.agregar(gestorComercial);
+    f.agregarGestorUP(gestorComercial, up1);
 
-    Gestor gestorSoporte = new Gestor("lauram", "pass1234", "Laura Martínez", "gestor soporte");
+    UnidadProcesadora up2 = new UnidadProcesadora("Bar");
+    Gestor gestorSoporte = new Gestor("lauram", "pass1234", "Laura Martínez", "gestor soporte",new UnidadProcesadora("Bar"));
     f.agregar(gestorSoporte);
-
+    f.agregarGestorUP(gestorSoporte, up2);
 
     Cliente cLogueado = f.loginCliente("1464", "pass");
     System.out.println(cLogueado != null ? "Login cliente exitoso: " + cLogueado.getNombreCompleto() : "Login cliente fallido");

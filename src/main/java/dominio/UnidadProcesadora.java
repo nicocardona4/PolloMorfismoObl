@@ -4,6 +4,7 @@
  */
 package dominio;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -13,10 +14,12 @@ import java.util.Collection;
 public class UnidadProcesadora {
     private String nombre;
     private Collection<Gestor> gestores;
-    //Colleccion de pedidos pendientes
+    private Collection<Pedido> pedidosPendientesAsig;
 
     public UnidadProcesadora(String nombre) {
         this.nombre = nombre;
+        this.gestores = new ArrayList<>();
+        this.pedidosPendientesAsig = new ArrayList<>();
     }
 
     public String getNombre() {
@@ -32,10 +35,26 @@ public class UnidadProcesadora {
     }
 
     public void setGestor(Gestor gestor) {
+        if(!this.gestores.contains(gestor))
         this.gestores.add(gestor);
     }
     
+    public Collection<Pedido> getPedidosPendientesAsig(){
+        return pedidosPendientesAsig;
+    }
+    
+    public void setPedidosPendientesAsig(Pedido p){
+        if(!pedidosPendientesAsig.contains(p))
+            this.pedidosPendientesAsig.add(p);
+    }
+    
     //ver de hacer un remove gestor
+    //cuando un gestor se asigna un pedido de la up, se remueve
+    public void removePedidoPorAsignacion(Pedido p){
+        if(pedidosPendientesAsig.contains(p)){
+            this.pedidosPendientesAsig.remove(p);
+        }
+    }
     
     
 }

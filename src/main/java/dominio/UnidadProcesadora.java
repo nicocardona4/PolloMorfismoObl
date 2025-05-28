@@ -4,14 +4,16 @@
  */
 package dominio;
 
+import iu.EventosRestaurante;
 import java.util.ArrayList;
 import java.util.Collection;
+import observer.Observable;
 
 /**
  *
  * @author maurizio
  */
-public class UnidadProcesadora {
+public class UnidadProcesadora extends Observable {
     private String nombre;
     private Collection<Gestor> gestores;
     private Collection<Pedido> pedidosPendientesAsig;
@@ -53,6 +55,7 @@ public class UnidadProcesadora {
     public void removePedidoPorAsignacion(Pedido p){
         if(pedidosPendientesAsig.contains(p)){
             this.pedidosPendientesAsig.remove(p);
+            avisar(EventosRestaurante.ASIGNACION_PEDIDO);
         }
     }
     

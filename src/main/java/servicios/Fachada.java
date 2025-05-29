@@ -6,7 +6,9 @@ package servicios;
 
 import dominio.Cliente;
 import dominio.Gestor;
+import dominio.Pedido;
 import dominio.UnidadProcesadora;
+import java.util.Collection;
 
 /**
  *
@@ -48,5 +50,9 @@ public class Fachada {
     
     public void agregarGestorUP(Gestor gestor, UnidadProcesadora up){
         servicioPedidos.agregarGestorUP(gestor,up);
+    }
+    
+    public Collection<Pedido> getPedidosPorUp(UnidadProcesadora up){
+        return servicioPedidos.getPedidosPorUp(up);
     }
 }

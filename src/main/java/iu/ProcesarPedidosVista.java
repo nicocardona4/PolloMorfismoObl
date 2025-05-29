@@ -5,14 +5,19 @@
 package iu;
 
 import dominio.Gestor;
+import dominio.Pedido;
+import dominio.UnidadProcesadora;
+import observer.Observable;
+import observer.Observador;
 
 /**
  *
  * @author maurizio
  */
-public class ProcesarPedidosVista extends javax.swing.JDialog {
+public class ProcesarPedidosVista extends javax.swing.JDialog implements Observador{
 
     private Gestor gestor;
+    private UnidadProcesadora up;
     /**
      * Creates new form ProcesarPedidosVista
      */
@@ -20,7 +25,15 @@ public class ProcesarPedidosVista extends javax.swing.JDialog {
         super(parent, false);
         initComponents();
         this.gestor = gestor;
+        this.up = gestor.getUp();
         mostrarInfoGestor();
+        
+        //Sobre los pedidos pendientes. 
+        //1: traer de fachada todos los pedidos pendientes de la up asignada al gestor.
+        //2: Agregar con un metodo del estilo: lstPedidos.setListData(up.getPedidos().toArray());
+        //3: Cuando tomo un pedido con el gestor, elimino pedido de pendientes de la up,
+        //   debo notificar ya que los demas gestores se deben enterar de eso.
+        //   vuelvo a cargar la lista con los pedidos pendientes actualizados
         
         //ToDo: en txtAConf teniendo el gestor puedo traer de la up todas esos pedidos
         //que esten pendientes de asignar.
@@ -42,25 +55,26 @@ public class ProcesarPedidosVista extends javax.swing.JDialog {
 
         txtInfo = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtAConf = new javax.swing.JTextArea();
         btnTomar = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblPedidos = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        lstPedidos = new javax.swing.JList();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         txtInfo.setEditable(false);
         txtInfo.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
 
-        txtAConf.setColumns(20);
-        txtAConf.setRows(5);
-        jScrollPane1.setViewportView(txtAConf);
-
         btnTomar.setText("Tomar Pedido");
+        btnTomar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTomarActionPerformed(evt);
+            }
+        });
 
         tblPedidos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -94,23 +108,28 @@ public class ProcesarPedidosVista extends javax.swing.JDialog {
 
         jButton2.setText("Finalizar Pedido");
 
+        lstPedidos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstPedidos.setCellRenderer(new PedidoListCellRenderer());
+        lstPedidos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lstPedidosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(lstPedidos);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
             .addComponent(jSeparator2)
             .addGroup(layout.createSequentialGroup()
+                .addGap(514, 514, 514)
+                .addComponent(btnTomar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 4, Short.MAX_VALUE)
+                .addContainerGap(12, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(btnTomar)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(17, 17, 17)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(20, 20, 20)
-                                .addComponent(txtInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(21, 21, 21)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -118,19 +137,24 @@ public class ProcesarPedidosVista extends javax.swing.JDialog {
                                 .addComponent(jButton2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButton1))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(16, Short.MAX_VALUE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(18, 18, 18)
                 .addComponent(txtInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addComponent(btnTomar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -140,11 +164,21 @@ public class ProcesarPedidosVista extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnTomarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTomarActionPerformed
+        // TODO add your handling code here:
+        tomarPedido();
+    }//GEN-LAST:event_btnTomarActionPerformed
+
+    private void lstPedidosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstPedidosMouseClicked
+        // TODO add your handling code here:
+        //obtenerPedido();
+    }//GEN-LAST:event_lstPedidosMouseClicked
 
     /**
      * @param args the command line arguments
@@ -159,13 +193,34 @@ public class ProcesarPedidosVista extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JList lstPedidos;
     private javax.swing.JTable tblPedidos;
-    private javax.swing.JTextArea txtAConf;
     private javax.swing.JTextField txtInfo;
     // End of variables declaration//GEN-END:variables
 
     private void mostrarInfoGestor() {
         //Todo: agregar unidad procesadora
         txtInfo.setText("Gestor: " + gestor.getNombreCompleto() + " | Unidad Procesadora: " + gestor.getUp().getNombre());
+    }
+
+    private void tomarPedido() {
+        //ToDo:si el pedido seleccionado no es null, lo toma
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+//    private void obtenerPedido() {
+//        Pedido p = null;
+//        if (Pedido.class.isInstance(lstPedidos.getSelectedValue())) 
+//            p = (Pedido) lstPedidos.getSelectedValue();
+//        
+//        if (!p.equals(null))
+//            this.pedidoSeleccionado = p;
+//    }
+
+    @Override
+    public void actualizar(Observable origen, Object evento) {
+        if (EventosRestaurante.ASIGNACION_PEDIDO.equals(evento)) {
+            //todo: refrescar la lista de pendientes
+        }
     }
 }

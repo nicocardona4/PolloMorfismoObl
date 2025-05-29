@@ -40,6 +40,10 @@ public class ServicioPedidos {
         return pedidos;
     }
     
+    public Collection<Pedido> getPedidosPorUp(UnidadProcesadora up){
+        return up.getPedidosPendientesAsig();
+    }
+    
     //ToDo: crear metodo para validar si ya existe la up en la coleccion 
     public void agregarUp(UnidadProcesadora up){
         //todo: Agregar exception si existe

@@ -56,5 +56,9 @@ public class Pedido {
     public String getEstadoActual() {
         return estadoPedido.getNombreEstado();
     }
+    
+    public int getPedidoId(){
+        return this.pedidoId;
+    }
 }
 

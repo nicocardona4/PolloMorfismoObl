@@ -18,11 +18,24 @@ public class Servicio {
     private Collection<Pedido> pedidos = new ArrayList<Pedido>();
     private float total;
     private Cliente cliente;
+    private Dispositivo dispositivo;
 
     public Servicio(float total, Cliente cliente) {
         this.servicioId = ++contadorServicioId;
         this.total = total;
         this.cliente = cliente;
+    }
+
+    public float getTotal() {
+        return total;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public Dispositivo getDispositivo() {
+        return dispositivo;
     }
     
 }

@@ -4,10 +4,14 @@
  */
 package servicios;
 
+
 import dominio.Gestor;
+import dominio.UnidadProcesadora;
+
+import dominio.Cliente;
 import dominio.Pedido;
 import dominio.Servicio;
-import dominio.UnidadProcesadora;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -20,6 +24,7 @@ public class ServicioPedidos {
     private Collection<UnidadProcesadora> ups = new ArrayList<>();
     private Collection<Servicio> servicios = new ArrayList<>();
     private Collection<Pedido> pedidos = new ArrayList();
+
     //ToDo: Collection de pedidos
 
         
@@ -36,10 +41,15 @@ public class ServicioPedidos {
         return ups;
     }
     
+
+
+
+
     public Collection<Pedido> getPedidos() {
         return pedidos;
     }
     
+
     public Collection<Pedido> getPedidosPorUp(UnidadProcesadora up){
         return up.getPedidosPendientesAsig();
     }
@@ -51,4 +61,16 @@ public class ServicioPedidos {
            ups.add(up);
         }
     }
+
+    public boolean TieneDispositivoEnUso(Cliente c){
+        for(Servicio s: servicios){
+            if(s.getCliente().equals(c))
+            {
+                return true;
+            }
+        }
+    return false;
+    }
+    
+
 }

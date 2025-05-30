@@ -36,12 +36,16 @@ public class Fachada {
         return servicioUsuario.loginCliente(clienteNro, password);
     }
 
-    public void agregar(Cliente cliente) {
-        servicioUsuario.agregarUsuario(cliente);
+    public void agregarCliente(Cliente cliente) {
+        servicioUsuario.agregarCliente(cliente);
     }
 
-    public void agregar(Gestor gestor) {
-        servicioUsuario.agregarUsuario(gestor);
+    public void agregarGestor(Gestor gestor) {
+        servicioUsuario.agregarGestor(gestor);
+    }
+
+    public Boolean TieneDispositivoEnUso(Cliente cliente) {
+        return servicioPedidos.TieneDispositivoEnUso(cliente);
     }
     
     public void agregarUp(UnidadProcesadora up){

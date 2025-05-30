@@ -18,24 +18,27 @@ public class PrecargaDatos {
     public static void cargar() {
     Fachada f = Fachada.getInstancia();
 
-    Cliente juan = new Cliente("Juan Perez", "pass","1464");
-    f.agregar(juan);
+    Cliente juan = new Cliente("Juan Perez", "cliente1","1234");
+    f.agregarCliente(juan);
 
     Cliente pedro = new Cliente("Pedro Picapiedra", "pass2","24441");
-    f.agregar(pedro);
+    f.agregarCliente(pedro);
 
     Cliente pablo = new Cliente("Pablo Marmol", "pass3","304859");
-    f.agregar(pablo);
+    f.agregarCliente(pablo);
+
 
     UnidadProcesadora up1 = new UnidadProcesadora("Cocina");
     Gestor gestorComercial = new Gestor("carlosg", "pass123", "Carlos Gómez", "gestor comercial",up1);
-    f.agregar(gestorComercial);
+    f.agregarGestor(gestorComercial);
     f.agregarGestorUP(gestorComercial, up1);
 
     UnidadProcesadora up2 = new UnidadProcesadora("Bar");
     Gestor gestorSoporte = new Gestor("lauram", "pass1234", "Laura Martínez", "gestor soporte",new UnidadProcesadora("Bar"));
-    f.agregar(gestorSoporte);
+    f.agregarGestor(gestorSoporte);
     f.agregarGestorUP(gestorSoporte, up2);
+
+
 
     Cliente cLogueado = f.loginCliente("1464", "pass");
     System.out.println(cLogueado != null ? "Login cliente exitoso: " + cLogueado.getNombreCompleto() : "Login cliente fallido");

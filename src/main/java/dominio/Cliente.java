@@ -37,4 +37,13 @@ public class Cliente extends Usuario {
         return identificador.matches("\\d+");
     }
     
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Cliente other = (Cliente) obj;
+        return this.clienteNro.equals(other.clienteNro);
+    }
+    
 }

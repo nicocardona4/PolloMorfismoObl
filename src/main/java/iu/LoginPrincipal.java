@@ -122,10 +122,10 @@ public class LoginPrincipal extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void loginUsuarioCliente() {
-        new LoginUsuarioClienteVista().setVisible(true);
+        new RealizarPedidosVista(this).setVisible(true);
     }
 
     private void loginUsuarioGestor() {
-        new LoginUsuarioGestorVista().setVisible(true);
+        new LoginVista(this,true).setVisible(true);
     }
 }

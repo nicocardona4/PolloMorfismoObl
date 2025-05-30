@@ -4,24 +4,26 @@
  */
 package iu;
 
+import dominio.Gestor;
 import dominio.Usuario;
 import java.util.Collection;
+import servicios.Fachada;
 import servicios.ServicioUsuario;
 
 /**
  *
  * @author nicolas.cardona
  */
-public abstract class LoginVista extends javax.swing.JDialog {
+public class LoginVista extends javax.swing.JDialog {
 
     /**
      * Creates new form LoginClienteVista
-     */
-    public LoginVista() {
-//        super(parent, modal);
-        super();
-        initComponents();
-    }
+        */
+   public LoginVista(java.awt.Frame parent, boolean modal) {
+       super(parent, modal);
+       initComponents();
+   }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -117,19 +119,24 @@ public abstract class LoginVista extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     private void login() {
-        Usuario usuario = loginInterno(txtId.getText(), txtPass.getText());
-        if (usuario != null) {
+        Gestor gestor = loginGestor(txtId.getText(), txtPass.getText());
+        if (gestor != null) {
             System.out.println("Login exitoso");
-            ejecutarSiguienteCU(usuario);
+            ejecutarSiguienteCU(gestor);
             dispose();
         } else {
             System.out.println("Identificador / clave inválido");
         }
     }
 
-    public abstract void ejecutarSiguienteCU(Usuario usuario);
+    public void ejecutarSiguienteCU(Usuario usuario){
+        
+    }
 
-    public abstract Usuario loginInterno(String usuario, String password);
+    public Gestor loginGestor(String usuario, String password)
+    {
+        return Fachada.getInstancia().loginGestor(usuario, password);
+    }
 
     
 }

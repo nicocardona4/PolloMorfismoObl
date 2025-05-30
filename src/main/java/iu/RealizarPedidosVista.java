@@ -19,10 +19,12 @@ public class RealizarPedidosVista extends JFrame{
 
     private Cliente cliente;
     private Fachada f;
+    private Dispositivo dispositivo;
     /**
      * Creates new form RealizarPedidosVista
      */
-    public RealizarPedidosVista(java.awt.Frame parent) {
+    public RealizarPedidosVista(java.awt.Frame parent, Dispositivo d) {
+        dispositivo = d;
         initComponents();
         setTitle("Realizar Pedido"); 
     }

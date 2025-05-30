@@ -9,6 +9,7 @@ import dominio.Gestor;
 import dominio.UnidadProcesadora;
 
 import dominio.Cliente;
+import dominio.Dispositivo;
 import dominio.Pedido;
 import dominio.Servicio;
 
@@ -24,9 +25,21 @@ public class ServicioPedidos {
     private Collection<UnidadProcesadora> ups = new ArrayList<>();
     private Collection<Servicio> servicios = new ArrayList<>();
     private Collection<Pedido> pedidos = new ArrayList();
+    private Collection<Dispositivo> dispositivos = new ArrayList();
+
+
+
 
     //ToDo: Collection de pedidos
-
+    public Collection<Dispositivo> getDispositivosDisponibles() {
+        Collection<Dispositivo> disponibles = new ArrayList<>();
+        for (Dispositivo d : dispositivos) {
+            if (!d.isEnUso()) {
+                disponibles.add(d);
+            }
+        }
+        return disponibles;
+    }
         
     static void agregarGestorUP(Gestor gestor, UnidadProcesadora up) {
         //Esto estaria gud asi?
@@ -70,6 +83,10 @@ public class ServicioPedidos {
             }
         }
     return false;
+    }
+
+    void agregarDispositivo(Dispositivo d) {
+        dispositivos.add(d);
     }
     
 

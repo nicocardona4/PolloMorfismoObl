@@ -5,6 +5,7 @@
 package com.mycompany.obligatoriopollomorfismo;
 
 import dominio.Cliente;
+import dominio.Dispositivo;
 import dominio.Gestor;
 import dominio.UnidadProcesadora;
 import servicios.Fachada;
@@ -38,16 +39,15 @@ public class PrecargaDatos {
     f.agregarGestor(gestorSoporte);
     f.agregarGestorUP(gestorSoporte, up2);
 
+    
+    Dispositivo d1 = new Dispositivo();
+    Dispositivo d2 = new Dispositivo();
+    Dispositivo d3 = new Dispositivo ();
+    f.agregarDispositivo(d1);
+    f.agregarDispositivo(d2);
+    f.agregarDispositivo(d3);
 
-
-    Cliente cLogueado = f.loginCliente("1464", "pass");
-    System.out.println(cLogueado != null ? "Login cliente exitoso: " + cLogueado.getNombreCompleto() : "Login cliente fallido");
-
-    Gestor gLogueado = f.loginGestor("lauram", "pass1234");
-    System.out.println(gLogueado != null ? "Login gestor exitoso: " + gLogueado.getNombreCompleto() : "Login gestor fallido ERROR");
-
-    Gestor gInvalido = f.loginGestor("lauram", "pass1gh234");
-    System.out.println(gInvalido != null ? "Login gestor exitoso (ERROR)" : "Login gestor fallido correctamente");
+    
 }
 
 }

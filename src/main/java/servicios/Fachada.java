@@ -5,6 +5,7 @@
 package servicios;
 
 import dominio.Cliente;
+import dominio.Dispositivo;
 import dominio.Gestor;
 import dominio.Pedido;
 import dominio.UnidadProcesadora;
@@ -20,12 +21,14 @@ public class Fachada {
     private ServicioUsuario servicioUsuario;
     private ServicioPedidos servicioPedidos;
     
+    
     public static Fachada getInstancia() {
         return instancia;
     }
 
     private Fachada() {
         servicioUsuario = new ServicioUsuario();
+        servicioPedidos = new ServicioPedidos();
     }
     
     public Gestor loginGestor(String usuario, String password) {
@@ -59,4 +62,14 @@ public class Fachada {
     public Collection<Pedido> getPedidosPorUp(UnidadProcesadora up){
         return servicioPedidos.getPedidosPorUp(up);
     }
+    
+    public Collection<Dispositivo> getDispositivosDisponibles()
+    {
+        return servicioPedidos.getDispositivosDisponibles();
+    }
+
+    public void agregarDispositivo(Dispositivo d) {
+        servicioPedidos.agregarDispositivo(d);
+    }
+
 }

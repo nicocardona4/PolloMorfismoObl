@@ -4,6 +4,10 @@
  */
 package iu;
 
+import dominio.Dispositivo;
+import java.util.Collection;
+import servicios.Fachada;
+
 /**
  *
  * @author maurizio
@@ -122,7 +126,12 @@ public class LoginPrincipal extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void loginUsuarioCliente() {
-        new RealizarPedidosVista(this).setVisible(true);
+        Collection<Dispositivo> disponibles = Fachada.getInstancia().getDispositivosDisponibles();
+        for(Dispositivo d:disponibles)
+        {
+            new RealizarPedidosVista(this,d).setVisible(true);
+
+        }
     }
 
     private void loginUsuarioGestor() {

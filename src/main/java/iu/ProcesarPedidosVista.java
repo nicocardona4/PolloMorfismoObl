@@ -7,8 +7,10 @@ package iu;
 import dominio.Gestor;
 import dominio.Pedido;
 import dominio.UnidadProcesadora;
+import javax.swing.table.DefaultTableModel;
 import observer.Observable;
 import observer.Observador;
+import servicios.Fachada;
 
 /**
  *
@@ -17,7 +19,12 @@ import observer.Observador;
 public class ProcesarPedidosVista extends javax.swing.JDialog implements Observador{
 
     private Gestor gestor;
+    private Fachada f = Fachada.getInstancia();
     private UnidadProcesadora up;
+    
+    private DefaultTableModel dtm;
+    private Object[] o = new Object[5];
+    
     /**
      * Creates new form ProcesarPedidosVista
      */
@@ -26,22 +33,13 @@ public class ProcesarPedidosVista extends javax.swing.JDialog implements Observa
         initComponents();
         this.gestor = gestor;
         this.up = gestor.getUp();
+        dtm = (DefaultTableModel) tblPedidos.getModel();
         mostrarInfoGestor();
-        
-        //Sobre los pedidos pendientes. 
+         //Sobre los pedidos pendientes. 
         //1: traer de fachada todos los pedidos pendientes de la up asignada al gestor.
-        //2: Agregar con un metodo del estilo: lstPedidos.setListData(up.getPedidos().toArray());
-        //3: Cuando tomo un pedido con el gestor, elimino pedido de pendientes de la up,
-        //   debo notificar ya que los demas gestores se deben enterar de eso.
-        //   vuelvo a cargar la lista con los pedidos pendientes actualizados
-        
-        //ToDo: en txtAConf teniendo el gestor puedo traer de la up todas esos pedidos
-        //que esten pendientes de asignar.
-        
-        //ToDo: UnidadProcesadora --->>> va a tener que avisar cada vez que un gestor 
-        //tome un pedido para que se le refresque las listas a los demas gestores
-        
+        mostrarPedidosPendientes();
         //ToDo: en tblPedidos mostrar los pedidos que tenga el gestor
+        mostrarPedidosTomados();
     }
 
     /**
@@ -171,7 +169,6 @@ public class ProcesarPedidosVista extends javax.swing.JDialog implements Observa
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTomarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTomarActionPerformed
-        // TODO add your handling code here:
         tomarPedido();
     }//GEN-LAST:event_btnTomarActionPerformed
 
@@ -205,22 +202,38 @@ public class ProcesarPedidosVista extends javax.swing.JDialog implements Observa
 
     private void tomarPedido() {
         //ToDo:si el pedido seleccionado no es null, lo toma
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Pedido p = (Pedido) lstPedidos.getSelectedValue();
+        if (p != null){
+            //Agrego pedido al gestor. 
+            //Esto deberia quitarlo de la lista de pendientes y avisar a los demas
+            //Asignar pedido al gestor y eliminar de la lista de pendientes de la up
+            this.gestor.setPedido(p);
+        }
     }
-
-//    private void obtenerPedido() {
-//        Pedido p = null;
-//        if (Pedido.class.isInstance(lstPedidos.getSelectedValue())) 
-//            p = (Pedido) lstPedidos.getSelectedValue();
-//        
-//        if (!p.equals(null))
-//            this.pedidoSeleccionado = p;
-//    }
 
     @Override
     public void actualizar(Observable origen, Object evento) {
         if (EventosRestaurante.ASIGNACION_PEDIDO.equals(evento)) {
-            //todo: refrescar la lista de pendientes
+            //Refrescar la lista de pendientes, en este caso se asigno alguno
+            //de los pedidos pendientes a este u otro gestor. Por lo tanto se debe borrar
+            //y cargar de nuevo la lista
+            mostrarPedidosPendientes();
+        }
+    }
+
+    private void mostrarPedidosPendientes() {
+        //ver si el setListData reemplaza todo por lo que se le pasa 
+        lstPedidos.setListData(f.getPedidosPorUp(up).toArray());
+    }
+
+    private void mostrarPedidosTomados() {
+        //tblPedidos.
+        for(Pedido pedido : gestor.getPedidosAsignados()){
+            o[1] = pedido.getItem().getNombre();
+            o[2] = pedido.getDescripcion();
+            //o[3] = pedido.getItem().getNombre(); //Nombre del cliente
+            //o[4] = pedido.getItem().getNombre(); //Fecha y hora del pedido
+            o[5] = pedido.getEstadoActual();
         }
     }
 }

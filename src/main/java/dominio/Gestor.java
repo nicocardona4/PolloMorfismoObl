@@ -55,6 +55,10 @@ public class Gestor extends Usuario {
        }
     }
     
+    public Collection<Pedido> getPedidosAsignados(){
+        return pedidosAsignados;
+    }
+    
     public boolean esValidoIdentificador(String identificador) {
         //ToDo:Agregar la excepcion
         return identificador.matches("[a-zA-Z0-9]+");

@@ -15,12 +15,15 @@ public class Pedido {
     private static int contadorPedidoId = 0;
     private int pedidoId;
     private EstadoPedido estadoPedido;
-    private Collection<ItemMenu> items = new ArrayList<ItemMenu>();
+    private ItemMenu item;
+    private String descripcion;
     private float costoPëdido;
 
-    public Pedido(float costoPëdido){
-//        this.estadoPedido = new EstadoPedido(NoConfirmado());
-        this.costoPëdido = costoPëdido;
+    public Pedido(ItemMenu item, String descripcion){
+        //this.estadoPedido = new EstadoPedido(NoConfirmado());
+        this.item = item;
+        this.descripcion = descripcion;
+        this.costoPëdido = item.getPrecio();
         this.pedidoId = ++contadorPedidoId;
     }
     
@@ -44,17 +47,24 @@ public class Pedido {
         estadoPedido.finalizarPedido(this);
     }
     
-    public void agregarItem(ItemMenu item){
-        if (!items.contains(item))//Ver si hay que restringir que no lo tenga
-            items.add(item);
-    }
-    
     public void setEstado(EstadoPedido estado) {
         this.estadoPedido = estado;
     }
     
     public String getEstadoActual() {
         return estadoPedido.getNombreEstado();
+    }
+
+    public ItemMenu getItem() {
+        return item;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
     
     public int getPedidoId(){

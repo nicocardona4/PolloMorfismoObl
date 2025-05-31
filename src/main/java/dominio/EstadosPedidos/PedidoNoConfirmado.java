@@ -12,11 +12,15 @@ import dominio.Pedido;
  * @author maurizio
  */
 public class PedidoNoConfirmado extends EstadoPedido {
+
+    public PedidoNoConfirmado(String nombreEstado) {
+        super(nombreEstado);
+    }
     
     @Override
     public void confirmarPedido(Pedido pedido) {
         System.out.println("Confirmando pedido...");
-        pedido.setEstado(new PedidoConfirmado());
+        pedido.setEstado(new PedidoConfirmado("Confirmado"));
     }
     
     @Override

@@ -8,6 +8,7 @@ import dominio.Cliente;
 import dominio.Dispositivo;
 import dominio.Gestor;
 import dominio.Pedido;
+import dominio.Servicio;
 import dominio.UnidadProcesadora;
 import java.util.Collection;
 
@@ -70,6 +71,10 @@ public class Fachada {
 
     public void agregarDispositivo(Dispositivo d) {
         servicioPedidos.agregarDispositivo(d);
+    }
+    
+    public Servicio getServicioById(int servicioId){
+        return servicioPedidos.getServicioById(servicioId);
     }
 
 }

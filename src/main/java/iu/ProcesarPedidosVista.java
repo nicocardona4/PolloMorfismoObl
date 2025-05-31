@@ -6,6 +6,7 @@ package iu;
 
 import dominio.Gestor;
 import dominio.Pedido;
+import dominio.Servicio;
 import dominio.UnidadProcesadora;
 import javax.swing.table.DefaultTableModel;
 import observer.Observable;
@@ -227,12 +228,14 @@ public class ProcesarPedidosVista extends javax.swing.JDialog implements Observa
     }
 
     private void mostrarPedidosTomados() {
+         
         //tblPedidos.
         for(Pedido pedido : gestor.getPedidosAsignados()){
+            Servicio srv = Fachada.getInstancia().getServicioById(pedido.getServicioId());
             o[1] = pedido.getItem().getNombre();
             o[2] = pedido.getDescripcion();
-            //o[3] = pedido.getItem().getNombre(); //Nombre del cliente
-            //o[4] = pedido.getItem().getNombre(); //Fecha y hora del pedido
+            o[3] = srv.getCliente().getNombreCompleto();
+            o[4] = pedido.getFechaCreacion();
             o[5] = pedido.getEstadoActual();
         }
     }

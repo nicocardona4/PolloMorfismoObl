@@ -12,6 +12,10 @@ import dominio.Pedido;
  * @author maurizio
  */
 public class PedidoEntregado extends EstadoPedido {
+
+    public PedidoEntregado(String nombreEstado) {
+        super(nombreEstado);
+    }
     
     @Override
     public void cobrarPedido(Pedido pedido) {

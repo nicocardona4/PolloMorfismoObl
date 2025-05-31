@@ -4,8 +4,8 @@
  */
 package dominio;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import dominio.EstadosPedidos.PedidoNoConfirmado;
+import java.util.Date;
 
 /**
  *
@@ -18,13 +18,17 @@ public class Pedido {
     private ItemMenu item;
     private String descripcion;
     private float costoPëdido;
+    private Date fechaCreacion;
+    private int servicioId;
 
-    public Pedido(ItemMenu item, String descripcion){
-        //this.estadoPedido = new EstadoPedido(NoConfirmado());
+    public Pedido(ItemMenu item, String descripcion,int servicioId){
+        this.estadoPedido = new PedidoNoConfirmado("No Confirmado");
         this.item = item;
         this.descripcion = descripcion;
         this.costoPëdido = item.getPrecio();
         this.pedidoId = ++contadorPedidoId;
+        this.fechaCreacion = new Date();
+        this.servicioId = servicioId;
     }
     
     public void confirmarPedido() {
@@ -70,5 +74,14 @@ public class Pedido {
     public int getPedidoId(){
         return this.pedidoId;
     }
+
+    public Date getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public int getServicioId() {
+        return servicioId;
+    }
+    
 }
 

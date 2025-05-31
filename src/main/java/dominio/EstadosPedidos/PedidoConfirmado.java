@@ -12,6 +12,11 @@ import dominio.Pedido;
  * @author maurizio
  */
 public class PedidoConfirmado  extends EstadoPedido{
+
+    public PedidoConfirmado(String nombreEstado) {
+        super(nombreEstado);
+    }
+    
     @Override
     public void eliminarPedido(Pedido pedido) {
         System.out.println("Eliminando pedido confirmado...");
@@ -27,7 +32,7 @@ public class PedidoConfirmado  extends EstadoPedido{
     @Override
     public void tomarPedido(Pedido pedido) {
         System.out.println("Tomando pedido para proceso...");
-        pedido.setEstado(new PedidoEnProceso());
+        pedido.setEstado(new PedidoEnProceso("En Proceso"));
     }
     
     @Override

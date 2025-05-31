@@ -9,6 +9,13 @@ package dominio;
  * @author maurizio
  */
 public abstract class EstadoPedido {
+    
+    public String nombreEstado;
+
+    public EstadoPedido(String nombreEstado) {
+        this.nombreEstado = nombreEstado;
+    }
+    
     public void confirmarPedido(Pedido pedido) {
         throw new IllegalStateException("No se puede confirmar el pedido en estado: " + 
                                       this.getClass().getSimpleName());

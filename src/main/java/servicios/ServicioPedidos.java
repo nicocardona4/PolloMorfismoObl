@@ -27,9 +27,6 @@ public class ServicioPedidos {
     private Collection<Pedido> pedidos = new ArrayList();
     private Collection<Dispositivo> dispositivos = new ArrayList();
 
-
-
-
     //ToDo: Collection de pedidos
     public Collection<Dispositivo> getDispositivosDisponibles() {
         Collection<Dispositivo> disponibles = new ArrayList<>();
@@ -52,6 +49,17 @@ public class ServicioPedidos {
     
     public Collection<UnidadProcesadora> getUps(){
         return ups;
+    }
+    
+    //Obtener servicio a partir del id
+    public Servicio getServicioById(int servicioNro){
+        Servicio servicio = new Servicio();
+        for(Servicio s : getServicios()){
+            if(s.getServicioId()==servicioNro){
+                servicio = s;
+            }
+        }
+        return servicio;
     }
     
 

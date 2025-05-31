@@ -12,10 +12,15 @@ import dominio.Pedido;
  * @author maurizio
  */
 public class PedidoEnProceso extends EstadoPedido {
+
+    public PedidoEnProceso(String nombreEstado) {
+        super(nombreEstado);
+    }
+    
     @Override
     public void finalizarPedido(Pedido pedido) {
         System.out.println("Finalizando preparación del pedido...");
-        pedido.setEstado(new PedidoFinalizado());
+        pedido.setEstado(new PedidoFinalizado("Finalizado"));
     }
     
     @Override

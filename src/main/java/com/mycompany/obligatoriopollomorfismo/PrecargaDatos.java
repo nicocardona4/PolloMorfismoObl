@@ -4,9 +4,11 @@
  */
 package com.mycompany.obligatoriopollomorfismo;
 
+import dominio.Categoria;
 import dominio.Cliente;
 import dominio.Dispositivo;
 import dominio.Gestor;
+import dominio.ItemMenu;
 import dominio.UnidadProcesadora;
 import servicios.Fachada;
 
@@ -46,6 +48,32 @@ public class PrecargaDatos {
     f.agregarDispositivo(d1);
     f.agregarDispositivo(d2);
     f.agregarDispositivo(d3);
+    
+    Categoria catEntradas = new Categoria("Entradas");
+    Categoria catPlatos = new Categoria("Platos principales");
+    Categoria catPostres = new Categoria("Postres");
+    Categoria catBebidas = new Categoria("Bebidas");
+    Categoria catVinos = new Categoria("Vinos");
+    Categoria catCafes = new Categoria("Cafés");
+
+    f.agregarCategoria(catEntradas);
+    f.agregarCategoria(catPlatos);
+    f.agregarCategoria(catPostres);
+    f.agregarCategoria(catBebidas);
+    f.agregarCategoria(catVinos);
+    f.agregarCategoria(catCafes);
+
+    ItemMenu im1 = new ItemMenu("Ensalada", 300, catEntradas);
+    ItemMenu im2 = new ItemMenu("Picada completa", 550, catEntradas);
+    ItemMenu im3 = new ItemMenu("Agua", 120, catBebidas);
+    ItemMenu im4 = new ItemMenu("Chajá", 300, catPostres);
+    ItemMenu im5 = new ItemMenu("Vino blanco", 440, catVinos);
+    
+    f.agregarItem(im1);
+    f.agregarItem(im2);
+    f.agregarItem(im3);
+    f.agregarItem(im4);
+    f.agregarItem(im5);
 
     
 }

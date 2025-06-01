@@ -93,7 +93,7 @@ public class ServicioPedidos {
     return false;
     }
 
-    void agregarDispositivo(Dispositivo d) {
+    public void agregarDispositivo(Dispositivo d) {
         dispositivos.add(d);
     }
     

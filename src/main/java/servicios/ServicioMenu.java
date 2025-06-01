@@ -4,16 +4,50 @@
  */
 package servicios;
 
+import dominio.Categoria;
+import dominio.ItemMenu;
 import dominio.Menu;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  *
  * @author nicoc
  */
 public class ServicioMenu {
-    private Menu menu;
 
+    
+    private Menu menu;
+    private Collection<Categoria> categorias = new ArrayList<>();
+    private Collection<ItemMenu> items = new ArrayList<>();
+
+
+    public Collection<ItemMenu> getItemDeCategoria(Categoria c) {
+        Collection<ItemMenu> resultado = new ArrayList<ItemMenu>();
+        for(ItemMenu im: items)
+        {
+            if(im.getCategoria().equals(c))
+            {
+                resultado.add(im);
+            }
+        }
+        return resultado;
+    }
+    
     public Menu getMenu() {
         return menu;
     }
+    
+    public  void agregarCategoria(Categoria c) {
+        categorias.add(c);
+    }
+
+    Collection<Categoria> getCategoras() {
+        return categorias;
+    }
+
+    void agregarItem(ItemMenu im) {
+        items.add(im);
+    }
+    
 }

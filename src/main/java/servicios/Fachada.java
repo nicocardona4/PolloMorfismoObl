@@ -4,9 +4,11 @@
  */
 package servicios;
 
+import dominio.Categoria;
 import dominio.Cliente;
 import dominio.Dispositivo;
 import dominio.Gestor;
+import dominio.ItemMenu;
 import dominio.Pedido;
 import dominio.Servicio;
 import dominio.UnidadProcesadora;
@@ -21,6 +23,8 @@ public class Fachada {
 
     private ServicioUsuario servicioUsuario;
     private ServicioPedidos servicioPedidos;
+    private ServicioMenu servicioMenu;
+
     
     
     public static Fachada getInstancia() {
@@ -30,6 +34,7 @@ public class Fachada {
     private Fachada() {
         servicioUsuario = new ServicioUsuario();
         servicioPedidos = new ServicioPedidos();
+        servicioMenu = new ServicioMenu();
     }
     
     public Gestor loginGestor(String usuario, String password) {
@@ -76,5 +81,21 @@ public class Fachada {
     public Servicio getServicioById(int servicioId){
         return servicioPedidos.getServicioById(servicioId);
     }
+    
+    public void agregarCategoria(Categoria c)
+    {
+        servicioMenu.agregarCategoria(c);
+    }
+    
+    public Collection<Categoria> getCategorias(){
+        return servicioMenu.getCategoras();
+    }
 
+    public Collection<ItemMenu> getItemsDeCategoria(Categoria c) {
+        return servicioMenu.getItemDeCategoria(c);
+    }
+
+    public void agregarItem(ItemMenu im) {
+        servicioMenu.agregarItem(im);
+    }
 }

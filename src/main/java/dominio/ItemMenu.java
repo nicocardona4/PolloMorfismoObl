@@ -15,10 +15,16 @@ public class ItemMenu {
     private float precio;
     private Collection<Ingrediente> ingredientes;
     private UnidadProcesadora up;
+    private Categoria categoria;
 
-    public ItemMenu(String nombre, float precio) {
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public ItemMenu(String nombre, float precio, Categoria c) {
         this.nombre = nombre;
         this.precio = precio;
+        this.categoria = c;
     }
 
     public String getNombre() {

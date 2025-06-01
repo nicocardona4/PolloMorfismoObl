@@ -4,11 +4,18 @@
  */
 package iu;
 
+import dominio.Categoria;
 import dominio.Cliente;
 import dominio.Dispositivo;
+import dominio.ItemMenu;
 import dominio.Servicio;
 import dominio.Usuario;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.ListModel;
 import servicios.Fachada;
 
 /**
@@ -20,21 +27,22 @@ public class RealizarPedidosVista extends JFrame{
     private Cliente cliente;
     private Fachada f;
     private Dispositivo dispositivo;
+    private Map<String, Categoria> categorias = new HashMap<>(); 
     /**
      * Creates new form RealizarPedidosVista
      */
     public RealizarPedidosVista(java.awt.Frame parent, Dispositivo d) {
         dispositivo = d;
         initComponents();
-        setTitle("Realizar Pedido"); 
+        setTitle("Realizar Pedidos"); 
+        mostrarCategorias();
     }
 
     public void ejecutarSiguienteCU() {
-        if(!f.getInstancia().TieneDispositivoEnUso(cliente))
-        {
+         dispositivo.setEnUso(true);
          setTitle("Realizar Pedidos - Cliente: " + cliente.getNombreCompleto());
          Servicio servicio = new Servicio(0,cliente);
-        }
+        
     }
 
     public Cliente loginCliente(String clienteNro, String password) {
@@ -42,14 +50,28 @@ public class RealizarPedidosVista extends JFrame{
     }
         
     private void login() {
-        cliente = loginCliente(txtClienteNro.getText(), txtClientePassword.getText());
-        if (cliente != null) {
-            System.out.println("Login exitoso");
-            ejecutarSiguienteCU();
-        } else {
-            System.out.println("Identificador / clave inválido");
+        if(dispositivo.isEnUso()){
+            System.out.println("Debe primero finalizar el servicio actual");
         }
+        cliente = loginCliente(txtClienteNro.getText(), txtClientePassword.getText());
+            if (cliente != null) {
+                if(!f.getInstancia().TieneDispositivoEnUso(cliente)){
+                    System.out.println("Login exitoso");
+                    ejecutarSiguienteCU();
+                }else{
+                    System.out.println("Ud. ya est{a identificado en otro dispositivo");
+
+                }
+            
+            } else {
+            System.out.println("Identificador / clave inválido");
+            }   
     }
+    
+    private void cerrarSesion() {
+        dispositivo.setEnUso(false);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -69,11 +91,9 @@ public class RealizarPedidosVista extends JFrame{
         txtLogin = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList<>();
+        lstItems = new javax.swing.JList<>();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jButton2 = new javax.swing.JButton();
@@ -86,6 +106,8 @@ public class RealizarPedidosVista extends JFrame{
         jScrollPane5 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
         jLabel9 = new javax.swing.JLabel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        lstCategorias = new javax.swing.JList<>();
         jLabel3 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
@@ -108,6 +130,11 @@ public class RealizarPedidosVista extends JFrame{
         jScrollPane4.setViewportView(jTable1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel1.setText("Número cliente:");
 
@@ -154,21 +181,9 @@ public class RealizarPedidosVista extends JFrame{
 
         jLabel4.setText("Categorías");
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(jList1);
-
         jLabel5.setText("Items");
 
-        jList2.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane2.setViewportView(jList2);
+        jScrollPane2.setViewportView(lstItems);
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -207,6 +222,18 @@ public class RealizarPedidosVista extends JFrame{
 
         jLabel9.setText("Monto total:");
 
+        lstCategorias.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        lstCategorias.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstCategoriasValueChanged(evt);
+            }
+        });
+        jScrollPane7.setViewportView(lstCategorias);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -217,25 +244,23 @@ public class RealizarPedidosVista extends JFrame{
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(48, 48, 48)
+                                        .addComponent(jButton2)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jButton3)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(14, 14, 14))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(63, 63, 63)
-                                .addComponent(jButton2)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton3)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jScrollPane3))
+                        .addGap(14, 14, 14))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -266,16 +291,16 @@ public class RealizarPedidosVista extends JFrame{
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGap(12, 12, 12)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton2)
                             .addComponent(jButton3)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel7)
@@ -355,7 +380,7 @@ public class RealizarPedidosVista extends JFrame{
                             .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(8, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -368,6 +393,23 @@ public class RealizarPedidosVista extends JFrame{
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
+    
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        cerrarSesion();
+    }//GEN-LAST:event_formWindowClosing
+
+    private void lstCategoriasValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstCategoriasValueChanged
+        String seleccion = lstCategorias.getSelectedValue();
+        Categoria categoria = categorias.get(seleccion);
+
+        DefaultListModel<String> modeloItems = new DefaultListModel();
+        
+        Collection<ItemMenu> items = f.getInstancia().getItemsDeCategoria(categoria);
+        for (ItemMenu item : items) {
+            modeloItems.addElement(item.getNombre());
+        }
+        lstItems.setModel(modeloItems);
+    }//GEN-LAST:event_lstCategoriasValueChanged
 
 //    /**
 //     * @param args the command line arguments
@@ -425,16 +467,14 @@ public class RealizarPedidosVista extends JFrame{
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JList<String> jList1;
-    private javax.swing.JList<String> jList2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
@@ -442,11 +482,32 @@ public class RealizarPedidosVista extends JFrame{
     private javax.swing.JTable jTable2;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
+    private javax.swing.JList<String> lstCategorias;
+    private javax.swing.JList<String> lstItems;
     private java.awt.Panel panel1;
     private javax.swing.JTextField txtClienteNro;
     private javax.swing.JPasswordField txtClientePassword;
     private javax.swing.JButton txtLogin;
     // End of variables declaration//GEN-END:variables
+
+private void mostrarCategorias() {
+    // Modelo para el JList
+    DefaultListModel<String> modeloCategorias = new DefaultListModel<>();
+
+    Map<String, Categoria> mapaCategorias = new HashMap<>();
+
+    Collection<Categoria> categorias = f.getInstancia().getCategorias();
+
+    for (Categoria c : categorias) {
+        modeloCategorias.addElement(c.getNombre()); 
+        mapaCategorias.put(c.getNombre(), c);       
+    }
+    lstCategorias.setModel(modeloCategorias);
+    this.categorias = mapaCategorias;
+}
+
+
+
 
 
 }

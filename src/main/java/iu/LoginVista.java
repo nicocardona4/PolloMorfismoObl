@@ -5,10 +5,7 @@
 package iu;
 
 import dominio.Gestor;
-import dominio.Usuario;
-import java.util.Collection;
 import servicios.Fachada;
-import servicios.ServicioUsuario;
 
 /**
  *
@@ -16,15 +13,13 @@ import servicios.ServicioUsuario;
  */
 public class LoginVista extends javax.swing.JDialog {
 
-    /**
-     * Creates new form LoginClienteVista
-        */
+   private java.awt.Frame parentFrame;
+   
    public LoginVista(java.awt.Frame parent, boolean modal) {
        super(parent, modal);
+       this.parentFrame = parent; 
        initComponents();
    }
-
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -122,20 +117,20 @@ public class LoginVista extends javax.swing.JDialog {
         Gestor gestor = loginGestor(txtId.getText(), txtPass.getText());
         if (gestor != null) {
             System.out.println("Login exitoso");
-            ejecutarSiguienteCU(gestor);
+            procesarPedidos(gestor);
             dispose();
         } else {
             System.out.println("Identificador / clave inválido");
         }
     }
 
-    public void ejecutarSiguienteCU(Usuario usuario){
-        
-    }
-
     public Gestor loginGestor(String usuario, String password)
     {
         return Fachada.getInstancia().loginGestor(usuario, password);
+    }
+
+    private void procesarPedidos(Gestor gestor) {
+        new ProcesarPedidosVista(parentFrame,gestor).setVisible(true);
     }
 
     

@@ -4,7 +4,6 @@
  */
 package dominio.EstadosPedidos;
 
-import dominio.EstadoPedido;
 import dominio.Pedido;
 
 /**
@@ -13,14 +12,14 @@ import dominio.Pedido;
  */
 public class PedidoEnProceso extends EstadoPedido {
 
-    public PedidoEnProceso(String nombreEstado) {
-        super(nombreEstado);
+    public PedidoEnProceso(Pedido p, String nombreEstado) {
+        super(p,nombreEstado);
     }
     
     @Override
     public void finalizarPedido(Pedido pedido) {
         System.out.println("Finalizando preparación del pedido...");
-        pedido.setEstado(new PedidoFinalizado("Finalizado"));
+        pedido.setEstado(new PedidoFinalizado(getPedido(),"Finalizado"));
     }
     
     @Override

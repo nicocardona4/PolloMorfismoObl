@@ -49,7 +49,9 @@ public class Gestor extends Usuario {
     
     public void setPedido(Pedido p){
         //Asigno pedido de la up y luego se la quito para que no quede como pendiente
+       System.out.println("dominio.Gestor.setPedido(), seteo el pedido con el id de servicio: "+p.getServicioId());
        if(!pedidosAsignados.contains(p)){
+           System.out.println("dominio.Gestor.setPedido() lo agrega a la coleccion" );
             this.pedidosAsignados.add(p);
             this.getUp().removePedidoPorAsignacion(p);
        }

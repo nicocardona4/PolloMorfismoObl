@@ -62,10 +62,6 @@ public class ServicioPedidos {
         return servicio;
     }
     
-
-
-
-
     public Collection<Pedido> getPedidos() {
         return pedidos;
     }
@@ -95,6 +91,14 @@ public class ServicioPedidos {
 
     public void agregarDispositivo(Dispositivo d) {
         dispositivos.add(d);
+    }
+
+    void agregarPedido(Pedido p) {
+        pedidos.add(p);
+    }
+
+    void agregarServicio(Servicio s) {
+        servicios.add(s);
     }
     
 

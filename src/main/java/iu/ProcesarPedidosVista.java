@@ -228,15 +228,17 @@ public class ProcesarPedidosVista extends javax.swing.JDialog implements Observa
     }
 
     private void mostrarPedidosTomados() {
-         
+         dtm.setRowCount(0);
         //tblPedidos.
         for(Pedido pedido : gestor.getPedidosAsignados()){
             Servicio srv = Fachada.getInstancia().getServicioById(pedido.getServicioId());
-            o[1] = pedido.getItem().getNombre();
-            o[2] = pedido.getDescripcion();
-            o[3] = srv.getCliente().getNombreCompleto();
-            o[4] = pedido.getFechaCreacion();
-            o[5] = pedido.getEstadoActual();
+            Object[] fila = new Object[5];
+            fila[0] = pedido.getItem().getNombre();
+            fila[1] = pedido.getDescripcion();
+            fila[2] = srv.getCliente().getNombreCompleto();
+            fila[3] = pedido.getFechaCreacion();
+            fila[4] = pedido.getEstadoActual();
+            dtm.addRow(fila);
         }
     }
 }

@@ -2,7 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package dominio;
+package dominio.EstadosPedidos;
+
+import dominio.Pedido;
 
 /**
  *
@@ -10,10 +12,16 @@ package dominio;
  */
 public abstract class EstadoPedido {
     
-    public String nombreEstado;
+    private Pedido pedido;
+    private String nombreEstado;
 
-    public EstadoPedido(String nombreEstado) {
+    public EstadoPedido(Pedido p, String nombreEstado) {
+        this.pedido = p;
         this.nombreEstado = nombreEstado;
+    }
+    
+    public Pedido getPedido(){
+        return this.pedido;
     }
     
     public void confirmarPedido(Pedido pedido) {

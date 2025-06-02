@@ -20,12 +20,13 @@ public class Servicio {
     private Cliente cliente;
 
     public Servicio() {
-        
+        this.servicioId = ++contadorServicioId;
     }
     
     public Servicio(float total, Cliente cliente) {
         this.servicioId = ++contadorServicioId;
         this.total = total;
+        System.out.println("dominio.Servicio.<init>() "+ cliente.getClienteNro() + " servicioId "+ servicioId);
         this.cliente = cliente;
     }
 

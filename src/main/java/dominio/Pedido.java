@@ -4,7 +4,9 @@
  */
 package dominio;
 
+import dominio.EstadosPedidos.EstadoPedido;
 import dominio.EstadosPedidos.PedidoNoConfirmado;
+import dominio.ItemMenu;
 import java.util.Date;
 
 /**
@@ -22,7 +24,7 @@ public class Pedido {
     private int servicioId;
 
     public Pedido(ItemMenu item, String descripcion,int servicioId){
-        this.estadoPedido = new PedidoNoConfirmado("No Confirmado");
+        this.estadoPedido = new PedidoNoConfirmado(this,"No Confirmado");
         this.item = item;
         this.descripcion = descripcion;
         this.costoPëdido = item.getPrecio();

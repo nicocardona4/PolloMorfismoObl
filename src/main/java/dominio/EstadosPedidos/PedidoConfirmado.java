@@ -4,7 +4,6 @@
  */
 package dominio.EstadosPedidos;
 
-import dominio.EstadoPedido;
 import dominio.Pedido;
 
 /**
@@ -13,8 +12,8 @@ import dominio.Pedido;
  */
 public class PedidoConfirmado  extends EstadoPedido{
 
-    public PedidoConfirmado(String nombreEstado) {
-        super(nombreEstado);
+    public PedidoConfirmado(Pedido p, String nombreEstado) {
+        super(p,nombreEstado);
     }
     
     @Override
@@ -32,7 +31,7 @@ public class PedidoConfirmado  extends EstadoPedido{
     @Override
     public void tomarPedido(Pedido pedido) {
         System.out.println("Tomando pedido para proceso...");
-        pedido.setEstado(new PedidoEnProceso("En Proceso"));
+        pedido.setEstado(new PedidoEnProceso(getPedido(),"En Proceso"));
     }
     
     @Override

@@ -4,7 +4,6 @@
  */
 package dominio.EstadosPedidos;
 
-import dominio.EstadoPedido;
 import dominio.Pedido;
 
 /**
@@ -13,14 +12,14 @@ import dominio.Pedido;
  */
 public class PedidoNoConfirmado extends EstadoPedido {
 
-    public PedidoNoConfirmado(String nombreEstado) {
-        super(nombreEstado);
+    public PedidoNoConfirmado(Pedido p, String nombreEstado) {
+        super(p,nombreEstado);
     }
     
     @Override
     public void confirmarPedido(Pedido pedido) {
         System.out.println("Confirmando pedido...");
-        pedido.setEstado(new PedidoConfirmado("Confirmado"));
+        pedido.setEstado(new PedidoConfirmado(getPedido(),"Confirmado"));
     }
     
     @Override

@@ -24,7 +24,6 @@ public class Fachada {
     private ServicioUsuario servicioUsuario;
     private ServicioPedidos servicioPedidos;
     private ServicioMenu servicioMenu;
-
     
     
     public static Fachada getInstancia() {
@@ -79,6 +78,7 @@ public class Fachada {
     }
     
     public Servicio getServicioById(int servicioId){
+        System.out.println("servicios.Fachada.getServicioById() servicioId:"+servicioId);
         return servicioPedidos.getServicioById(servicioId);
     }
     
@@ -97,5 +97,13 @@ public class Fachada {
 
     public void agregarItem(ItemMenu im) {
         servicioMenu.agregarItem(im);
+    }
+    
+    public void agregarPedido(Pedido p){
+        servicioPedidos.agregarPedido(p);
+    }
+    
+    public void agregarServicio(Servicio s){
+        servicioPedidos.agregarServicio(s);
     }
 }

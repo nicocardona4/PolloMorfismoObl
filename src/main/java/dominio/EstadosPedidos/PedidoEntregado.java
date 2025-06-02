@@ -4,7 +4,6 @@
  */
 package dominio.EstadosPedidos;
 
-import dominio.EstadoPedido;
 import dominio.Pedido;
 
 /**
@@ -13,8 +12,8 @@ import dominio.Pedido;
  */
 public class PedidoEntregado extends EstadoPedido {
 
-    public PedidoEntregado(String nombreEstado) {
-        super(nombreEstado);
+    public PedidoEntregado(Pedido p, String nombreEstado) {
+        super(p,nombreEstado);
     }
     
     @Override

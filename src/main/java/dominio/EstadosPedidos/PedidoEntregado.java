@@ -27,4 +27,8 @@ public class PedidoEntregado extends EstadoPedido {
         return "Entregado";
     }
     
+    @Override
+    public void entregarPedido() {
+        throw new IllegalStateException("El pedido ya está entregado");
+    }
 }

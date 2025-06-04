@@ -47,7 +47,7 @@ public class Pedido {
     }
     
     public void entregarPedido() {
-        estadoPedido.entregarPedido(this);
+        estadoPedido.entregarPedido();
     }
     
     public void finalizarPedido() {

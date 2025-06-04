@@ -11,6 +11,7 @@ import dominio.Gestor;
 import dominio.ItemMenu;
 import dominio.Pedido;
 import dominio.Servicio;
+import dominio.Sesion;
 import dominio.UnidadProcesadora;
 import java.util.Collection;
 
@@ -51,6 +52,14 @@ public class Fachada {
     public void agregarGestor(Gestor gestor) {
         servicioUsuario.agregarGestor(gestor);
     }
+    
+    public void agregar(Sesion sesion) {
+        servicioUsuario.agregar(sesion);
+    }
+
+    public void remover(Sesion sesion) {
+        servicioUsuario.remover(sesion);
+    }
 
     public Boolean TieneDispositivoEnUso(Cliente cliente) {
         return servicioPedidos.TieneDispositivoEnUso(cliente);
@@ -78,7 +87,6 @@ public class Fachada {
     }
     
     public Servicio getServicioById(int servicioId){
-        System.out.println("servicios.Fachada.getServicioById() servicioId:"+servicioId);
         return servicioPedidos.getServicioById(servicioId);
     }
     

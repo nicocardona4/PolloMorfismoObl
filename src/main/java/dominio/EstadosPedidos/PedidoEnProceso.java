@@ -33,4 +33,9 @@ public class PedidoEnProceso extends EstadoPedido {
     public String getNombreEstado() {
         return "En Proceso";
     }
+    
+    @Override
+    public void entregarPedido() {
+        throw new IllegalStateException("Debe finalizar el pedido");
+    }
 }

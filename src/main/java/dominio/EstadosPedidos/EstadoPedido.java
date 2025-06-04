@@ -44,7 +44,7 @@ public abstract class EstadoPedido {
                                       this.getClass().getSimpleName());
     }
     
-    public void entregarPedido(Pedido pedido) {
+    public void entregarPedido() {
         throw new IllegalStateException("No se puede entregar el pedido en estado: " + 
                                       this.getClass().getSimpleName());
     }

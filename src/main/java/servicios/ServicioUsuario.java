@@ -6,6 +6,7 @@ package servicios;
 
 import dominio.Cliente;
 import dominio.Gestor;
+import dominio.Sesion;
 import dominio.Usuario;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,7 +17,8 @@ import java.util.Collection;
 public class ServicioUsuario {
     private Collection<Usuario> usuarios = new ArrayList<>();
     private Collection<Cliente> clientes = new ArrayList();    
-    private Collection<Gestor> gestores = new ArrayList();    
+    private Collection<Gestor> gestores = new ArrayList();  
+    private ArrayList<Sesion> sesiones = new ArrayList<>();
 
     public Collection<Cliente> getClientes() {
         return clientes;
@@ -67,6 +69,30 @@ public class ServicioUsuario {
         return null;
     }
     
+    public void agregarUsuario(Usuario u) {
+        usuarios.add(u);
+    }
+    public void agregarGestor(Gestor g) {
+        gestores.add(g);
+    }
+    public void agregarCliente(Cliente c) {
+        clientes.add(c);
+    }
+
+    public void agregar(Sesion sesion) {
+        sesiones.add(sesion);
+//        avisar(EventosAgenda.ALTA_DE_SESION);
+    }
+
+    public void remover(Sesion sesion) {
+        sesiones.remove(sesion);
+//        avisar(EventosAgenda.BAJA_DE_SESION);
+    }
+
+    Collection<Sesion> getSesiones() {
+        return sesiones;
+    }
+    
 //        public Cliente loginCliente(String clienteNro, String password) {
 //        Usuario u = loginGenerico(clienteNro, password, Cliente.class);
 //        return (Cliente) u;
@@ -100,15 +126,4 @@ public class ServicioUsuario {
 //        }
 //        return null;
 //    }
-//
-    public void agregarUsuario(Usuario u) {
-        usuarios.add(u);
-    }
-    public void agregarGestor(Gestor g) {
-        gestores.add(g);
-    }
-    public void agregarCliente(Cliente c) {
-        clientes.add(c);
-    }
-
 }

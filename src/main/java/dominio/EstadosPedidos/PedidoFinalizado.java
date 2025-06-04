@@ -17,9 +17,10 @@ public class PedidoFinalizado extends EstadoPedido {
     }
     
     @Override
-    public void entregarPedido(Pedido pedido) {
+    public void entregarPedido() {
+        Pedido p = this.getPedido();
         System.out.println("Entregando pedido al cliente...");
-        pedido.setEstado(new PedidoEntregado(getPedido(),"Entregado"));
+        p.setEstado(new PedidoEntregado(p,"Entregado"));
     }
     
     @Override

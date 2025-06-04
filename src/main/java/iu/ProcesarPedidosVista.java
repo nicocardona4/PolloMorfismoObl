@@ -7,6 +7,7 @@ package iu;
 import dominio.Gestor;
 import dominio.Pedido;
 import dominio.Servicio;
+import dominio.Sesion;
 import dominio.UnidadProcesadora;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +20,12 @@ import servicios.Fachada;
  *
  * @author maurizio
  */
-public class ProcesarPedidosVista extends javax.swing.JDialog implements Observador{
+public class ProcesarPedidosVista extends BaseVista implements Observador{
 
     private Gestor gestor;
     private Fachada f = Fachada.getInstancia();
     private UnidadProcesadora up;
-    private List<Pedido> pedidosMostrados;
+    private Sesion sesion;
     private DefaultTableModel dtm;
     private Object[] o = new Object[5];
     
@@ -32,10 +33,11 @@ public class ProcesarPedidosVista extends javax.swing.JDialog implements Observa
      * Creates new form ProcesarPedidosVista
      */
     public ProcesarPedidosVista(java.awt.Frame parent, Gestor gestor) {
-        super(parent, false);
+        //super(parent, false);
         initComponents();
         this.gestor = gestor;
         this.up = gestor.getUp();
+        crearSesion();
         dtm = (DefaultTableModel) tblPedidos.getModel();
         mostrarInfoGestor();
          //Sobre los pedidos pendientes. 
@@ -43,6 +45,9 @@ public class ProcesarPedidosVista extends javax.swing.JDialog implements Observa
         mostrarPedidosPendientes();
         //ToDo: en tblPedidos mostrar los pedidos que tenga el gestor
         mostrarPedidosTomados();
+        tblPedidos.getColumnModel().getColumn(5).setMinWidth(0);
+        tblPedidos.getColumnModel().getColumn(5).setMaxWidth(0);
+        tblPedidos.getColumnModel().getColumn(5).setWidth(0);
     }
 
     /**
@@ -60,12 +65,17 @@ public class ProcesarPedidosVista extends javax.swing.JDialog implements Observa
         jSeparator2 = new javax.swing.JSeparator();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblPedidos = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        btnEntregar = new javax.swing.JButton();
         btnFinalizar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         lstPedidos = new javax.swing.JList();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         txtInfo.setEditable(false);
         txtInfo.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
@@ -79,20 +89,20 @@ public class ProcesarPedidosVista extends javax.swing.JDialog implements Observa
 
         tblPedidos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Nombre de ítem", "Descripción", "Cliente", "Fecha Hora", "Estado"
+                "Nombre de ítem", "Descripción", "Cliente", "Fecha Hora", "Estado", "Pedido"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -105,7 +115,12 @@ public class ProcesarPedidosVista extends javax.swing.JDialog implements Observa
         });
         jScrollPane2.setViewportView(tblPedidos);
 
-        jButton1.setText("Entregar Pedido");
+        btnEntregar.setText("Entregar Pedido");
+        btnEntregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEntregarActionPerformed(evt);
+            }
+        });
 
         btnFinalizar.setText("Finalizar Pedido");
         btnFinalizar.addActionListener(new java.awt.event.ActionListener() {
@@ -142,7 +157,7 @@ public class ProcesarPedidosVista extends javax.swing.JDialog implements Observa
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnFinalizar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton1))
+                                .addComponent(btnEntregar))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(16, 16, 16)
@@ -168,7 +183,7 @@ public class ProcesarPedidosVista extends javax.swing.JDialog implements Observa
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(btnEntregar)
                     .addComponent(btnFinalizar))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
@@ -190,15 +205,24 @@ public class ProcesarPedidosVista extends javax.swing.JDialog implements Observa
         finalizarPedido();
     }//GEN-LAST:event_btnFinalizarActionPerformed
 
+    private void btnEntregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntregarActionPerformed
+        // TODO add your handling code here:
+        entregarPedido();
+    }//GEN-LAST:event_btnEntregarActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        cerrarSesion();
+    }//GEN-LAST:event_formWindowClosing
+
     /**
      * @param args the command line arguments
      */
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEntregar;
     private javax.swing.JButton btnFinalizar;
     private javax.swing.JButton btnTomar;
-    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
@@ -216,17 +240,34 @@ public class ProcesarPedidosVista extends javax.swing.JDialog implements Observa
     private void tomarPedido() {
         Pedido p = (Pedido) lstPedidos.getSelectedValue();
         if (p != null){
-            p.tomarPedido(this.gestor);
+            try {
+                limpiarMensajeDeError();
+                p.tomarPedido(this.gestor);
+            }catch(IllegalStateException ex){
+                mostrarMensajeDeError(ex.getMessage());
+            }
+        }else{
+            mostrarMensajeDeError("Debe seleccionar un pedido");
         }
     }
     
     private void finalizarPedido(){
         int fila = tblPedidos.getSelectedRow();
-        Pedido p = this.pedidosMostrados.get(tblPedidos.convertRowIndexToModel(fila));
+//        ArrayList<Pedido> pedidosMostrados = (ArrayList<Pedido>) gestor.getPedidosAsignados();
+//        Pedido p = pedidosMostrados.get(tblPedidos.convertRowIndexToModel(fila));
+        Pedido p = (Pedido) dtm.getValueAt(fila, 5);
         if(p!=null){
-            p.finalizarPedido();
-            //despues agregar que solo muestre los que estan en proceso/finalizados? asi se pueden entregar?
-            mostrarPedidosTomados();
+            try{
+                limpiarMensajeDeError();
+                p.finalizarPedido();
+                //despues agregar que solo muestre los que estan en proceso/finalizados? asi se pueden entregar?
+                mostrarPedidosTomados();
+            }catch(IllegalStateException ex){
+                mostrarMensajeDeError(ex.getMessage());
+            }
+            
+        }else{
+            mostrarMensajeDeError("Debe seleccionar un pedido");
         }
     }
         
@@ -253,21 +294,62 @@ public class ProcesarPedidosVista extends javax.swing.JDialog implements Observa
     }
 
     private void mostrarPedidosTomados() {
-         dtm.setRowCount(0);
-         List<Pedido> pedidos = new ArrayList<>();
-
-        //tblPedidos.
+        dtm.setRowCount(0);
+        List<Pedido> pedidos = new ArrayList<>();
         for(Pedido pedido : gestor.getPedidosAsignados()){
             Servicio srv = Fachada.getInstancia().getServicioById(pedido.getServicioId());
-            Object[] fila = new Object[5];
-            pedidos.add(pedido);
+            Object[] fila = new Object[6];
             fila[0] = pedido.getItem().getNombre();
             fila[1] = pedido.getDescripcion();
             fila[2] = srv.getCliente().getNombreCompleto();
             fila[3] = pedido.getFechaCreacion();
             fila[4] = pedido.getEstadoActual();
+            fila[5] = pedido;
             dtm.addRow(fila);
         }
-        this.pedidosMostrados = pedidos;
+    }
+
+    private void entregarPedido() {
+        int fila = tblPedidos.getSelectedRow();
+//        ArrayList<Pedido> pedidosMostrados = (ArrayList<Pedido>) gestor.getPedidosAsignados();
+//        Pedido p = pedidosMostrados.get(tblPedidos.convertRowIndexToModel(fila));
+        Pedido p = (Pedido) dtm.getValueAt(fila, 5);
+        if(p!=null){
+            try{
+                limpiarMensajeDeError();
+                p.entregarPedido();
+                //despues agregar que solo muestre los que estan en proceso/finalizados? asi se pueden entregar?
+                mostrarPedidosTomados();
+            }catch(IllegalStateException ex){
+                mostrarMensajeDeError(ex.getMessage());
+            }
+        }else{
+            mostrarMensajeDeError("Debe seleccionar un pedido");
+        }
+    }
+
+    private void crearSesion() {
+        this.sesion = new Sesion(this.gestor);
+        f.agregar(sesion);
+    }
+    
+    private void cerrarSesion() {
+        //Validar si tiene pedidos por entregar
+        DefaultTableModel model = (DefaultTableModel) tblPedidos.getModel();
+        int rowCount = model.getRowCount();
+        boolean hayPedidosPorEntregar=false;
+        for (int i = 0; i < rowCount; i++) {
+            Pedido p = (Pedido) model.getValueAt(i, 5); // columna 0 tiene el Pedido
+            if (!p.getEstadoActual().equalsIgnoreCase("Entregado")) {
+                hayPedidosPorEntregar = true;
+                break; 
+            }
+        }
+        System.out.println("HAY PEDIDOS POR ENTREGAR??:"+hayPedidosPorEntregar);
+        if(!hayPedidosPorEntregar){
+            f.remover(sesion);
+        }{
+            mostrarMensajeDeError("Tiene pedidos pendientes");
+        }
     }
 }

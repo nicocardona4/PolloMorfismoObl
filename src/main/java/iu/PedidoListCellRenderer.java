@@ -5,8 +5,10 @@
 package iu;
 
 import dominio.Pedido;
+import dominio.Servicio;
 import javax.swing.*;
 import java.awt.*;
+import servicios.Fachada;
 
 /**
  *
@@ -21,9 +23,10 @@ public class PedidoListCellRenderer extends JLabel implements ListCellRenderer<P
     @Override
     public Component getListCellRendererComponent(JList<? extends Pedido> list, Pedido value, int index, boolean isSelected, boolean cellHasFocus) {
         if (value != null) {
-            setText(String.valueOf(value.getPedidoId())); // Muestro el id, luego obtengo mas info en la vista
-                                                                //Otra opc. es tener un campo descripcion del pedido
-                                                                //o un metodo descripcion
+            Fachada f = Fachada.getInstancia();
+            Servicio s = f.getServicioById(value.getServicioId());
+            setText(String.valueOf(value.getItem().getNombre() + "- Cliente: " + s.getCliente().getNombreCompleto() + " - " + 
+                    value.getFechaCreacion())); 
         }
 
         if (isSelected) {

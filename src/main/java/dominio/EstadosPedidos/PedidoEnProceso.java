@@ -17,9 +17,10 @@ public class PedidoEnProceso extends EstadoPedido {
     }
     
     @Override
-    public void finalizarPedido(Pedido pedido) {
+    public void finalizarPedido() {
+        Pedido p = this.getPedido();
         System.out.println("Finalizando preparación del pedido...");
-        pedido.setEstado(new PedidoFinalizado(getPedido(),"Finalizado"));
+        p.setEstado(new PedidoFinalizado(p,"Finalizado"));
     }
     
     @Override

@@ -42,12 +42,13 @@ public class UnidadProcesadora extends Observable {
     }
     
     public Collection<Pedido> getPedidosPendientesAsig(){
-        return pedidosPendientesAsig;
+        return this.pedidosPendientesAsig;
     }
     
     public void setPedidosPendientesAsig(Pedido p){
-        if(!pedidosPendientesAsig.contains(p))
+        if(!pedidosPendientesAsig.contains(p)){
             this.pedidosPendientesAsig.add(p);
+        }
     }
     
     //ver de hacer un remove gestor

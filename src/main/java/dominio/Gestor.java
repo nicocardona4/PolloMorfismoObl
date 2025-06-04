@@ -1,5 +1,6 @@
 package dominio;
 
+import iu.EventosRestaurante;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -49,12 +50,19 @@ public class Gestor extends Usuario {
     
     public void setPedido(Pedido p){
         //Asigno pedido de la up y luego se la quito para que no quede como pendiente
-       System.out.println("dominio.Gestor.setPedido(), seteo el pedido con el id de servicio: "+p.getServicioId());
        if(!pedidosAsignados.contains(p)){
-           System.out.println("dominio.Gestor.setPedido() lo agrega a la coleccion" );
             this.pedidosAsignados.add(p);
+            System.out.println("Elimino el pedido: "+ p.getDescripcion() + " de la up: "+ this.getUp().getNombre());
             this.getUp().removePedidoPorAsignacion(p);
        }
+    }
+    
+    public void removePedido(Pedido p){
+        if(pedidosAsignados.contains(p)){
+            pedidosAsignados.remove(p);
+            //Se va a tener que suscribir el usuario que hizo el pedido.
+            avisar(EventosRestaurante.FINALIZACION_PEDIDO);
+        }
     }
     
     public Collection<Pedido> getPedidosAsignados(){

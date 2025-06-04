@@ -9,5 +9,6 @@ package iu;
  * @author maurizio
  */
 public enum EventosRestaurante {
-    ASIGNACION_PEDIDO
+    ASIGNACION_PEDIDO,
+    FINALIZACION_PEDIDO
 }

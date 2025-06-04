@@ -39,9 +39,13 @@ public class PrecargaDatos {
         f.agregarGestorUP(gestorComercial, up1);
 
         UnidadProcesadora up2 = new UnidadProcesadora("Bar");
-        Gestor gestorSoporte = new Gestor("lauram", "pass1234", "Laura Martínez", "gestor soporte",new UnidadProcesadora("Bar"));
+        Gestor gestorSoporte = new Gestor("lauram", "pass1234", "Laura Martínez", "gestor soporte",up2);
         f.agregarGestor(gestorSoporte);
         f.agregarGestorUP(gestorSoporte, up2);
+        
+        Gestor gestorSoporte2 = new Gestor("maurom", "pass1234", "Mauro Mendez", "gestor soporte 2",up2);
+        f.agregarGestor(gestorSoporte2);
+        f.agregarGestorUP(gestorSoporte2, up2);
 
 
         Dispositivo d1 = new Dispositivo();
@@ -80,22 +84,32 @@ public class PrecargaDatos {
         System.out.println("PRECARGA DE DATOS: "+juan.getNombreCompleto());
         Servicio sJuan = new Servicio(1090f,juan);
         Pedido p1 = new Pedido(im1,"Ensalada de la casa",sJuan.getServicioId());
-        Pedido p2 = new Pedido(im2,"Picada xxl",sJuan.getServicioId());
+        Pedido p2 = new Pedido(im2,"Las papas bien crocantes",sJuan.getServicioId());
         Pedido p3 = new Pedido(im3,"Agua c/gas",sJuan.getServicioId());
         Pedido p4 = new Pedido(im3,"Agua s/gas",sJuan.getServicioId());
-
-        gestorSoporte.setPedido(p4);
-        gestorSoporte.setPedido(p3);
-
-        up2.setPedidosPendientesAsig(p1);
-        up2.setPedidosPendientesAsig(p2);
-
+        
+        p1.setUp(up2);
+        p2.setUp(up2);
+        p3.setUp(up2);
+        p4.setUp(up2);
+        
         f.agregarPedido(p4);
         f.agregarPedido(p3);
         f.agregarPedido(p2);
         f.agregarPedido(p1);
-        
         f.agregarServicio(sJuan);
+        
+        p1.confirmarPedido();
+        p2.confirmarPedido();
+        p3.confirmarPedido();
+        p4.confirmarPedido();
+        
+//        gestorSoporte.setPedido(p4);
+//        gestorSoporte.setPedido(p3);
+
+        
+        
+        
     }   
 
 }

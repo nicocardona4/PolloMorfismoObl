@@ -4,6 +4,7 @@
  */
 package dominio.EstadosPedidos;
 
+import dominio.Gestor;
 import dominio.Pedido;
 
 /**
@@ -24,7 +25,7 @@ public abstract class EstadoPedido {
         return this.pedido;
     }
     
-    public void confirmarPedido(Pedido pedido) {
+    public void confirmarPedido() {
         throw new IllegalStateException("No se puede confirmar el pedido en estado: " + 
                                       this.getClass().getSimpleName());
     }
@@ -34,7 +35,7 @@ public abstract class EstadoPedido {
                                       this.getClass().getSimpleName());
     }
     
-    public void tomarPedido(Pedido pedido) { // o entregarPedido() si lo usas para "tomar"
+    public void tomarPedido(Gestor gestor) { // o entregarPedido() si lo usas para "tomar"
         throw new IllegalStateException("No se puede tomar...");
     }
     
@@ -48,7 +49,7 @@ public abstract class EstadoPedido {
                                       this.getClass().getSimpleName());
     }
     
-    public void finalizarPedido(Pedido pedido) {
+    public void finalizarPedido() {
         throw new IllegalStateException("No se puede finalizar el pedido en estado: " + 
                                       this.getClass().getSimpleName());
     }

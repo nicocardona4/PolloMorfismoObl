@@ -8,6 +8,8 @@ import dominio.Gestor;
 import dominio.Pedido;
 import dominio.Servicio;
 import dominio.UnidadProcesadora;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import observer.Observable;
 import observer.Observador;
@@ -22,7 +24,7 @@ public class ProcesarPedidosVista extends javax.swing.JDialog implements Observa
     private Gestor gestor;
     private Fachada f = Fachada.getInstancia();
     private UnidadProcesadora up;
-    
+    private List<Pedido> pedidosMostrados;
     private DefaultTableModel dtm;
     private Object[] o = new Object[5];
     
@@ -59,7 +61,7 @@ public class ProcesarPedidosVista extends javax.swing.JDialog implements Observa
         jScrollPane2 = new javax.swing.JScrollPane();
         tblPedidos = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnFinalizar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         lstPedidos = new javax.swing.JList();
 
@@ -105,7 +107,12 @@ public class ProcesarPedidosVista extends javax.swing.JDialog implements Observa
 
         jButton1.setText("Entregar Pedido");
 
-        jButton2.setText("Finalizar Pedido");
+        btnFinalizar.setText("Finalizar Pedido");
+        btnFinalizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFinalizarActionPerformed(evt);
+            }
+        });
 
         lstPedidos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstPedidos.setCellRenderer(new PedidoListCellRenderer());
@@ -133,7 +140,7 @@ public class ProcesarPedidosVista extends javax.swing.JDialog implements Observa
                         .addGap(21, 21, 21)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton2)
+                                .addComponent(btnFinalizar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButton1))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -162,7 +169,7 @@ public class ProcesarPedidosVista extends javax.swing.JDialog implements Observa
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(btnFinalizar))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
 
@@ -178,15 +185,20 @@ public class ProcesarPedidosVista extends javax.swing.JDialog implements Observa
         //obtenerPedido();
     }//GEN-LAST:event_lstPedidosMouseClicked
 
+    private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
+        // TODO add your handling code here:
+        finalizarPedido();
+    }//GEN-LAST:event_btnFinalizarActionPerformed
+
     /**
      * @param args the command line arguments
      */
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnFinalizar;
     private javax.swing.JButton btnTomar;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
@@ -202,16 +214,22 @@ public class ProcesarPedidosVista extends javax.swing.JDialog implements Observa
     }
 
     private void tomarPedido() {
-        //ToDo:si el pedido seleccionado no es null, lo toma
         Pedido p = (Pedido) lstPedidos.getSelectedValue();
         if (p != null){
-            //Agrego pedido al gestor. 
-            //Esto deberia quitarlo de la lista de pendientes y avisar a los demas
-            //Asignar pedido al gestor y eliminar de la lista de pendientes de la up
-            this.gestor.setPedido(p);
+            p.tomarPedido(this.gestor);
         }
     }
-
+    
+    private void finalizarPedido(){
+        int fila = tblPedidos.getSelectedRow();
+        Pedido p = this.pedidosMostrados.get(tblPedidos.convertRowIndexToModel(fila));
+        if(p!=null){
+            p.finalizarPedido();
+            //despues agregar que solo muestre los que estan en proceso/finalizados? asi se pueden entregar?
+            mostrarPedidosTomados();
+        }
+    }
+        
     @Override
     public void actualizar(Observable origen, Object evento) {
         if (EventosRestaurante.ASIGNACION_PEDIDO.equals(evento)) {
@@ -219,20 +237,30 @@ public class ProcesarPedidosVista extends javax.swing.JDialog implements Observa
             //de los pedidos pendientes a este u otro gestor. Por lo tanto se debe borrar
             //y cargar de nuevo la lista
             mostrarPedidosPendientes();
+            mostrarPedidosTomados();
         }
     }
 
     private void mostrarPedidosPendientes() {
-        //ver si el setListData reemplaza todo por lo que se le pasa 
+        //suscribir como observador
+        suscribirComoObservador(up);
         lstPedidos.setListData(f.getPedidosPorUp(up).toArray());
+    }
+    
+    private void suscribirComoObservador(UnidadProcesadora up){
+        up.removerObservador(this);
+        up.agregarObservador(this);
     }
 
     private void mostrarPedidosTomados() {
          dtm.setRowCount(0);
+         List<Pedido> pedidos = new ArrayList<>();
+
         //tblPedidos.
         for(Pedido pedido : gestor.getPedidosAsignados()){
             Servicio srv = Fachada.getInstancia().getServicioById(pedido.getServicioId());
             Object[] fila = new Object[5];
+            pedidos.add(pedido);
             fila[0] = pedido.getItem().getNombre();
             fila[1] = pedido.getDescripcion();
             fila[2] = srv.getCliente().getNombreCompleto();
@@ -240,5 +268,6 @@ public class ProcesarPedidosVista extends javax.swing.JDialog implements Observa
             fila[4] = pedido.getEstadoActual();
             dtm.addRow(fila);
         }
+        this.pedidosMostrados = pedidos;
     }
 }

@@ -17,9 +17,11 @@ public class PedidoNoConfirmado extends EstadoPedido {
     }
     
     @Override
-    public void confirmarPedido(Pedido pedido) {
+    public void confirmarPedido() {
         System.out.println("Confirmando pedido...");
-        pedido.setEstado(new PedidoConfirmado(getPedido(),"Confirmado"));
+        Pedido p = this.getPedido();
+        p.setEstado(new PedidoConfirmado(p,"Confirmado"));
+        p.getUp().setPedidosPendientesAsig(p);
     }
     
     @Override

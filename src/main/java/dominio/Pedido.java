@@ -22,7 +22,8 @@ public class Pedido {
     private float costoPëdido;
     private Date fechaCreacion;
     private int servicioId;
-
+    private UnidadProcesadora up;
+            
     public Pedido(ItemMenu item, String descripcion,int servicioId){
         this.estadoPedido = new PedidoNoConfirmado(this,"No Confirmado");
         this.item = item;
@@ -34,7 +35,7 @@ public class Pedido {
     }
     
     public void confirmarPedido() {
-        estadoPedido.confirmarPedido(this);
+        estadoPedido.confirmarPedido();
     }
     
     public void eliminarPedido() {
@@ -50,7 +51,11 @@ public class Pedido {
     }
     
     public void finalizarPedido() {
-        estadoPedido.finalizarPedido(this);
+        estadoPedido.finalizarPedido();
+    }
+    
+    public void tomarPedido(Gestor gestor){
+        estadoPedido.tomarPedido(gestor);
     }
     
     public void setEstado(EstadoPedido estado) {
@@ -59,6 +64,10 @@ public class Pedido {
     
     public String getEstadoActual() {
         return estadoPedido.getNombreEstado();
+    }
+
+    public EstadoPedido getEstadoPedido() {
+        return estadoPedido;
     }
 
     public ItemMenu getItem() {
@@ -79,6 +88,14 @@ public class Pedido {
 
     public Date getFechaCreacion() {
         return fechaCreacion;
+    }
+
+    public UnidadProcesadora getUp() {
+        return up;
+    }
+
+    public void setUp(UnidadProcesadora up) {
+        this.up = up;
     }
 
     public int getServicioId() {

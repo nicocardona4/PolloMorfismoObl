@@ -4,6 +4,7 @@
  */
 package dominio.EstadosPedidos;
 
+import dominio.Gestor;
 import dominio.Pedido;
 
 /**
@@ -29,9 +30,11 @@ public class PedidoConfirmado  extends EstadoPedido{
     }
     
     @Override
-    public void tomarPedido(Pedido pedido) {
+    public void tomarPedido(Gestor gestor) {
         System.out.println("Tomando pedido para proceso...");
-        pedido.setEstado(new PedidoEnProceso(getPedido(),"En Proceso"));
+        Pedido p = this.getPedido();
+        p.setEstado(new PedidoEnProceso(p,"En Proceso"));
+        gestor.setPedido(p);
     }
     
     @Override

@@ -4,12 +4,14 @@
  */
 package dominio;
 
+import observer.Observable;
+
 /**
  *
  * @author maurizio
  */
 
-public abstract class Usuario {
+public abstract class Usuario extends Observable{
 
     public Usuario(String nombreCompleto, String password) {
         this.password = password;

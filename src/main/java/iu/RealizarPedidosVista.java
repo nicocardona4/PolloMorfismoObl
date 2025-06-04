@@ -46,7 +46,7 @@ public class RealizarPedidosVista extends JFrame{
     }
 
     public Cliente loginCliente(String clienteNro, String password) {
-        return f.getInstancia().loginCliente(clienteNro, password);
+        return f.loginCliente(clienteNro, password);
     }
         
     private void login() {
@@ -55,7 +55,7 @@ public class RealizarPedidosVista extends JFrame{
         }
         cliente = loginCliente(txtClienteNro.getText(), txtClientePassword.getText());
             if (cliente != null) {
-                if(!f.getInstancia().TieneDispositivoEnUso(cliente)){
+                if(!f.TieneDispositivoEnUso(cliente)){
                     System.out.println("Login exitoso");
                     ejecutarSiguienteCU();
                 }else{
@@ -197,7 +197,8 @@ public class RealizarPedidosVista extends JFrame{
 
         jLabel7.setText("Pedidos del servicio");
 
-        jButton4.setText("Cpnfirmar Pedidos");
+        jButton4.setText("Confirmar Pedidos");
+        jButton4.setActionCommand("Confirmar Pedidos");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -404,7 +405,7 @@ public class RealizarPedidosVista extends JFrame{
 
         DefaultListModel<String> modeloItems = new DefaultListModel();
         
-        Collection<ItemMenu> items = f.getInstancia().getItemsDeCategoria(categoria);
+        Collection<ItemMenu> items = f.getItemsDeCategoria(categoria);
         for (ItemMenu item : items) {
             modeloItems.addElement(item.getNombre());
         }
@@ -496,7 +497,7 @@ private void mostrarCategorias() {
 
     Map<String, Categoria> mapaCategorias = new HashMap<>();
 
-    Collection<Categoria> categorias = f.getInstancia().getCategorias();
+    Collection<Categoria> categorias = f.getCategorias();
 
     for (Categoria c : categorias) {
         modeloCategorias.addElement(c.getNombre()); 

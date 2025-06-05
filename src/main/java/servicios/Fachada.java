@@ -13,6 +13,7 @@ import dominio.Pedido;
 import dominio.Servicio;
 import dominio.Sesion;
 import dominio.UnidadProcesadora;
+import excepciones.LoginException;
 import java.util.Collection;
 
 /**
@@ -37,7 +38,7 @@ public class Fachada {
         servicioMenu = new ServicioMenu();
     }
     
-    public Gestor loginGestor(String usuario, String password) {
+    public Gestor loginGestor(String usuario, String password) throws LoginException {
         return servicioUsuario.loginGestor(usuario, password);
     }
 

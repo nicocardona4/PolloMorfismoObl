@@ -5,13 +5,16 @@
 package iu;
 
 import dominio.Gestor;
+import excepciones.LoginException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import servicios.Fachada;
 
 /**
  *
  * @author nicolas.cardona
  */
-public class LoginVista extends javax.swing.JDialog {
+public class LoginVista extends BaseVista {
 
    private java.awt.Frame parentFrame;
    
@@ -114,17 +117,21 @@ public class LoginVista extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     private void login() {
-        Gestor gestor = loginGestor(txtId.getText(), txtPass.getText());
-        if (gestor != null) {
-            System.out.println("Login exitoso");
-            procesarPedidos(gestor);
-            dispose();
-        } else {
-            System.out.println("Identificador / clave inválido");
+        limpiarMensajeDeError();
+        try {
+            Gestor gestor = Fachada.getInstancia().loginGestor(txtId.getText(), txtPass.getText());
+            if (gestor != null) {
+                procesarPedidos(gestor);
+                dispose();
+            } else {
+                mostrarMensajeDeError("Identificador / clave inválido");
+            }
+        } catch (LoginException ex) {
+            mostrarMensajeDeError(ex.getMessage());
         }
     }
 
-    public Gestor loginGestor(String usuario, String password)
+    public Gestor loginGestor(String usuario, String password) throws LoginException
     {
         return Fachada.getInstancia().loginGestor(usuario, password);
     }

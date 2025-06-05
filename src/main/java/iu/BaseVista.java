@@ -4,6 +4,8 @@
  */
 package iu;
 
+import java.awt.Frame;
+
 /**
  *
  * @author facun
@@ -13,8 +15,9 @@ public abstract class BaseVista extends javax.swing.JDialog {
     /**
      * Creates new form BaseVista
      */
-    public BaseVista() {
-        initComponents();
+    public BaseVista(Frame parent, boolean modal) {
+        super(parent, modal);
+        initComponents(); // asegurate que este método exista o esté implementado en subclases
     }
 
     /**
@@ -43,9 +46,9 @@ public abstract class BaseVista extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 28, Short.MAX_VALUE)
-                .addComponent(lblMensajeError, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(lblMensajeError, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 53, Short.MAX_VALUE))
         );
 
         pack();

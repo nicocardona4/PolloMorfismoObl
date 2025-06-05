@@ -33,7 +33,7 @@ public class ProcesarPedidosVista extends BaseVista implements Observador{
      * Creates new form ProcesarPedidosVista
      */
     public ProcesarPedidosVista(java.awt.Frame parent, Gestor gestor) {
-        //super(parent, false);
+        super(parent, false);
         initComponents();
         this.gestor = gestor;
         this.up = gestor.getUp();
@@ -48,6 +48,7 @@ public class ProcesarPedidosVista extends BaseVista implements Observador{
         tblPedidos.getColumnModel().getColumn(5).setMinWidth(0);
         tblPedidos.getColumnModel().getColumn(5).setMaxWidth(0);
         tblPedidos.getColumnModel().getColumn(5).setWidth(0);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
 
     /**
@@ -253,10 +254,13 @@ public class ProcesarPedidosVista extends BaseVista implements Observador{
     
     private void finalizarPedido(){
         int fila = tblPedidos.getSelectedRow();
-//        ArrayList<Pedido> pedidosMostrados = (ArrayList<Pedido>) gestor.getPedidosAsignados();
-//        Pedido p = pedidosMostrados.get(tblPedidos.convertRowIndexToModel(fila));
-        Pedido p = (Pedido) dtm.getValueAt(fila, 5);
+        Pedido p = null;
+        System.out.println("fila!!"+fila);
+        if (fila>=0){
+            p = (Pedido) dtm.getValueAt(fila, 5);
+        }
         if(p!=null){
+            System.out.println("entro aca!!");
             try{
                 limpiarMensajeDeError();
                 p.finalizarPedido();
@@ -310,10 +314,11 @@ public class ProcesarPedidosVista extends BaseVista implements Observador{
     }
 
     private void entregarPedido() {
+        Pedido p = null;
         int fila = tblPedidos.getSelectedRow();
-//        ArrayList<Pedido> pedidosMostrados = (ArrayList<Pedido>) gestor.getPedidosAsignados();
-//        Pedido p = pedidosMostrados.get(tblPedidos.convertRowIndexToModel(fila));
-        Pedido p = (Pedido) dtm.getValueAt(fila, 5);
+        if (fila>=0)
+          p = (Pedido) dtm.getValueAt(fila, 5);
+        
         if(p!=null){
             try{
                 limpiarMensajeDeError();
@@ -345,11 +350,11 @@ public class ProcesarPedidosVista extends BaseVista implements Observador{
                 break; 
             }
         }
-        System.out.println("HAY PEDIDOS POR ENTREGAR??:"+hayPedidosPorEntregar);
-        if(!hayPedidosPorEntregar){
-            f.remover(sesion);
-        }{
-            mostrarMensajeDeError("Tiene pedidos pendientes");
+        if (!hayPedidosPorEntregar) {
+            f.remover(sesion); 
+            dispose(); // cierra la ventana de forma manual
+        } else {
+            mostrarMensajeDeError("Tiene pedidos pendientes"); // ventana sigue abierta
         }
     }
 }

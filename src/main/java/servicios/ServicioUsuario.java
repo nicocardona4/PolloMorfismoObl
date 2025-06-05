@@ -8,6 +8,7 @@ import dominio.Cliente;
 import dominio.Gestor;
 import dominio.Sesion;
 import dominio.Usuario;
+import excepciones.LoginException;
 import java.util.ArrayList;
 import java.util.Collection;
 /**
@@ -30,6 +31,10 @@ public class ServicioUsuario {
 
     public Collection<Usuario> getUsuarios() {
         return usuarios;
+    }
+    
+    Collection<Sesion> getSesiones() {
+        return sesiones;
     }
     
     private Cliente getCliente(String clienteNro) {
@@ -61,8 +66,19 @@ public class ServicioUsuario {
         return null;
     }
 
-    public Gestor loginGestor(String nombreUsuario, String password) {
+    public Gestor loginGestor(String nombreUsuario, String password) throws LoginException {
         Gestor gestor = getGestor(nombreUsuario);
+        
+        //valido primero que no este logueado
+        for(Sesion s:this.getSesiones()){
+            System.out.println("nombreusuario:"+s.getUsuario().getNombreDeUsuario());
+            System.out.println("nombreusuario:"+gestor.getNombreDeUsuario());
+            if(s.getUsuario().getNombreDeUsuario().equals(gestor.getNombreDeUsuario())){
+                System.out.println("llego aca");
+                throw new LoginException("El gestor ya se encuentra logueado");
+            }
+        }
+       
         if (gestor != null && gestor.esValido(password)) {
             return gestor;
         }
@@ -87,10 +103,6 @@ public class ServicioUsuario {
     public void remover(Sesion sesion) {
         sesiones.remove(sesion);
 //        avisar(EventosAgenda.BAJA_DE_SESION);
-    }
-
-    Collection<Sesion> getSesiones() {
-        return sesiones;
     }
     
 //        public Cliente loginCliente(String clienteNro, String password) {

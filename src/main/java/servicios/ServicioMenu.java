@@ -42,7 +42,7 @@ public class ServicioMenu {
         categorias.add(c);
     }
 
-    Collection<Categoria> getCategoras() {
+    public Collection<Categoria> getCategorias() {
         return categorias;
     }
 

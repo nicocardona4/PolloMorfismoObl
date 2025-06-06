@@ -10,9 +10,12 @@ import dominio.Dispositivo;
 import dominio.ItemMenu;
 import dominio.Servicio;
 import dominio.Usuario;
+import excepciones.PedidoInvalidoException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.ListModel;
@@ -25,9 +28,11 @@ import servicios.Fachada;
 public class RealizarPedidosVista extends JFrame{
 
     private Cliente cliente;
-    private Fachada f;
     private Dispositivo dispositivo;
     private Map<String, Categoria> categorias = new HashMap<>(); 
+    private Map<String, ItemMenu> items = new HashMap<>(); 
+    private Servicio servicio;
+    private float montoTotal = 0f;
     /**
      * Creates new form RealizarPedidosVista
      */
@@ -41,12 +46,13 @@ public class RealizarPedidosVista extends JFrame{
     public void ejecutarSiguienteCU() {
          dispositivo.setEnUso(true);
          setTitle("Realizar Pedidos - Cliente: " + cliente.getNombreCompleto());
-         Servicio servicio = new Servicio(0,cliente);
+         servicio = new Servicio(0,cliente);
+         Fachada.getInstancia().agregarServicio(servicio);
         
     }
 
     public Cliente loginCliente(String clienteNro, String password) {
-        return f.loginCliente(clienteNro, password);
+        return Fachada.getInstancia().loginCliente(clienteNro, password);
     }
         
     private void login() {
@@ -55,7 +61,7 @@ public class RealizarPedidosVista extends JFrame{
         }
         cliente = loginCliente(txtClienteNro.getText(), txtClientePassword.getText());
             if (cliente != null) {
-                if(!f.TieneDispositivoEnUso(cliente)){
+                if(!Fachada.getInstancia().TieneDispositivoEnUso(cliente)){
                     System.out.println("Login exitoso");
                     ejecutarSiguienteCU();
                 }else{
@@ -95,7 +101,7 @@ public class RealizarPedidosVista extends JFrame{
         jScrollPane2 = new javax.swing.JScrollPane();
         lstItems = new javax.swing.JList<>();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtComentario = new javax.swing.JTextArea();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
@@ -108,6 +114,7 @@ public class RealizarPedidosVista extends JFrame{
         jLabel9 = new javax.swing.JLabel();
         jScrollPane7 = new javax.swing.JScrollPane();
         lstCategorias = new javax.swing.JList<>();
+        lblMonto = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
@@ -140,8 +147,6 @@ public class RealizarPedidosVista extends JFrame{
 
         jLabel2.setText("Contraseña:");
 
-        txtClientePassword.setText("jPasswordField1");
-
         txtLogin.setText("Aceptar");
         txtLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -161,8 +166,8 @@ public class RealizarPedidosVista extends JFrame{
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtClientePassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(txtClientePassword, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
                 .addComponent(txtLogin)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -185,11 +190,16 @@ public class RealizarPedidosVista extends JFrame{
 
         jScrollPane2.setViewportView(lstItems);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane3.setViewportView(jTextArea1);
+        txtComentario.setColumns(20);
+        txtComentario.setRows(5);
+        jScrollPane3.setViewportView(txtComentario);
 
         jButton2.setText("Agregar Pedido");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Eliminar Pedido");
 
@@ -198,7 +208,6 @@ public class RealizarPedidosVista extends JFrame{
         jLabel7.setText("Pedidos del servicio");
 
         jButton4.setText("Confirmar Pedidos");
-        jButton4.setActionCommand("Confirmar Pedidos");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -234,6 +243,8 @@ public class RealizarPedidosVista extends JFrame{
             }
         });
         jScrollPane7.setViewportView(lstCategorias);
+
+        lblMonto.setText("0");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -278,8 +289,10 @@ public class RealizarPedidosVista extends JFrame{
                         .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25))
+                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(63, 63, 63)
+                .addComponent(lblMonto)
+                .addGap(39, 39, 39))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -313,7 +326,9 @@ public class RealizarPedidosVista extends JFrame{
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
-                .addComponent(jLabel9))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(lblMonto)))
         );
 
         jLabel3.setText("Menú");
@@ -392,7 +407,7 @@ public class RealizarPedidosVista extends JFrame{
     }//GEN-LAST:event_txtLoginActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+//        confirmarPedido();
     }//GEN-LAST:event_jButton4ActionPerformed
     
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -402,15 +417,24 @@ public class RealizarPedidosVista extends JFrame{
     private void lstCategoriasValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstCategoriasValueChanged
         String seleccion = lstCategorias.getSelectedValue();
         Categoria categoria = categorias.get(seleccion);
-
+        
         DefaultListModel<String> modeloItems = new DefaultListModel();
         
-        Collection<ItemMenu> items = f.getItemsDeCategoria(categoria);
-        for (ItemMenu item : items) {
+        Collection<ItemMenu> itemsAux = Fachada.getInstancia().getItemsDeCategoria(categoria);
+        for (ItemMenu item : itemsAux) {
             modeloItems.addElement(item.getNombre());
+            items.put(item.getNombre(), item);
         }
         lstItems.setModel(modeloItems);
     }//GEN-LAST:event_lstCategoriasValueChanged
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            agregarPedido();
+        } catch (PedidoInvalidoException ex) {
+            Logger.getLogger(RealizarPedidosVista.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
 //    /**
 //     * @param args the command line arguments
@@ -481,13 +505,14 @@ public class RealizarPedidosVista extends JFrame{
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
+    private javax.swing.JLabel lblMonto;
     private javax.swing.JList<String> lstCategorias;
     private javax.swing.JList<String> lstItems;
     private java.awt.Panel panel1;
     private javax.swing.JTextField txtClienteNro;
     private javax.swing.JPasswordField txtClientePassword;
+    private javax.swing.JTextArea txtComentario;
     private javax.swing.JButton txtLogin;
     // End of variables declaration//GEN-END:variables
 
@@ -497,7 +522,7 @@ private void mostrarCategorias() {
 
     Map<String, Categoria> mapaCategorias = new HashMap<>();
 
-    Collection<Categoria> categorias = f.getCategorias();
+    Collection<Categoria> categorias = Fachada.getInstancia().getCategorias();
 
     for (Categoria c : categorias) {
         modeloCategorias.addElement(c.getNombre()); 
@@ -506,6 +531,24 @@ private void mostrarCategorias() {
     lstCategorias.setModel(modeloCategorias);
     this.categorias = mapaCategorias;
 }
+
+    private void agregarPedido() throws PedidoInvalidoException {
+        String seleccion = lstItems.getSelectedValue();
+        if(seleccion == null){
+            throw new PedidoInvalidoException("Debe seleccionar un item");
+        }
+        ItemMenu itemSeleccionado = items.get(seleccion);
+        calcularMonto(itemSeleccionado.getPrecio());
+        System.out.println("servicio es null? " + (servicio == null));
+
+        Fachada.getInstancia().agregarPedido(itemSeleccionado,txtComentario.getText(), servicio.getServicioId());
+    }
+    
+    public void calcularMonto(float montoPedido) {
+    montoTotal += montoPedido;
+    lblMonto.setText(String.format("Total: $%.2f", montoTotal));
+}
+
 
 
 

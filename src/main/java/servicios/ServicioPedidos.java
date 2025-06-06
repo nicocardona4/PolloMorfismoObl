@@ -10,6 +10,7 @@ import dominio.UnidadProcesadora;
 
 import dominio.Cliente;
 import dominio.Dispositivo;
+import dominio.ItemMenu;
 import dominio.Pedido;
 import dominio.Servicio;
 
@@ -99,6 +100,11 @@ public class ServicioPedidos {
 
     void agregarServicio(Servicio s) {
         servicios.add(s);
+    }
+
+    void agregarPedido(ItemMenu itemSeleccionado, String comentario, int servicioId) {
+        Pedido p = new Pedido(itemSeleccionado,comentario,servicioId);
+        pedidos.add(p);
     }
     
 

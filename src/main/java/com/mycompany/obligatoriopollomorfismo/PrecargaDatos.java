@@ -26,7 +26,7 @@ public class PrecargaDatos {
         Cliente juan = new Cliente("Juan Perez", "cliente1","1234");
         f.agregarCliente(juan);
 
-        Cliente pedro = new Cliente("Pedro Picapiedra", "pass2","24441");
+        Cliente pedro = new Cliente("Pedro Picapiedra", "123","123");
         f.agregarCliente(pedro);
 
         Cliente pablo = new Cliente("Pablo Marmol", "pass3","304859");

@@ -97,7 +97,7 @@ public class Fachada {
     }
     
     public Collection<Categoria> getCategorias(){
-        return servicioMenu.getCategoras();
+        return servicioMenu.getCategorias();
     }
 
     public Collection<ItemMenu> getItemsDeCategoria(Categoria c) {
@@ -115,4 +115,10 @@ public class Fachada {
     public void agregarServicio(Servicio s){
         servicioPedidos.agregarServicio(s);
     }
+
+    public void agregarPedido(ItemMenu itemSeleccionado, String comentario, int servicioId) {
+        servicioPedidos.agregarPedido(itemSeleccionado, comentario,servicioId);
+    }
+
+
 }

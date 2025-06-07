@@ -57,13 +57,13 @@ public class Gestor extends Usuario {
        }
     }
     
-    public void removePedido(Pedido p){
-        if(pedidosAsignados.contains(p)){
-            pedidosAsignados.remove(p);
-            //Se va a tener que suscribir el usuario que hizo el pedido.
-            avisar(EventosRestaurante.FINALIZACION_PEDIDO);
-        }
-    }
+//    public void removePedido(Pedido p){
+//        if(pedidosAsignados.contains(p)){
+//            pedidosAsignados.remove(p);
+//            //Se va a tener que suscribir el usuario que hizo el pedido.
+//            avisar(EventosRestaurante.FINALIZACION_PEDIDO);
+//        }
+//    }
     
     public Collection<Pedido> getPedidosAsignados(){
         return pedidosAsignados;

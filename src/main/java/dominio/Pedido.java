@@ -7,13 +7,15 @@ package dominio;
 import dominio.EstadosPedidos.EstadoPedido;
 import dominio.EstadosPedidos.PedidoNoConfirmado;
 import dominio.ItemMenu;
+import iu.EventosRestaurante;
 import java.util.Date;
+import observer.Observable;
 
 /**
  *
  * @author nicoc
  */
-public class Pedido {
+public class Pedido extends Observable{
     private static int contadorPedidoId = 0;
     private int pedidoId;
     private EstadoPedido estadoPedido;
@@ -52,6 +54,8 @@ public class Pedido {
     
     public void finalizarPedido() {
         estadoPedido.finalizarPedido();
+        avisar(EventosRestaurante.FINALIZACION_PEDIDO);
+
     }
     
     public void tomarPedido(Gestor gestor){

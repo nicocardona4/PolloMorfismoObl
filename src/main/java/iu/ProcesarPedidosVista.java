@@ -9,8 +9,6 @@ import dominio.Pedido;
 import dominio.Servicio;
 import dominio.Sesion;
 import dominio.UnidadProcesadora;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import observer.Observable;
 import observer.Observador;
@@ -27,7 +25,7 @@ public class ProcesarPedidosVista extends BaseVista implements Observador{
     private UnidadProcesadora up;
     private Sesion sesion;
     private DefaultTableModel dtm;
-    private Object[] o = new Object[5];
+    private Object[] o = new Object[6];
     
     /**
      * Creates new form ProcesarPedidosVista
@@ -255,12 +253,10 @@ public class ProcesarPedidosVista extends BaseVista implements Observador{
     private void finalizarPedido(){
         int fila = tblPedidos.getSelectedRow();
         Pedido p = null;
-        System.out.println("fila!!"+fila);
         if (fila>=0){
             p = (Pedido) dtm.getValueAt(fila, 5);
         }
         if(p!=null){
-            System.out.println("entro aca!!");
             try{
                 limpiarMensajeDeError();
                 p.finalizarPedido();
@@ -288,7 +284,6 @@ public class ProcesarPedidosVista extends BaseVista implements Observador{
 
     private void mostrarPedidosPendientes() {
         //suscribir como observador
-        suscribirComoObservador(up);
         lstPedidos.setListData(f.getPedidosPorUp(up).toArray());
     }
     
@@ -299,7 +294,6 @@ public class ProcesarPedidosVista extends BaseVista implements Observador{
 
     private void mostrarPedidosTomados() {
         dtm.setRowCount(0);
-        List<Pedido> pedidos = new ArrayList<>();
         for(Pedido pedido : gestor.getPedidosAsignados()){
             Servicio srv = Fachada.getInstancia().getServicioById(pedido.getServicioId());
             Object[] fila = new Object[6];
@@ -336,6 +330,7 @@ public class ProcesarPedidosVista extends BaseVista implements Observador{
     private void crearSesion() {
         this.sesion = new Sesion(this.gestor);
         f.agregar(sesion);
+        suscribirComoObservador(up);
     }
     
     private void cerrarSesion() {
@@ -351,6 +346,7 @@ public class ProcesarPedidosVista extends BaseVista implements Observador{
             }
         }
         if (!hayPedidosPorEntregar) {
+            this.up.removerObservador(this);
             f.remover(sesion); 
             dispose(); // cierra la ventana de forma manual
         } else {

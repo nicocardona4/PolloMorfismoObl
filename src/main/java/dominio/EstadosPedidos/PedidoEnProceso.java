@@ -5,6 +5,7 @@
 package dominio.EstadosPedidos;
 
 import dominio.Pedido;
+import iu.EventosRestaurante;
 
 /**
  *

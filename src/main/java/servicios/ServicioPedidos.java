@@ -102,9 +102,24 @@ public class ServicioPedidos {
         servicios.add(s);
     }
 
-    void agregarPedido(ItemMenu itemSeleccionado, String comentario, int servicioId) {
-        Pedido p = new Pedido(itemSeleccionado,comentario,servicioId);
+    public Pedido agregarPedido(ItemMenu itemSeleccionado, String comentario, int servicioId) {
+        Pedido p = new Pedido(itemSeleccionado, comentario, servicioId);
         pedidos.add(p);
+
+        Servicio servicio = getServicioById(servicioId);
+        if (servicio != null) {
+            servicio.getPedidos().add(p);
+        }
+
+        return p;
+}
+
+
+    void eliminarPedido(Pedido p, Servicio servicio) {
+        servicio.getPedidos().remove(p);
+        if(p.getEstadoActual() == "Confirmado"){
+            p.getUp().removePedidoPorEliminacion(p);
+        }
     }
     
 

@@ -60,5 +60,12 @@ public class UnidadProcesadora extends Observable {
         }
     }
     
+    public void removePedidoPorEliminacion(Pedido p){
+         if(pedidosPendientesAsig.contains(p)){
+            this.pedidosPendientesAsig.remove(p);
+        }
+        
+    }
+    
     
 }

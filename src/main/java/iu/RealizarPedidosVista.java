@@ -8,9 +8,11 @@ import dominio.Categoria;
 import dominio.Cliente;
 import dominio.Dispositivo;
 import dominio.ItemMenu;
+import dominio.Pedido;
 import dominio.Servicio;
 import dominio.Usuario;
 import excepciones.PedidoInvalidoException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,31 +21,39 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.ListModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+import observer.Observable;
+import observer.Observador;
 import servicios.Fachada;
 
 /**
  *
  * @author nicolas.cardona
  */
-public class RealizarPedidosVista extends JFrame{
+public class RealizarPedidosVista  extends BaseVista implements Observador{
 
     private Cliente cliente;
     private Dispositivo dispositivo;
+    private Collection<Pedido> pedidos = new ArrayList<Pedido>();
     private Map<String, Categoria> categorias = new HashMap<>(); 
     private Map<String, ItemMenu> items = new HashMap<>(); 
     private Servicio servicio;
     private float montoTotal = 0f;
+    private DefaultTableModel dtm;
+    private Object[] o = new Object[7];
     /**
      * Creates new form RealizarPedidosVista
      */
     public RealizarPedidosVista(java.awt.Frame parent, Dispositivo d) {
+        super(parent,false);
         dispositivo = d;
         initComponents();
-        setTitle("Realizar Pedidos"); 
-        mostrarCategorias();
+        iniciarModel();
+
     }
 
-    public void ejecutarSiguienteCU() {
+    public void InicializarDispositivo() {
          dispositivo.setEnUso(true);
          setTitle("Realizar Pedidos - Cliente: " + cliente.getNombreCompleto());
          servicio = new Servicio(0,cliente);
@@ -57,20 +67,19 @@ public class RealizarPedidosVista extends JFrame{
         
     private void login() {
         if(dispositivo.isEnUso()){
-            System.out.println("Debe primero finalizar el servicio actual");
+            mostrarMensajeDeError("Debe primero finalizar el servicio actual");
         }
         cliente = loginCliente(txtClienteNro.getText(), txtClientePassword.getText());
             if (cliente != null) {
                 if(!Fachada.getInstancia().TieneDispositivoEnUso(cliente)){
-                    System.out.println("Login exitoso");
-                    ejecutarSiguienteCU();
+                    InicializarDispositivo();
                 }else{
-                    System.out.println("Ud. ya est{a identificado en otro dispositivo");
+                   mostrarMensajeDeError("Ud. ya est{a identificado en otro dispositivo");
 
                 }
             
             } else {
-            System.out.println("Identificador / clave inválido");
+            mostrarMensajeDeError("Identificador / clave inválido");
             }   
     }
     
@@ -109,12 +118,12 @@ public class RealizarPedidosVista extends JFrame{
         jSeparator2 = new javax.swing.JSeparator();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
         jLabel9 = new javax.swing.JLabel();
         jScrollPane7 = new javax.swing.JScrollPane();
         lstCategorias = new javax.swing.JList<>();
         lblMonto = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblPedidos = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
@@ -202,6 +211,11 @@ public class RealizarPedidosVista extends JFrame{
         });
 
         jButton3.setText("Eliminar Pedido");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jLabel6.setText("Comentario");
 
@@ -215,20 +229,11 @@ public class RealizarPedidosVista extends JFrame{
         });
 
         jButton5.setText("Finalizar Servicio");
-
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
-            },
-            new String [] {
-                "Ítem", "Comentario", "Estado", "Unidad", "Gestor", "Precio"
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
             }
-        ));
-        jScrollPane5.setViewportView(jTable2);
+        });
 
         jLabel9.setText("Monto total:");
 
@@ -245,6 +250,53 @@ public class RealizarPedidosVista extends JFrame{
         jScrollPane7.setViewportView(lstCategorias);
 
         lblMonto.setText("0");
+
+        tblPedidos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Ítem", "Comentario", "Estado", "Unidad", "Gestor", "Precio", "Pedido"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tblPedidos);
+        if (tblPedidos.getColumnModel().getColumnCount() > 0) {
+            tblPedidos.getColumnModel().getColumn(0).setResizable(false);
+            tblPedidos.getColumnModel().getColumn(0).setHeaderValue("Ítem");
+            tblPedidos.getColumnModel().getColumn(1).setResizable(false);
+            tblPedidos.getColumnModel().getColumn(1).setHeaderValue("Comentario");
+            tblPedidos.getColumnModel().getColumn(2).setResizable(false);
+            tblPedidos.getColumnModel().getColumn(2).setHeaderValue("Estado");
+            tblPedidos.getColumnModel().getColumn(3).setResizable(false);
+            tblPedidos.getColumnModel().getColumn(3).setHeaderValue("Unidad");
+            tblPedidos.getColumnModel().getColumn(4).setResizable(false);
+            tblPedidos.getColumnModel().getColumn(4).setHeaderValue("Gestor");
+            tblPedidos.getColumnModel().getColumn(5).setResizable(false);
+            tblPedidos.getColumnModel().getColumn(5).setHeaderValue("Precio");
+            tblPedidos.getColumnModel().getColumn(6).setResizable(false);
+            tblPedidos.getColumnModel().getColumn(6).setHeaderValue("Pedido");
+        }
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -281,18 +333,18 @@ public class RealizarPedidosVista extends JFrame{
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 728, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jScrollPane1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(63, 63, 63)
+                                .addComponent(lblMonto)
+                                .addGap(39, 39, 39))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jButton4)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton5)))
-                        .addGap(0, 0, Short.MAX_VALUE))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(63, 63, 63)
-                .addComponent(lblMonto)
-                .addGap(39, 39, 39))
+                                .addComponent(jButton5)
+                                .addGap(0, 0, Short.MAX_VALUE))))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -323,12 +375,16 @@ public class RealizarPedidosVista extends JFrame{
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton4)
                     .addComponent(jButton5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(lblMonto)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9)
+                            .addComponent(lblMonto)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 6, Short.MAX_VALUE))))
         );
 
         jLabel3.setText("Menú");
@@ -436,6 +492,15 @@ public class RealizarPedidosVista extends JFrame{
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        cerrarSesion();
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+       eliminarPedido();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
 //    /**
 //     * @param args the command line arguments
 //     */
@@ -494,22 +559,22 @@ public class RealizarPedidosVista extends JFrame{
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JLabel lblMonto;
     private javax.swing.JList<String> lstCategorias;
     private javax.swing.JList<String> lstItems;
     private java.awt.Panel panel1;
+    private javax.swing.JTable tblPedidos;
     private javax.swing.JTextField txtClienteNro;
     private javax.swing.JPasswordField txtClientePassword;
     private javax.swing.JTextArea txtComentario;
@@ -538,20 +603,69 @@ private void mostrarCategorias() {
             throw new PedidoInvalidoException("Debe seleccionar un item");
         }
         ItemMenu itemSeleccionado = items.get(seleccion);
-        calcularMonto(itemSeleccionado.getPrecio());
-        System.out.println("servicio es null? " + (servicio == null));
 
-        Fachada.getInstancia().agregarPedido(itemSeleccionado,txtComentario.getText(), servicio.getServicioId());
-    }
-    
+        if(servicio!= null){
+        Pedido p = Fachada.getInstancia().agregarPedido(itemSeleccionado,txtComentario.getText(), servicio.getServicioId());
+        calcularMonto(itemSeleccionado.getPrecio());
+        actualizarPedidos();
+    }else{
+            mostrarMensajeDeError("Debe iniciar sesión");
+        }
+ }
+
+        
     public void calcularMonto(float montoPedido) {
     montoTotal += montoPedido;
     lblMonto.setText(String.format("Total: $%.2f", montoTotal));
 }
 
+    @Override
+    public void actualizar(Observable origen, Object evento) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
+    private void actualizarPedidos() {
+        dtm.setRowCount(0);
+        for(Pedido pedido: servicio.getPedidos()){
+            
+        Object[] fila = new Object[7];
+        fila[0] = pedido.getItem().getNombre();
+        fila[1] = pedido.getDescripcion();
+        fila[2] = pedido.getEstadoActual();
+        fila[3] = pedido.getUp();
+        fila[4] = "SIN IMPLEMENTAR";
+        fila[5] = pedido.getItem().getCategoria().getNombre();
+        fila[6] = pedido;
 
+        dtm.addRow(fila);   
+        
+        }
+    }
 
+    private void iniciarModel() {
+    dtm = (DefaultTableModel) tblPedidos.getModel();
+    dtm.setRowCount(0);
+    tblPedidos.setModel(dtm);
+    TableColumnModel columnModel = tblPedidos.getColumnModel();
+    columnModel.getColumn(6).setMinWidth(0);
+    columnModel.getColumn(6).setMaxWidth(0);
+    columnModel.getColumn(6).setPreferredWidth(0); 
+    columnModel.getColumn(6).setResizable(false);
 
-
+    setTitle("Realizar Pedidos"); 
+    mostrarCategorias();
 }
+
+    private void eliminarPedido() {
+        int fila = tblPedidos.getSelectedRow();
+        Pedido p = null;
+        if (fila>=0){
+            p = (Pedido) dtm.getValueAt(fila, 6);
+        }
+        Fachada.getInstancia().EliminarPedido(p,servicio);
+        actualizarPedidos();
+    }
+
+
+    }
+

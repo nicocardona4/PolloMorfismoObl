@@ -82,7 +82,7 @@ public class PrecargaDatos {
         f.agregarItem(im5);
         
         System.out.println("PRECARGA DE DATOS: "+juan.getNombreCompleto());
-        Servicio sJuan = new Servicio(1090f,juan);
+        Servicio sJuan = new Servicio(1090f,pablo);
         Pedido p1 = new Pedido(im1,"Ensalada de la casa",sJuan.getServicioId());
         Pedido p2 = new Pedido(im2,"Las papas bien crocantes",sJuan.getServicioId());
         Pedido p3 = new Pedido(im3,"Agua c/gas",sJuan.getServicioId());

@@ -41,5 +41,10 @@ public class Servicio {
     public Cliente getCliente() {
         return cliente;
     }
+    
+    public Collection<Pedido> getPedidos(){
+    return pedidos;
+    }
+    
 
 }

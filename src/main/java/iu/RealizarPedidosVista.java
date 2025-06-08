@@ -463,7 +463,7 @@ public class RealizarPedidosVista  extends BaseVista implements Observador{
     }//GEN-LAST:event_txtLoginActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-//        confirmarPedido();
+        confirmarPedidos();
     }//GEN-LAST:event_jButton4ActionPerformed
     
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -621,7 +621,7 @@ private void mostrarCategorias() {
 
     @Override
     public void actualizar(Observable origen, Object evento) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        actualizarPedidos();
     }
 
     private void actualizarPedidos() {
@@ -662,7 +662,21 @@ private void mostrarCategorias() {
         if (fila>=0){
             p = (Pedido) dtm.getValueAt(fila, 6);
         }
+        try{
+        p.eliminarPedido();
         Fachada.getInstancia().EliminarPedido(p,servicio);
+        actualizarPedidos();
+        }
+        catch(IllegalStateException ex){
+            mostrarMensajeDeError(ex.getMessage());
+        }
+    }
+
+    private void confirmarPedidos() {
+        pedidos = servicio.getPedidos();
+        for(Pedido p: pedidos){
+            p.confirmarPedido();
+        }
         actualizarPedidos();
     }
 

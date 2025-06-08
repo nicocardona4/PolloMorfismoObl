@@ -5,6 +5,7 @@
 package dominio.EstadosPedidos;
 
 import dominio.Pedido;
+import servicios.Fachada;
 
 /**
  *
@@ -26,8 +27,7 @@ public class PedidoNoConfirmado extends EstadoPedido {
     
     @Override
     public void eliminarPedido(Pedido pedido) {
-        System.out.println("Eliminando pedido no confirmado...");
-        // Lógica para eliminar pedido
+        Fachada.getInstancia().EliminarPedido(pedido,Fachada.getInstancia().getServicioById(pedido.getServicioId()));
     }
     
     @Override

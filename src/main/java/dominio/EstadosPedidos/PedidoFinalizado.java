@@ -34,4 +34,9 @@ public class PedidoFinalizado extends EstadoPedido {
         return "Finalizado";
     }
     
+    @Override
+    public void eliminarPedido(Pedido pedido){
+       throw new IllegalStateException("No se puede eliminar un pedido finalizado");
+    }
+    
 }

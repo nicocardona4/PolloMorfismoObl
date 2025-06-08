@@ -31,4 +31,9 @@ public class PedidoEntregado extends EstadoPedido {
     public void entregarPedido() {
         throw new IllegalStateException("El pedido ya está entregado");
     }
+    
+    @Override
+    public void eliminarPedido(Pedido pedido){
+       throw new IllegalStateException("No se puede eliminar un pedido entregado");
+    }
 }

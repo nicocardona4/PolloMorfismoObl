@@ -39,4 +39,9 @@ public class PedidoEnProceso extends EstadoPedido {
     public void entregarPedido() {
         throw new IllegalStateException("Debe finalizar el pedido");
     }
+    
+    @Override
+    public void eliminarPedido(Pedido pedido){
+       throw new IllegalStateException("No se puede eliminar un pedido en proceso");
+    }
 }

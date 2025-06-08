@@ -74,6 +74,16 @@ public class PrecargaDatos {
         ItemMenu im3 = new ItemMenu("Agua", 120, catBebidas);
         ItemMenu im4 = new ItemMenu("Chajá", 300, catPostres);
         ItemMenu im5 = new ItemMenu("Vino blanco", 440, catVinos);
+        im1.setUp(up1);
+        im2.setUp(up1);
+        im3.setUp(up1);
+        im4.setUp(up1);
+        im5.setUp(up2);
+
+        
+        
+        
+        
 
         f.agregarItem(im1);
         f.agregarItem(im2);

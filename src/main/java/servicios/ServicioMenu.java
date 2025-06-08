@@ -45,6 +45,7 @@ public class ServicioMenu {
     public Collection<Categoria> getCategorias() {
         return categorias;
     }
+    
 
     void agregarItem(ItemMenu im) {
         items.add(im);

@@ -104,6 +104,7 @@ public class ServicioPedidos {
 
     public Pedido agregarPedido(ItemMenu itemSeleccionado, String comentario, int servicioId) {
         Pedido p = new Pedido(itemSeleccionado, comentario, servicioId);
+        p.setUp(itemSeleccionado.getUp());
         pedidos.add(p);
 
         Servicio servicio = getServicioById(servicioId);

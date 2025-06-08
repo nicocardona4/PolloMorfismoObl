@@ -10,6 +10,8 @@ import dominio.UnidadProcesadora;
 
 import dominio.Cliente;
 import dominio.Dispositivo;
+import dominio.Ingrediente;
+import dominio.Insumo;
 import dominio.ItemMenu;
 import dominio.Pedido;
 import dominio.Servicio;
@@ -104,6 +106,7 @@ public class ServicioPedidos {
 
     public Pedido agregarPedido(ItemMenu itemSeleccionado, String comentario, int servicioId) {
         Pedido p = new Pedido(itemSeleccionado, comentario, servicioId);
+        actualizarStock(p, false);
         p.setUp(itemSeleccionado.getUp());
         pedidos.add(p);
 
@@ -114,13 +117,35 @@ public class ServicioPedidos {
 
         return p;
 }
+    
+    public void actualizarStock(Pedido pedido, boolean devolver) {
+    for (Ingrediente ingrediente : pedido.getItem().getIngredientes()) {
+        int cantidad = ingrediente.getCantidad();
+        Insumo insumo = ingrediente.getInsumo();
+        int nuevoStock = insumo.getActualStock();
+
+            if(devolver){
+               nuevoStock += cantidad;
+            }else{
+                if (nuevoStock < insumo.getMinStock()) {
+                    throw new IllegalStateException("Stock insuficiente para el insumo: " + insumo.getNombre());
+                }
+                nuevoStock -= cantidad;
+            }
+        insumo.setActualStock(nuevoStock);
+        }
+}
+
+
+    
+    
 
 
     void eliminarPedido(Pedido p, Servicio servicio) {
         servicio.getPedidos().remove(p);
-        if(p.getEstadoActual() == "Confirmado"){
-            p.getUp().removePedidoPorEliminacion(p);
-        }
+        p.getUp().removePedidoPorEliminacion(p);
+        actualizarStock(p, true);
+        
     }
     
 

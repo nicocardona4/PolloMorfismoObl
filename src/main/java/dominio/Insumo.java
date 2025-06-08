@@ -43,5 +43,9 @@ public class Insumo {
         this.actualStock = actualStock;
     }
     
+    public Boolean hayStock(){
+        return minStock <= actualStock;
+    }
+    
     
 }

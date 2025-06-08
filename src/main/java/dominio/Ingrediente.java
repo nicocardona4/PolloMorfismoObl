@@ -11,6 +11,7 @@ package dominio;
 public class Ingrediente {
     private String nombre;
     private int cantidad;
+    private Insumo insumo;
 
     public String getNombre() {
         return nombre;
@@ -33,6 +34,8 @@ public class Ingrediente {
         this.cantidad = cantidad;
     }
     
-    
+    public Insumo getInsumo(){
+        return insumo;
+    }
     
 }

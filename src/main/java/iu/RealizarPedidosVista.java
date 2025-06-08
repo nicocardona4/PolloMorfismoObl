@@ -7,6 +7,7 @@ package iu;
 import dominio.Categoria;
 import dominio.Cliente;
 import dominio.Dispositivo;
+import dominio.Ingrediente;
 import dominio.ItemMenu;
 import dominio.Pedido;
 import dominio.Servicio;
@@ -478,8 +479,20 @@ public class RealizarPedidosVista  extends BaseVista implements Observador{
         
         Collection<ItemMenu> itemsAux = Fachada.getInstancia().getItemsDeCategoria(categoria);
         for (ItemMenu item : itemsAux) {
-            modeloItems.addElement(item.getNombre());
-            items.put(item.getNombre(), item);
+            boolean todosConStock = true;
+            
+            for(Ingrediente i: item.getIngredientes()){
+                if (!i.getInsumo().hayStock()){
+                    todosConStock = false;
+                    break;
+                }
+                
+            }
+            if(todosConStock){
+                modeloItems.addElement(item.getNombre());
+                items.put(item.getNombre(), item);
+            }
+
         }
         lstItems.setModel(modeloItems);
     }//GEN-LAST:event_lstCategoriasValueChanged

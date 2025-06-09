@@ -106,8 +106,6 @@ public class ServicioPedidos {
 
     public Pedido agregarPedido(ItemMenu itemSeleccionado, String comentario, int servicioId) {
         Pedido p = new Pedido(itemSeleccionado, comentario, servicioId);
-        actualizarStock(p, false);
-        p.setUp(itemSeleccionado.getUp());
         pedidos.add(p);
 
         Servicio servicio = getServicioById(servicioId);
@@ -118,10 +116,15 @@ public class ServicioPedidos {
         return p;
 }
     
+    public void confirmarPedido(Pedido p){
+        actualizarStock(p, false);
+        p.setUp(p.getItem().getUp());
+        p.getUp().setPedidosPendientesAsig(p);
+    }
+    
     public void actualizarStock(Pedido pedido, boolean devolver) {
     for (Ingrediente ingrediente : pedido.getItem().getIngredientes()) {
         int cantidad = ingrediente.getCantidad();
-        System.out.println(cantidad);
         Insumo insumo = ingrediente.getInsumo();
         int nuevoStock = insumo.getActualStock();
 
@@ -133,8 +136,10 @@ public class ServicioPedidos {
                 }
                 nuevoStock -= cantidad;
             }
+        System.out.println(insumo.getNombre() +" ANTES STOCK: " + insumo.getActualStock());  
+        System.out.println("CANTIDAD " + cantidad);
         insumo.setActualStock(nuevoStock);
-        System.out.println("AGUA STOCK: " + insumo.getActualStock());
+        System.out.println(insumo.getNombre() +"ACTUAL  STOCK: " + insumo.getActualStock());
         }
 }
 

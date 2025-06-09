@@ -34,6 +34,7 @@ public class Pedido extends Observable{
         this.pedidoId = ++contadorPedidoId;
         this.fechaCreacion = new Date();
         this.servicioId = servicioId;
+        this.up = item.getUp();
     }
     
     public float getCostoPedido(){

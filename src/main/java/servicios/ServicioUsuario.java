@@ -6,6 +6,7 @@ package servicios;
 
 import dominio.Cliente;
 import dominio.Gestor;
+import dominio.Pedido;
 import dominio.Sesion;
 import dominio.Usuario;
 import excepciones.LoginException;
@@ -57,7 +58,7 @@ public class ServicioUsuario {
     }
 
 
-    public Cliente loginCliente(String clienteNro, String password) {
+     Cliente loginCliente(String clienteNro, String password) {
         Cliente cliente = getCliente(clienteNro);
  
         if (cliente != null && cliente.esValido(password)) {
@@ -66,7 +67,7 @@ public class ServicioUsuario {
         return null;
     }
 
-    public Gestor loginGestor(String nombreUsuario, String password) throws LoginException {
+     Gestor loginGestor(String nombreUsuario, String password) throws LoginException {
         Gestor gestor = getGestor(nombreUsuario);
         
         //valido primero que no este logueado
@@ -85,24 +86,33 @@ public class ServicioUsuario {
         return null;
     }
     
-    public void agregarUsuario(Usuario u) {
+     void agregarUsuario(Usuario u) {
         usuarios.add(u);
     }
-    public void agregarGestor(Gestor g) {
+     void agregarGestor(Gestor g) {
         gestores.add(g);
     }
-    public void agregarCliente(Cliente c) {
+     void agregarCliente(Cliente c) {
         clientes.add(c);
     }
 
-    public void agregar(Sesion sesion) {
+     void agregar(Sesion sesion) {
         sesiones.add(sesion);
 //        avisar(EventosAgenda.ALTA_DE_SESION);
     }
 
-    public void remover(Sesion sesion) {
+     void remover(Sesion sesion) {
         sesiones.remove(sesion);
 //        avisar(EventosAgenda.BAJA_DE_SESION);
+    }
+    
+    Gestor obtenerGestorDePedido(Pedido pedido) {
+        for(Gestor g:gestores){
+            if(g.getPedidosAsignados().contains(pedido)){
+                return g;
+            }
+        }
+        return null;
     }
     
 //        public Cliente loginCliente(String clienteNro, String password) {
@@ -138,4 +148,6 @@ public class ServicioUsuario {
 //        }
 //        return null;
 //    }
+
+
 }

@@ -7,6 +7,7 @@ package iu;
 import dominio.Categoria;
 import dominio.Cliente;
 import dominio.Dispositivo;
+import dominio.Gestor;
 import dominio.Ingrediente;
 import dominio.Insumo;
 import dominio.ItemMenu;
@@ -654,14 +655,15 @@ private void mostrarCategorias() {
 
     private void actualizarPedidos() {
         dtm.setRowCount(0);
+        Gestor gestor = null;
         for(Pedido pedido: servicio.getPedidos()){
-            
+        gestor = Fachada.getInstancia().obtenerGestorDePedido(pedido);
         Object[] fila = new Object[7];
         fila[0] = pedido.getItem().getNombre();
         fila[1] = pedido.getDescripcion();
         fila[2] = pedido.getEstadoActual();
         fila[3] = pedido.getUp().getNombre();
-        fila[4] = "SIN IMPLEMENTAR";
+        fila[4] = gestor.getNombreCompleto();
         fila[5] = pedido.getCostoPedido();
         fila[6] = pedido;
 
@@ -736,7 +738,7 @@ private void mostrarCategorias() {
         }
     }
 
-    lstItems.setModel(modeloItems); // No hace falta invokeLater si esto viene del EDT
+    lstItems.setModel(modeloItems); 
     
 }
 

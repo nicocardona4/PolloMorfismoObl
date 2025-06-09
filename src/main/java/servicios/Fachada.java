@@ -24,6 +24,8 @@ import java.util.Collection;
 public class Fachada {
     private static Fachada instancia = new Fachada();
 
+
+
     private ServicioUsuario servicioUsuario;
     private ServicioPedidos servicioPedidos;
     private ServicioMenu servicioMenu;
@@ -122,6 +124,10 @@ public class Fachada {
         servicioPedidos.agregarPedido(p);
     }
     
+    public Gestor obtenerGestorDePedido(Pedido pedido) {
+        return servicioUsuario.obtenerGestorDePedido(pedido);
+    }
+    
     public void agregarServicio(Servicio s){
         servicioPedidos.agregarServicio(s);
     }
@@ -132,6 +138,10 @@ public class Fachada {
 
     public void EliminarPedido(Pedido p, Servicio servicio) {
         servicioPedidos.eliminarPedido(p,servicio);
+    }
+    
+    public void confirmarPedido(Pedido p){
+        servicioPedidos.confirmarPedido(p);
     }
 
 

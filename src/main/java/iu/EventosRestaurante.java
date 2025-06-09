@@ -10,5 +10,6 @@ package iu;
  */
 public enum EventosRestaurante {
     ASIGNACION_PEDIDO,
-    FINALIZACION_PEDIDO
+    FINALIZACION_PEDIDO,
+    ACTUALIZACION_STOCK
 }

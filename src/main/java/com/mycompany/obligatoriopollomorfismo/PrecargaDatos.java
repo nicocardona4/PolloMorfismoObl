@@ -8,6 +8,8 @@ import dominio.Categoria;
 import dominio.Cliente;
 import dominio.Dispositivo;
 import dominio.Gestor;
+import dominio.Ingrediente;
+import dominio.Insumo;
 import dominio.ItemMenu;
 import dominio.Pedido;
 import dominio.Servicio;
@@ -69,21 +71,86 @@ public class PrecargaDatos {
         f.agregarCategoria(catVinos);
         f.agregarCategoria(catCafes);
 
-        ItemMenu im1 = new ItemMenu("Ensalada", 300, catEntradas);
-        ItemMenu im2 = new ItemMenu("Picada completa", 550, catEntradas);
-        ItemMenu im3 = new ItemMenu("Agua", 120, catBebidas);
-        ItemMenu im4 = new ItemMenu("Chajá", 300, catPostres);
-        ItemMenu im5 = new ItemMenu("Vino blanco", 440, catVinos);
-        im1.setUp(up1);
-        im2.setUp(up1);
-        im3.setUp(up1);
-        im4.setUp(up1);
-        im5.setUp(up2);
+        ItemMenu im1 = new ItemMenu("Ensalada", 300, catEntradas,up1);
+        ItemMenu im2 = new ItemMenu("Picada completa", 550, catEntradas,up1);
+        ItemMenu im3 = new ItemMenu("Agua", 120, catBebidas,up1);
+        ItemMenu im4 = new ItemMenu("Chajá", 300, catPostres,up1);
+        ItemMenu im5 = new ItemMenu("Vino blanco", 440, catVinos,up2);
+
 
         
-        
-        
-        
+        Insumo harina = new Insumo("Harina", 100, 200);
+        Insumo azucar = new Insumo("Azúcar", 80, 150);
+        Insumo huevos = new Insumo("Huevos", 200, 300);
+        Insumo leche = new Insumo("Leche", 60, 100);
+        Insumo manteca = new Insumo("Manteca", 50, 100);
+        Insumo chocolate = new Insumo("Chocolate", 40, 85);
+        Insumo sal = new Insumo("Sal", 150, 250);
+        Insumo aceite = new Insumo("Aceite", 70, 150);
+        Insumo levadura = new Insumo("Levadura", 30, 500);
+        Insumo vainilla = new Insumo("Vainilla", 25, 300);
+        Insumo cafe = new Insumo("café", 25, 300);
+        Insumo crema = new Insumo("Crema", 25, 300);
+        Insumo frutilla = new Insumo("Frutilla", 25, 300);
+        Insumo agua = new Insumo("Agua", 10, 11);
+        f.agregarInsumo(harina);
+        f.agregarInsumo(azucar);
+        f.agregarInsumo(huevos);
+        f.agregarInsumo(leche);
+        f.agregarInsumo(manteca);
+        f.agregarInsumo(chocolate);
+        f.agregarInsumo(sal);
+        f.agregarInsumo(aceite);
+        f.agregarInsumo(vainilla);
+        f.agregarInsumo(cafe);
+        f.agregarInsumo(crema);
+        f.agregarInsumo(frutilla);
+        f.agregarInsumo(agua);
+
+
+
+
+        Ingrediente ingHarina = new Ingrediente("Harina", 2, harina);
+        Ingrediente ingAzucar = new Ingrediente("Azúcar", 3, azucar);
+        Ingrediente ingLeche = new Ingrediente("Leche", 1, leche);
+        Ingrediente ingHuevos = new Ingrediente("Huevos", 4, huevos);
+        Ingrediente ingManteca = new Ingrediente("Manteca", 2, manteca);
+        Ingrediente ingChocolate = new Ingrediente("Chocolate", 3, chocolate);
+        Ingrediente ingCafé = new Ingrediente("Café", 1, cafe);
+        Ingrediente ingCrema = new Ingrediente("Crema", 2, crema);
+        Ingrediente ingVainilla = new Ingrediente("Vainilla", 1, vainilla);
+        Ingrediente ingFrutilla = new Ingrediente("Frutilla", 5, frutilla);
+        Ingrediente ingAgua = new Ingrediente("Agua", 1, agua);
+
+
+        // Ensalada
+        im1.getIngredientes().add(ingLeche);      // Aderezo cremoso
+        im1.getIngredientes().add(ingCrema);      // Para suavidad
+        im1.getIngredientes().add(ingFrutilla);   // Toque fresco/frutal
+
+        // Picada completa
+        im2.getIngredientes().add(ingHarina);     // Pan
+        im2.getIngredientes().add(ingManteca);    // Para acompañamiento
+        im2.getIngredientes().add(ingChocolate);  // Toque dulce
+        im2.getIngredientes().add(ingVainilla);   // Aderezo aromático
+
+        // Agua
+        im3.getIngredientes().add(ingAgua);
+
+
+        // Chajá (postre uruguayo típico)
+        im4.getIngredientes().add(ingHarina);     // Bizcochuelo
+        im4.getIngredientes().add(ingAzucar);     // Merengue
+        im4.getIngredientes().add(ingHuevos);     // Bizcochuelo
+        im4.getIngredientes().add(ingFrutilla);   // Decoración/fruta
+        im4.getIngredientes().add(ingCrema);      // Relleno
+
+        // Vino blanco
+        // Generalmente no se descompone en ingredientes reales, pero podemos simularlo
+        im5.getIngredientes().add(ingVainilla);   // Nota aromática
+        im5.getIngredientes().add(ingAzucar);     // Para suavidad
+        im5.getIngredientes().add(ingFrutilla);   // Toque frutal
+
 
         f.agregarItem(im1);
         f.agregarItem(im2);

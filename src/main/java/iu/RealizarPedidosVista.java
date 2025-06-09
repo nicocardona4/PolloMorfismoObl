@@ -8,6 +8,7 @@ import dominio.Categoria;
 import dominio.Cliente;
 import dominio.Dispositivo;
 import dominio.Ingrediente;
+import dominio.Insumo;
 import dominio.ItemMenu;
 import dominio.Pedido;
 import dominio.Servicio;
@@ -22,6 +23,7 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.ListModel;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import observer.Observable;
@@ -50,6 +52,9 @@ public class RealizarPedidosVista  extends BaseVista implements Observador{
         super(parent,false);
         dispositivo = d;
         initComponents();
+        for(Insumo i: Fachada.getInstancia().getInsumos()){
+            suscribirComoObservador(i);
+        }
         iniciarModel();
 
     }
@@ -489,8 +494,9 @@ public class RealizarPedidosVista  extends BaseVista implements Observador{
                 
             }
             if(todosConStock){
-                modeloItems.addElement(item.getNombre());
-                items.put(item.getNombre(), item);
+                String clave = item.getNombre() + " - " + item.getPrecio();
+                modeloItems.addElement(clave);
+                items.put(clave, item);
             }
 
         }
@@ -634,7 +640,16 @@ private void mostrarCategorias() {
 
     @Override
     public void actualizar(Observable origen, Object evento) {
-        actualizarPedidos();
+        if(EventosRestaurante.ACTUALIZACION_STOCK.equals(evento)){
+            System.out.println("ACTUALIZACION DE STOCK RECIBIDA");
+                mostrarCategorias();
+                actualizarItems();
+        }
+    }
+    
+    private void suscribirComoObservador(Insumo insumo){
+        insumo.removerObservador(this);
+        insumo.agregarObservador(this);
     }
 
     private void actualizarPedidos() {
@@ -645,9 +660,9 @@ private void mostrarCategorias() {
         fila[0] = pedido.getItem().getNombre();
         fila[1] = pedido.getDescripcion();
         fila[2] = pedido.getEstadoActual();
-        fila[3] = pedido.getUp();
+        fila[3] = pedido.getUp().getNombre();
         fila[4] = "SIN IMPLEMENTAR";
-        fila[5] = pedido.getItem().getCategoria().getNombre();
+        fila[5] = pedido.getCostoPedido();
         fila[6] = pedido;
 
         dtm.addRow(fila);   
@@ -676,8 +691,8 @@ private void mostrarCategorias() {
             p = (Pedido) dtm.getValueAt(fila, 6);
         }
         try{
+        calcularMonto(-p.getCostoPedido());
         p.eliminarPedido();
-        Fachada.getInstancia().EliminarPedido(p,servicio);
         actualizarPedidos();
         }
         catch(IllegalStateException ex){
@@ -693,6 +708,39 @@ private void mostrarCategorias() {
         actualizarPedidos();
     }
 
+    private void actualizarItems() {
+    String seleccion = lstCategorias.getSelectedValue();
+    if (seleccion == null) return;
 
+    Categoria categoria = categorias.get(seleccion);
+    if (categoria == null) return;
+
+    Collection<ItemMenu> itemsAux = Fachada.getInstancia().getItemsDeCategoria(categoria);
+
+    DefaultListModel<String> modeloItems = new DefaultListModel<>();
+    items.clear();
+
+    for (ItemMenu item : itemsAux) {
+        boolean todosConStock = true;
+        for (Ingrediente i : item.getIngredientes()) {
+            if (!i.getInsumo().hayStock()) {
+                todosConStock = false;
+                break;
+            }
+        }
+
+        if (todosConStock) {
+            String clave = item.getNombre() + " - " + item.getPrecio();
+            modeloItems.addElement(clave);
+            items.put(clave, item);
+        }
     }
+
+    lstItems.setModel(modeloItems); // No hace falta invokeLater si esto viene del EDT
+    
+}
+
+}
+
+
 

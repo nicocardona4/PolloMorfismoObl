@@ -4,11 +4,14 @@
  */
 package dominio;
 
+import iu.EventosRestaurante;
+import observer.Observable;
+
 /**
  *
  * @author maurizio
  */
-public class Insumo {
+public class Insumo extends Observable{
     private String nombre; //Idem nombre de ingrediente
     private int minStock;
     private int actualStock;
@@ -40,6 +43,7 @@ public class Insumo {
     }
 
     public void setActualStock(int actualStock) {
+        avisar(EventosRestaurante.ACTUALIZACION_STOCK);
         this.actualStock = actualStock;
     }
     

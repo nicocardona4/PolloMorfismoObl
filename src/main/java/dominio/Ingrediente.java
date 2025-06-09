@@ -29,9 +29,10 @@ public class Ingrediente {
         this.cantidad = cantidad;
     }
 
-    public Ingrediente(String nombre, int cantidad) {
+    public Ingrediente(String nombre, int cantidad, Insumo i) {
         this.nombre = nombre;
         this.cantidad = cantidad;
+        this.insumo = i;
     }
     
     public Insumo getInsumo(){

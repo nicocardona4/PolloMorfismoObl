@@ -8,6 +8,7 @@ import dominio.Categoria;
 import dominio.Cliente;
 import dominio.Dispositivo;
 import dominio.Gestor;
+import dominio.Insumo;
 import dominio.ItemMenu;
 import dominio.Pedido;
 import dominio.Servicio;
@@ -107,6 +108,15 @@ public class Fachada {
     public void agregarItem(ItemMenu im) {
         servicioMenu.agregarItem(im);
     }
+    
+    public Collection<Insumo> getInsumos(){
+        return servicioMenu.getInsumos();
+    }
+    
+    public void agregarInsumo(Insumo insumo){
+         servicioMenu.agregarInsumo(insumo);
+    }
+    
     
     public void agregarPedido(Pedido p){
         servicioPedidos.agregarPedido(p);

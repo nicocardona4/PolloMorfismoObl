@@ -36,6 +36,10 @@ public class Pedido extends Observable{
         this.servicioId = servicioId;
     }
     
+    public float getCostoPedido(){
+    return costoPëdido;
+    }
+    
     public void confirmarPedido() {
         estadoPedido.confirmarPedido();
     }

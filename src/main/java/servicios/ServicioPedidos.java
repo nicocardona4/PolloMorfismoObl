@@ -121,6 +121,7 @@ public class ServicioPedidos {
     public void actualizarStock(Pedido pedido, boolean devolver) {
     for (Ingrediente ingrediente : pedido.getItem().getIngredientes()) {
         int cantidad = ingrediente.getCantidad();
+        System.out.println(cantidad);
         Insumo insumo = ingrediente.getInsumo();
         int nuevoStock = insumo.getActualStock();
 
@@ -133,12 +134,11 @@ public class ServicioPedidos {
                 nuevoStock -= cantidad;
             }
         insumo.setActualStock(nuevoStock);
+        System.out.println("AGUA STOCK: " + insumo.getActualStock());
         }
 }
 
 
-    
-    
 
 
     void eliminarPedido(Pedido p, Servicio servicio) {

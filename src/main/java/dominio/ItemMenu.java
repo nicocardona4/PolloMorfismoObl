@@ -4,6 +4,7 @@
  */
 package dominio;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -21,10 +22,12 @@ public class ItemMenu {
         return categoria;
     }
 
-    public ItemMenu(String nombre, float precio, Categoria c) {
+    public ItemMenu(String nombre, float precio, Categoria c, UnidadProcesadora uni) {
         this.nombre = nombre;
         this.precio = precio;
         this.categoria = c;
+        this.ingredientes = new ArrayList<>();
+        this.up = uni;
     }
 
     public String getNombre() {

@@ -5,6 +5,7 @@
 package servicios;
 
 import dominio.Categoria;
+import dominio.Insumo;
 import dominio.ItemMenu;
 import dominio.Menu;
 import java.util.ArrayList;
@@ -20,9 +21,10 @@ public class ServicioMenu {
     private Menu menu;
     private Collection<Categoria> categorias = new ArrayList<>();
     private Collection<ItemMenu> items = new ArrayList<>();
+    private Collection<Insumo> insumos = new ArrayList<>();    
 
 
-    public Collection<ItemMenu> getItemDeCategoria(Categoria c) {
+     Collection<ItemMenu> getItemDeCategoria(Categoria c) {
         Collection<ItemMenu> resultado = new ArrayList<ItemMenu>();
         for(ItemMenu im: items)
         {
@@ -34,21 +36,29 @@ public class ServicioMenu {
         return resultado;
     }
     
-    public Menu getMenu() {
+     Menu getMenu() {
         return menu;
     }
     
-    public  void agregarCategoria(Categoria c) {
+      void agregarCategoria(Categoria c) {
         categorias.add(c);
     }
 
-    public Collection<Categoria> getCategorias() {
+     Collection<Categoria> getCategorias() {
         return categorias;
     }
     
 
     void agregarItem(ItemMenu im) {
         items.add(im);
+    }
+
+    Collection<Insumo> getInsumos(){
+    return insumos;
+    }
+
+    void agregarInsumo(Insumo insumo) {
+        insumos.add(insumo);
     }
     
 }

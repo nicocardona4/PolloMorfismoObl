@@ -63,7 +63,7 @@ public class RealizarPedidosVista  extends BaseVista implements Observador{
     public void InicializarDispositivo() {
          dispositivo.setEnUso(true);
          setTitle("Realizar Pedidos - Cliente: " + cliente.getNombreCompleto());
-         servicio = new Servicio(0,cliente);
+         servicio = new Servicio(cliente);
          Fachada.getInstancia().agregarServicio(servicio);
         
     }
@@ -626,7 +626,6 @@ private void mostrarCategorias() {
 
         if(servicio!= null){
         Pedido p = Fachada.getInstancia().agregarPedido(itemSeleccionado,txtComentario.getText(), servicio.getServicioId());
-        calcularMonto(itemSeleccionado.getPrecio());
         actualizarPedidos();
     }else{
             mostrarMensajeDeError("Debe iniciar sesión");
@@ -663,7 +662,7 @@ private void mostrarCategorias() {
         fila[1] = pedido.getDescripcion();
         fila[2] = pedido.getEstadoActual();
         fila[3] = pedido.getUp().getNombre();
-        fila[4] = gestor.getNombreCompleto();
+        fila[4] = (gestor != null) ? gestor.getNombreCompleto() : "En espera";
         fila[5] = pedido.getCostoPedido();
         fila[6] = pedido;
 
@@ -707,6 +706,7 @@ private void mostrarCategorias() {
         for(Pedido p: pedidos){
             p.confirmarPedido();
         }
+        servicio.getTotal();
         actualizarPedidos();
     }
 

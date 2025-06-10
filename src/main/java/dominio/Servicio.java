@@ -16,16 +16,15 @@ public class Servicio {
     
     private int servicioId;
     private Collection<Pedido> pedidos = new ArrayList<Pedido>();
-    private float total;
+    private float total=0;
     private Cliente cliente;
 
     public Servicio() {
         this.servicioId = ++contadorServicioId;
     }
     
-    public Servicio(float total, Cliente cliente) {
+    public Servicio(Cliente cliente) {
         this.servicioId = ++contadorServicioId;
-        this.total = total;
         System.out.println("dominio.Servicio.<init>() "+ cliente.getClienteNro() + " servicioId "+ servicioId);
         this.cliente = cliente;
     }
@@ -35,6 +34,12 @@ public class Servicio {
     }
     
     public float getTotal() {
+        
+        for(Pedido p:pedidos){
+            if(p.getEstadoActual() == "Confirmado"){
+                total += p.getCostoPedido();
+            }
+        }
         return total;
     }
 

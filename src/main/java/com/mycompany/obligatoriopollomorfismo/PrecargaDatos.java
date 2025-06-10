@@ -175,7 +175,10 @@ public class PrecargaDatos {
         
         TipoCliente deLaCasa = new TipoCliente("De la casa", List.of(
                 new BeneficioMontoFijo(500.0)
-        ));                   
+        ));  
+        
+        TipoCliente comun = new TipoCliente("Comun", List.of(
+        ));  
         
         juan.setTipoBeneficio(preferencial);
         

@@ -6,7 +6,6 @@ package dominio;
 
 import dominio.EstadosPedidos.EstadoPedido;
 import dominio.EstadosPedidos.PedidoNoConfirmado;
-import dominio.ItemMenu;
 import iu.EventosRestaurante;
 import java.util.Date;
 import observer.Observable;
@@ -23,17 +22,17 @@ public class Pedido extends Observable{
     private String descripcion;
     private float costoPëdido;
     private Date fechaCreacion;
-    private int servicioId;
+    private Servicio servicio;
     private UnidadProcesadora up;
             
-    public Pedido(ItemMenu item, String descripcion,int servicioId){
+    public Pedido(ItemMenu item, String descripcion,Servicio servicio){
         this.estadoPedido = new PedidoNoConfirmado(this,"No Confirmado");
         this.item = item;
         this.descripcion = descripcion;
         this.costoPëdido = item.getPrecio();
         this.pedidoId = ++contadorPedidoId;
         this.fechaCreacion = new Date();
-        this.servicioId = servicioId;
+        this.servicio = servicio;
         this.up = item.getUp();
     }
     
@@ -107,8 +106,8 @@ public class Pedido extends Observable{
         this.up = up;
     }
 
-    public int getServicioId() {
-        return servicioId;
+    public Servicio getServicio() {
+        return servicio;
     }
     
 }

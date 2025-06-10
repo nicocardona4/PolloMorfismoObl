@@ -295,7 +295,7 @@ public class ProcesarPedidosVista extends BaseVista implements Observador{
     private void mostrarPedidosTomados() {
         dtm.setRowCount(0);
         for(Pedido pedido : gestor.getPedidosAsignados()){
-            Servicio srv = Fachada.getInstancia().getServicioById(pedido.getServicioId());
+            Servicio srv = pedido.getServicio();
             Object[] fila = new Object[6];
             fila[0] = pedido.getItem().getNombre();
             fila[1] = pedido.getDescripcion();

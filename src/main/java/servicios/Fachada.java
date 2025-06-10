@@ -132,8 +132,8 @@ public class Fachada {
         servicioPedidos.agregarServicio(s);
     }
 
-    public Pedido agregarPedido(ItemMenu itemSeleccionado, String comentario, int servicioId) {
-        return servicioPedidos.agregarPedido(itemSeleccionado, comentario,servicioId);
+    public Pedido agregarPedido(ItemMenu itemSeleccionado, String comentario, Servicio servicio) {
+        return servicioPedidos.agregarPedido(itemSeleccionado, comentario,servicio);
     }
 
     public void EliminarPedido(Pedido p, Servicio servicio) {

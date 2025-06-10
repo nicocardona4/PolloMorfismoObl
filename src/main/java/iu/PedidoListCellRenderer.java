@@ -24,7 +24,7 @@ public class PedidoListCellRenderer extends JLabel implements ListCellRenderer<P
     public Component getListCellRendererComponent(JList<? extends Pedido> list, Pedido value, int index, boolean isSelected, boolean cellHasFocus) {
         if (value != null) {
             Fachada f = Fachada.getInstancia();
-            Servicio s = f.getServicioById(value.getServicioId());
+            Servicio s = value.getServicio();
             setText(String.valueOf(value.getItem().getNombre() + "- Cliente: " + s.getCliente().getNombreCompleto() + " - " + 
                     value.getFechaCreacion())); 
         }

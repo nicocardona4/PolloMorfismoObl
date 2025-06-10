@@ -625,7 +625,7 @@ private void mostrarCategorias() {
         ItemMenu itemSeleccionado = items.get(seleccion);
 
         if(servicio!= null){
-        Pedido p = Fachada.getInstancia().agregarPedido(itemSeleccionado,txtComentario.getText(), servicio.getServicioId());
+        Pedido p = Fachada.getInstancia().agregarPedido(itemSeleccionado,txtComentario.getText(), servicio);
         actualizarPedidos();
     }else{
             mostrarMensajeDeError("Debe iniciar sesión");

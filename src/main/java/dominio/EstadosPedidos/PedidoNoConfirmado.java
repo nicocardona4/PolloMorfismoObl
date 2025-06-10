@@ -27,7 +27,7 @@ public class PedidoNoConfirmado extends EstadoPedido {
     
     @Override
     public void eliminarPedido(Pedido pedido) {
-        Fachada.getInstancia().EliminarPedido(pedido,Fachada.getInstancia().getServicioById(pedido.getServicioId()));
+        Fachada.getInstancia().EliminarPedido(pedido,pedido.getServicio());
     }
     
     @Override

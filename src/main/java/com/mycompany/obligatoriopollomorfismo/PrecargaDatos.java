@@ -73,7 +73,7 @@ public class PrecargaDatos {
 
         ItemMenu im1 = new ItemMenu("Ensalada", 300, catEntradas,up1);
         ItemMenu im2 = new ItemMenu("Picada completa", 550, catEntradas,up1);
-        ItemMenu im3 = new ItemMenu("Agua", 120, catBebidas,up1);
+        ItemMenu im3 = new ItemMenu("Agua", 120, catBebidas,up2);
         ItemMenu im4 = new ItemMenu("Chajá", 300, catPostres,up1);
         ItemMenu im5 = new ItemMenu("Vino blanco", 440, catVinos,up2);
 
@@ -91,8 +91,8 @@ public class PrecargaDatos {
         Insumo vainilla = new Insumo("Vainilla", 25, 300);
         Insumo cafe = new Insumo("café", 25, 300);
         Insumo crema = new Insumo("Crema", 25, 300);
-        Insumo frutilla = new Insumo("Frutilla", 25, 300);
-        Insumo agua = new Insumo("Agua", 10, 11);
+        Insumo frutilla = new Insumo("Frutilla", 25, 26);
+        Insumo agua = new Insumo("Agua", 10, 15);
         f.agregarInsumo(harina);
         f.agregarInsumo(azucar);
         f.agregarInsumo(huevos);
@@ -119,7 +119,7 @@ public class PrecargaDatos {
         Ingrediente ingCafé = new Ingrediente("Café", 1, cafe);
         Ingrediente ingCrema = new Ingrediente("Crema", 2, crema);
         Ingrediente ingVainilla = new Ingrediente("Vainilla", 1, vainilla);
-        Ingrediente ingFrutilla = new Ingrediente("Frutilla", 5, frutilla);
+        Ingrediente ingFrutilla = new Ingrediente("Frutilla", 1, frutilla);
         Ingrediente ingAgua = new Ingrediente("Agua", 1, agua);
 
 

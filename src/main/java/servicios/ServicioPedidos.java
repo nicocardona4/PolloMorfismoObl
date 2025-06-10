@@ -84,7 +84,7 @@ public class ServicioPedidos {
 
     public boolean TieneDispositivoEnUso(Cliente c){
         for(Servicio s: servicios){
-            if(s.getCliente().equals(c))
+            if(s.getCliente().equals(c))//FALTA VALIDAR QUE EL SERVICIO NO ESTE FINALIZADO
             {
                 return true;
             }

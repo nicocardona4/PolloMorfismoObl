@@ -90,8 +90,9 @@ public class RealizarPedidosVista  extends BaseVista implements Observador{
             }   
     }
     
-    private void cerrarSesion() {
+    private void finalizarServicio() {
         dispositivo.setEnUso(false);
+        iniciarModel();
     }
     
     /**
@@ -474,7 +475,7 @@ public class RealizarPedidosVista  extends BaseVista implements Observador{
     }//GEN-LAST:event_jButton4ActionPerformed
     
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        cerrarSesion();
+        finalizarServicio();
     }//GEN-LAST:event_formWindowClosing
 
     private void lstCategoriasValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstCategoriasValueChanged
@@ -514,7 +515,7 @@ public class RealizarPedidosVista  extends BaseVista implements Observador{
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        cerrarSesion();
+        finalizarServicio();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -645,11 +646,15 @@ private void mostrarCategorias() {
                 mostrarCategorias();
                 actualizarItems();
         }
+        if(EventosRestaurante.ASIGNACION_PEDIDO.equals(evento)){
+            System.out.println("ASIGNACION DE PEDIDO RECIBIDA");
+            actualizarPedidos();
+        }
     }
     
-    private void suscribirComoObservador(Insumo insumo){
-        insumo.removerObservador(this);
-        insumo.agregarObservador(this);
+    private void suscribirComoObservador(Observable observable){
+        observable.removerObservador(this);
+        observable.agregarObservador(this);
     }
 
     private void actualizarPedidos() {
@@ -705,6 +710,7 @@ private void mostrarCategorias() {
         pedidos = servicio.getPedidos();
         for(Pedido p: pedidos){
             p.confirmarPedido();
+            suscribirComoObservador(p.getUp());
         }
         servicio.getTotal();
         actualizarPedidos();

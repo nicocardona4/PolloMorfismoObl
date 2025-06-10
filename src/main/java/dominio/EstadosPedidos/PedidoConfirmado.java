@@ -24,6 +24,10 @@ public class PedidoConfirmado  extends EstadoPedido{
         Fachada.getInstancia().EliminarPedido(pedido,pedido.getServicio());
     }
     
+    @Override 
+    public void confirmarPedido() {
+    }
+    
     @Override
     public void cobrarPedido(Pedido pedido) {
         System.out.println("Cobrando pedido confirmado...");

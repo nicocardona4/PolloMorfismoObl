@@ -8,6 +8,7 @@ import dominio.Cliente;
 import dominio.Gestor;
 import dominio.Pedido;
 import dominio.Sesion;
+import dominio.TipoCliente;
 import dominio.Usuario;
 import excepciones.LoginException;
 import java.util.ArrayList;
@@ -115,6 +116,9 @@ public class ServicioUsuario {
         return null;
     }
     
+    void agregarTipoCliente(Cliente c, TipoCliente tc) {
+        c.setTipoBeneficio(tc);
+    }
 //        public Cliente loginCliente(String clienteNro, String password) {
 //        Usuario u = loginGenerico(clienteNro, password, Cliente.class);
 //        return (Cliente) u;
@@ -148,6 +152,8 @@ public class ServicioUsuario {
 //        }
 //        return null;
 //    }
+
+   
 
 
 }

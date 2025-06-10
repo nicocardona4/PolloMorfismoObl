@@ -13,6 +13,7 @@ import dominio.ItemMenu;
 import dominio.Pedido;
 import dominio.Servicio;
 import dominio.Sesion;
+import dominio.TipoCliente;
 import dominio.UnidadProcesadora;
 import excepciones.LoginException;
 import java.util.Collection;
@@ -23,8 +24,6 @@ import java.util.Collection;
  */
 public class Fachada {
     private static Fachada instancia = new Fachada();
-
-
 
     private ServicioUsuario servicioUsuario;
     private ServicioPedidos servicioPedidos;
@@ -126,6 +125,10 @@ public class Fachada {
     
     public Gestor obtenerGestorDePedido(Pedido pedido) {
         return servicioUsuario.obtenerGestorDePedido(pedido);
+    }
+    
+    public void agregarTipoCliente(Cliente c, TipoCliente tc){
+        servicioUsuario.agregarTipoCliente(c,tc);
     }
     
     public void agregarServicio(Servicio s){

@@ -180,7 +180,7 @@ public class PrecargaDatos {
         TipoCliente comun = new TipoCliente("Comun", List.of(
         ));  
         
-        juan.setTipoBeneficio(preferencial);
+        f.agregarTipoCliente(juan, preferencial);
         
         System.out.println("PRECARGA DE DATOS: "+juan.getNombreCompleto());
         Servicio sJuan = new Servicio(pablo);

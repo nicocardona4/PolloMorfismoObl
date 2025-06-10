@@ -4,6 +4,9 @@
  */
 package com.mycompany.obligatoriopollomorfismo;
 
+import dominio.BeneficioMontoFijo;
+import dominio.BeneficioPorCategoria;
+import dominio.BeneficioPorcentual;
 import dominio.Categoria;
 import dominio.Cliente;
 import dominio.Dispositivo;
@@ -13,7 +16,10 @@ import dominio.Insumo;
 import dominio.ItemMenu;
 import dominio.Pedido;
 import dominio.Servicio;
+import dominio.TipoCliente;
 import dominio.UnidadProcesadora;
+import java.util.List;
+import java.util.Set;
 import servicios.Fachada;
 
 
@@ -157,6 +163,21 @@ public class PrecargaDatos {
         f.agregarItem(im3);
         f.agregarItem(im4);
         f.agregarItem(im5);
+        
+        TipoCliente preferencial = new TipoCliente("Preferencial", List.of(
+            new BeneficioPorCategoria(Set.of(catBebidas)),               // categoria bebidas
+            new BeneficioPorcentual(5.0, 2000.0)                       // 5% si el total > 2000
+        ));
+        
+        TipoCliente frecuentes = new TipoCliente("Frecuente", List.of(
+            new BeneficioPorCategoria(Set.of(catCafes))                   
+        ));
+        
+        TipoCliente deLaCasa = new TipoCliente("De la casa", List.of(
+                new BeneficioMontoFijo(500.0)
+        ));                   
+        
+        juan.setTipoBeneficio(preferencial);
         
         System.out.println("PRECARGA DE DATOS: "+juan.getNombreCompleto());
         Servicio sJuan = new Servicio(pablo);

@@ -8,9 +8,8 @@ import dominio.Servicio;
 
 /**
  *
- * @author nicoc
+ * @author maurizio
  */
-public interface TipoCliente {
-    public int calcularDescuento(Servicio servicio);
-    public String descripcionBeneficio(Servicio servicio);
+public interface Beneficio {
+    double calcularBeneficio(Servicio servicio);
 }

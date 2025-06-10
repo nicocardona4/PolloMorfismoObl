@@ -4,8 +4,6 @@
  */
 package dominio;
 
-import Interfaces.TipoCliente;
-
 /**
  *
  * @author maurizio
@@ -23,10 +21,22 @@ public class Cliente extends Usuario {
     public Cliente(String nombreCompleto, String password, String clienteNro) {
         super(nombreCompleto, password);
         this.clienteNro = clienteNro;
+//        this.tipoCliente = new SinBeneficio(); // Por defecto
         //todo: prceso de asignacion de dispositivo
     }
 
+    public void setTipoBeneficio(TipoCliente clienteTipoBeneficio) {
+        this.tipoCliente = clienteTipoBeneficio;
+    }
     
+    public double calcularDescuento(Servicio servicio) {
+        return tipoCliente.calcularDescuento(servicio);
+    }
+
+    public String getTipoNombre() {
+        return tipoCliente.getNombre();
+    }
+
 //    public void abonarServicio(int servicioId){
 //        //ToDo
 //    }

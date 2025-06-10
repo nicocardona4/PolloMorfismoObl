@@ -109,6 +109,10 @@ public class Pedido extends Observable{
     public Servicio getServicio() {
         return servicio;
     }
+
+    public boolean esDeCategoria(Categoria categoria) {
+        return this.item.getCategoria().equals(categoria);
+    }
     
 }
 

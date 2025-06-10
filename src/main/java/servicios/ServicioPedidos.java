@@ -104,11 +104,11 @@ public class ServicioPedidos {
         servicios.add(s);
     }
 
-    public Pedido agregarPedido(ItemMenu itemSeleccionado, String comentario, int servicioId) {
-        Pedido p = new Pedido(itemSeleccionado, comentario, servicioId);
+    public Pedido agregarPedido(ItemMenu itemSeleccionado, String comentario, Servicio servicio) {
+        Pedido p = new Pedido(itemSeleccionado, comentario, servicio);
         pedidos.add(p);
 
-        Servicio servicio = getServicioById(servicioId);
+        //Servicio servicio = getServicioById(servicioId);
         if (servicio != null) {
             servicio.getPedidos().add(p);
         }

@@ -160,10 +160,10 @@ public class PrecargaDatos {
         
         System.out.println("PRECARGA DE DATOS: "+juan.getNombreCompleto());
         Servicio sJuan = new Servicio(pablo);
-        Pedido p1 = new Pedido(im1,"Ensalada de la casa",sJuan.getServicioId());
-        Pedido p2 = new Pedido(im2,"Las papas bien crocantes",sJuan.getServicioId());
-        Pedido p3 = new Pedido(im3,"Agua c/gas",sJuan.getServicioId());
-        Pedido p4 = new Pedido(im3,"Agua s/gas",sJuan.getServicioId());
+        Pedido p1 = new Pedido(im1,"Ensalada de la casa",sJuan);
+        Pedido p2 = new Pedido(im2,"Las papas bien crocantes",sJuan);
+        Pedido p3 = new Pedido(im3,"Agua c/gas",sJuan);
+        Pedido p4 = new Pedido(im3,"Agua s/gas",sJuan);
         
         p1.setUp(up2);
         p2.setUp(up2);

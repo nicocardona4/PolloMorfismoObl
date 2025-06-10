@@ -1,6 +1,5 @@
 package dominio;
 
-import iu.EventosRestaurante;
 import java.util.ArrayList;
 import java.util.Collection;
 

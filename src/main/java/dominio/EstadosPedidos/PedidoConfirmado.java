@@ -21,7 +21,7 @@ public class PedidoConfirmado  extends EstadoPedido{
     @Override
     public void eliminarPedido(Pedido pedido) {
         System.out.println("Eliminando pedido confirmado...");
-        Fachada.getInstancia().EliminarPedido(pedido,Fachada.getInstancia().getServicioById(pedido.getServicioId()));
+        Fachada.getInstancia().EliminarPedido(pedido,pedido.getServicio());
     }
     
     @Override

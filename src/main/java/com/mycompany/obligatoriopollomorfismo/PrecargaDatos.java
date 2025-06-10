@@ -6,6 +6,7 @@ package com.mycompany.obligatoriopollomorfismo;
 
 import dominio.BeneficioMontoFijo;
 import dominio.BeneficioPorCategoria;
+import dominio.BeneficioPorItemMenu;
 import dominio.BeneficioPorcentual;
 import dominio.Categoria;
 import dominio.Cliente;
@@ -165,8 +166,8 @@ public class PrecargaDatos {
         f.agregarItem(im5);
         
         TipoCliente preferencial = new TipoCliente("Preferencial", List.of(
-            new BeneficioPorCategoria(Set.of(catBebidas)),               // categoria bebidas
-            new BeneficioPorcentual(5.0, 2000.0)                       // 5% si el total > 2000
+            new BeneficioPorItemMenu(Set.of(im3)),               // Item agua
+            new BeneficioPorcentual(5.0, 2000.0)           // 5% si el total > 2000
         ));
         
         TipoCliente frecuentes = new TipoCliente("Frecuente", List.of(

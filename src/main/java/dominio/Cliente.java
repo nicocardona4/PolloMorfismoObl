@@ -4,6 +4,8 @@
  */
 package dominio;
 
+import java.util.List;
+
 /**
  *
  * @author maurizio
@@ -21,7 +23,7 @@ public class Cliente extends Usuario {
     public Cliente(String nombreCompleto, String password, String clienteNro) {
         super(nombreCompleto, password);
         this.clienteNro = clienteNro;
-//        this.tipoCliente = new SinBeneficio(); // Por defecto
+        this.tipoCliente = new TipoCliente("Comun", List.of()); // Por defecto
         //todo: prceso de asignacion de dispositivo
     }
 

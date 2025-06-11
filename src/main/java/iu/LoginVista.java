@@ -6,20 +6,19 @@ package iu;
 
 import dominio.Gestor;
 import excepciones.LoginException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import servicios.Fachada;
 
 /**
  *
  * @author nicolas.cardona
  */
-public class LoginVista extends BaseVista {
-
+public class LoginVista extends BaseVistaImpl {
+//public class LoginVista {
    private java.awt.Frame parentFrame;
    
    public LoginVista(java.awt.Frame parent, boolean modal) {
-       super(parent, modal);
+//       super(parent, modal);
+       super();
        this.parentFrame = parent; 
        initComponents();
    }
@@ -137,7 +136,12 @@ public class LoginVista extends BaseVista {
     }
 
     private void procesarPedidos(Gestor gestor) {
-        new ProcesarPedidosVista(parentFrame,gestor).setVisible(true);
+        new ProcesarPedidosVistaImpl(parentFrame,gestor).setVisible(true);
+    }
+
+    @Override
+    protected void avisarAlControladorDelPedidoDeCierre() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     

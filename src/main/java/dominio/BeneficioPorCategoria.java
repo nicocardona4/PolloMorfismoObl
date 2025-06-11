@@ -5,7 +5,7 @@
 package dominio;
 
 import Interfaces.Beneficio;
-import dominio.Servicio;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -14,7 +14,7 @@ import java.util.Set;
  */
 public class BeneficioPorCategoria implements Beneficio {
     
-    private Set<Categoria> categoriasGratis;
+    private Set<Categoria> categoriasGratis =new HashSet<>(); ;
     
     public BeneficioPorCategoria(Set<Categoria> categoriasGratis) {
         this.categoriasGratis = categoriasGratis;

@@ -13,7 +13,6 @@ import dominio.Insumo;
 import dominio.ItemMenu;
 import dominio.Pedido;
 import dominio.Servicio;
-import dominio.Usuario;
 import excepciones.PedidoInvalidoException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,9 +21,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
-import javax.swing.ListModel;
-import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import observer.Observable;
@@ -35,7 +31,7 @@ import servicios.Fachada;
  *
  * @author nicolas.cardona
  */
-public class RealizarPedidosVista  extends BaseVista implements Observador{
+public class RealizarPedidosVista  extends BaseVistaImpl implements Observador{
 
     private Cliente cliente;
     private Dispositivo dispositivo;
@@ -50,7 +46,7 @@ public class RealizarPedidosVista  extends BaseVista implements Observador{
      * Creates new form RealizarPedidosVista
      */
     public RealizarPedidosVista(java.awt.Frame parent, Dispositivo d) {
-        super(parent,false);
+//        super(parent,false);
         dispositivo = d;
         initComponents();
         for(Insumo i: Fachada.getInstancia().getInsumos()){
@@ -747,6 +743,11 @@ private void mostrarCategorias() {
     lstItems.setModel(modeloItems); 
     
 }
+
+    @Override
+    protected void avisarAlControladorDelPedidoDeCierre() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
 }
 

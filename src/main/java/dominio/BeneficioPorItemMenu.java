@@ -5,6 +5,7 @@
 package dominio;
 
 import Interfaces.Beneficio;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -14,10 +15,21 @@ import java.util.Set;
 public class BeneficioPorItemMenu implements Beneficio  {
     
     
-    private Set<ItemMenu> itemsGratis;
+    private Set<ItemMenu> itemsGratis = new HashSet<>(); ;
     
     public BeneficioPorItemMenu(Set<ItemMenu> itemsGratis) {
-        this.itemsGratis = itemsGratis;
+        if(itemsGratis!=null){
+            this.itemsGratis.addAll(itemsGratis);
+        }
+    }
+    
+    // Método para agregar nuevos items
+    public void agregaritemGratis(ItemMenu item) {
+        itemsGratis.add(item);
+    }
+
+    public void agregarItemsGratis(Set<ItemMenu> nuevoItem) {
+        itemsGratis.addAll(nuevoItem);
     }
     
     @Override

@@ -165,8 +165,10 @@ public class PrecargaDatos {
         f.agregarItem(im4);
         f.agregarItem(im5);
         
+        Set<ItemMenu> itemsGratis = Set.of(im3);
+        
         TipoCliente preferencial = new TipoCliente("Preferencial", List.of(
-            new BeneficioPorItemMenu(Set.of(im3)),               // Item agua
+            new BeneficioPorItemMenu(itemsGratis),               // Item agua
             new BeneficioPorcentual(5.0, 2000.0)           // 5% si el total > 2000
         ));
         

@@ -27,4 +27,18 @@ public class TipoCliente {
     public String getNombre() {
         return nombre;
     }
+    
+    public String getInvitaciones(Servicio servicio) {
+    StringBuilder sb = new StringBuilder();
+
+    for (Beneficio b : beneficios) {
+        String invitacion = b.invitacion(servicio);
+        if (invitacion != null && !invitacion.isBlank()) {
+            sb.append(invitacion).append("\n");
+        }
+    }
+
+    return sb.toString().trim();
+}
+
 }

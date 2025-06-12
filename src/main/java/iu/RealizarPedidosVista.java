@@ -87,7 +87,19 @@ public class RealizarPedidosVista  extends BaseVistaImpl implements Observador{
     }
     
     private void finalizarServicio() {
+        jCheckBox1.setVisible(true);
+        txtPago.setText("Pago realizado");
+    }
+    
+    private void pagoRealizado(){
+        txtPago.setText("");
+        jCheckBox1.setVisible(false);
         dispositivo.setEnUso(false);
+        double total = servicio.getTotal();
+        double descuento = cliente.calcularDescuento(servicio);
+        total = total - descuento;
+        String mensaje = cliente.getInvitaciones(servicio);
+        mostrarMensajeDeError(mensaje);
         iniciarModel();
     }
     
@@ -134,7 +146,8 @@ public class RealizarPedidosVista  extends BaseVistaImpl implements Observador{
         jLabel8 = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
         jScrollPane6 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        txtPago = new javax.swing.JTextArea();
+        jCheckBox1 = new javax.swing.JCheckBox();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -406,9 +419,16 @@ public class RealizarPedidosVista  extends BaseVistaImpl implements Observador{
 
         jLabel8.setText("Pedidos del servicio");
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane6.setViewportView(jTextArea2);
+        txtPago.setColumns(20);
+        txtPago.setRows(5);
+        jScrollPane6.setViewportView(txtPago);
+
+        jCheckBox1.setText("He leído");
+        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -427,7 +447,9 @@ public class RealizarPedidosVista  extends BaseVistaImpl implements Observador{
                                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 740, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
-                                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 704, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 704, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jCheckBox1)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -455,7 +477,9 @@ public class RealizarPedidosVista  extends BaseVistaImpl implements Observador{
                             .addComponent(jLabel8)
                             .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jCheckBox1))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -518,6 +542,10 @@ public class RealizarPedidosVista  extends BaseVistaImpl implements Observador{
        eliminarPedido();
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+        pagoRealizado();
+    }//GEN-LAST:event_jCheckBox1ActionPerformed
+
 //    /**
 //     * @param args the command line arguments
 //     */
@@ -565,6 +593,7 @@ public class RealizarPedidosVista  extends BaseVistaImpl implements Observador{
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -586,7 +615,6 @@ public class RealizarPedidosVista  extends BaseVistaImpl implements Observador{
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea2;
     private javax.swing.JLabel lblMonto;
     private javax.swing.JList<String> lstCategorias;
     private javax.swing.JList<String> lstItems;
@@ -596,6 +624,7 @@ public class RealizarPedidosVista  extends BaseVistaImpl implements Observador{
     private javax.swing.JPasswordField txtClientePassword;
     private javax.swing.JTextArea txtComentario;
     private javax.swing.JButton txtLogin;
+    private javax.swing.JTextArea txtPago;
     // End of variables declaration//GEN-END:variables
 
 private void mostrarCategorias() {

@@ -28,5 +28,11 @@ public class BeneficioPorcentual implements Beneficio {
         }
         return 0.0;
     }
+
+    @Override
+    public String invitacion(Servicio servicio) {
+    String inv = "Descuento del " + porcentaje;
+    return inv;    
+    }
     
 }

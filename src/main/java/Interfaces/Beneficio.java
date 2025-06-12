@@ -12,4 +12,5 @@ import dominio.Servicio;
  */
 public interface Beneficio {
     double calcularBeneficio(Servicio servicio);
+    String invitacion(Servicio servicio);
 }

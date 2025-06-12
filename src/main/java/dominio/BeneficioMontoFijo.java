@@ -22,5 +22,10 @@ public class BeneficioMontoFijo implements Beneficio {
         double total = servicio.getTotal();
         return Math.min(montoDescuento, total);
     }
+
+    @Override
+    public String invitacion(Servicio servicio) {
+        return "Descuento de $" + montoDescuento; 
+    }
     
 }

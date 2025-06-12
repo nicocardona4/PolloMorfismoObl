@@ -27,12 +27,20 @@ public class Cliente extends Usuario {
         //todo: prceso de asignacion de dispositivo
     }
 
+    public void setTipoCliente(TipoCliente tipoCliente) {
+        this.tipoCliente = tipoCliente;
+    }
+
     public void setTipoBeneficio(TipoCliente clienteTipoBeneficio) {
         this.tipoCliente = clienteTipoBeneficio;
     }
     
     public double calcularDescuento(Servicio servicio) {
         return tipoCliente.calcularDescuento(servicio);
+    }
+    
+    public String getInvitaciones(Servicio servicio){
+        return tipoCliente.getInvitaciones(servicio);
     }
 
     public String getTipoNombre() {

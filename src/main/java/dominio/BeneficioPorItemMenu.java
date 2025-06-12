@@ -39,6 +39,19 @@ public class BeneficioPorItemMenu implements Beneficio  {
                 .mapToDouble(Pedido::getCostoPedido)
                 .sum();
     }
+
+    @Override
+    public String invitacion(Servicio servicio) {
+        for (Pedido p : servicio.getPedidos()) {
+            if (itemsGratis.contains(p.getItem())) {
+                return  p.getItem().getNombre() + " invitación!";
+            }
+        }
+        return ""; 
+    }
+
+
+    
     
     
 }

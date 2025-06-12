@@ -27,5 +27,15 @@ public class BeneficioPorCategoria implements Beneficio {
                 .mapToDouble(Pedido::getCostoPedido)
                 .sum();
     }
+
+    @Override
+    public String invitacion(Servicio servicio) {
+        for (Pedido p : servicio.getPedidos()) {
+            if (categoriasGratis.contains(p.getItem().getCategoria())) {
+                return  p.getItem().getCategoria().getNombre() + " invitación!";
+            }
+        }
+        return ""; 
+    }
     
 }

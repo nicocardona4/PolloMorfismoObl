@@ -4,6 +4,7 @@
  */
 package com.mycompany.obligatoriopollomorfismo;
 
+import Interfaces.Beneficio;
 import dominio.BeneficioMontoFijo;
 import dominio.BeneficioPorCategoria;
 import dominio.BeneficioPorItemMenu;
@@ -19,6 +20,8 @@ import dominio.Pedido;
 import dominio.Servicio;
 import dominio.TipoCliente;
 import dominio.UnidadProcesadora;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import servicios.Fachada;
@@ -34,6 +37,11 @@ public class PrecargaDatos {
 
         Cliente juan = new Cliente("Juan Perez", "cliente1","1234");
         f.agregarCliente(juan);
+        BeneficioMontoFijo montoFijo = new BeneficioMontoFijo(500);
+        Collection<Beneficio> beneficios = new ArrayList();
+        beneficios.add(montoFijo);
+        juan.setTipoCliente(new TipoCliente("De La Casa", beneficios));
+        
 
         Cliente pedro = new Cliente("Pedro Picapiedra", "123","123");
         f.agregarCliente(pedro);
@@ -79,9 +87,9 @@ public class PrecargaDatos {
         f.agregarCategoria(catCafes);
 
         ItemMenu im1 = new ItemMenu("Ensalada", 300, catEntradas,up1);
-        ItemMenu im2 = new ItemMenu("Picada completa", 550, catEntradas,up1);
+        ItemMenu im2 = new ItemMenu("Picada completa", 1550, catEntradas,up1);
         ItemMenu im3 = new ItemMenu("Agua", 120, catBebidas,up2);
-        ItemMenu im4 = new ItemMenu("Chajá", 300, catPostres,up1);
+        ItemMenu im4 = new ItemMenu("Chajá", 700, catPostres,up1);
         ItemMenu im5 = new ItemMenu("Vino blanco", 440, catVinos,up2);
 
 
@@ -98,7 +106,7 @@ public class PrecargaDatos {
         Insumo vainilla = new Insumo("Vainilla", 25, 300);
         Insumo cafe = new Insumo("café", 25, 300);
         Insumo crema = new Insumo("Crema", 25, 300);
-        Insumo frutilla = new Insumo("Frutilla", 25, 26);
+        Insumo frutilla = new Insumo("Frutilla", 25, 50);
         Insumo agua = new Insumo("Agua", 10, 15);
         f.agregarInsumo(harina);
         f.agregarInsumo(azucar);
@@ -211,7 +219,7 @@ public class PrecargaDatos {
 //        gestorSoporte.setPedido(p4);
 //        gestorSoporte.setPedido(p3);
 
-        
+        System.out.println("BENFICIO" + juan.getTipoNombre());
         
         
     }   

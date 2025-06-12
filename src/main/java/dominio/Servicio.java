@@ -4,6 +4,8 @@
  */
 package dominio;
 
+import dominio.EstadosServicio.EstadoServicio;
+import dominio.EstadosServicio.ServicioIniciado;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -18,6 +20,15 @@ public class Servicio {
     private Collection<Pedido> pedidos = new ArrayList<Pedido>();
     private float total=0;
     private Cliente cliente;
+    private EstadoServicio estado;
+
+    public EstadoServicio getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoServicio estado) {
+        this.estado = estado;
+    }
 
     public Servicio() {
         this.servicioId = ++contadorServicioId;
@@ -27,6 +38,7 @@ public class Servicio {
         this.servicioId = ++contadorServicioId;
         System.out.println("dominio.Servicio.<init>() "+ cliente.getClienteNro() + " servicioId "+ servicioId);
         this.cliente = cliente;
+        this.estado = new ServicioIniciado();
     }
 
     public int getServicioId() {
@@ -51,5 +63,7 @@ public class Servicio {
     return pedidos;
     }
     
-
+    public void finalizarServicio(){
+        this.estado.finalizarServicio(this);
+    }
 }

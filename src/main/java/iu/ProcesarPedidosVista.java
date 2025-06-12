@@ -4,9 +4,9 @@
  */
 package iu;
 
-import dominio.Gestor;
-import dominio.UnidadProcesadora;
-import javax.swing.table.DefaultTableModel;
+import dominio.Pedido;
+import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -14,10 +14,15 @@ import javax.swing.table.DefaultTableModel;
  */
 public interface ProcesarPedidosVista extends BaseVista{
 
-    void mostrarInfoGestor(Gestor gestor);
+    void mostrarInfoGestor(String infoGestor);
 
-    void mostrarPedidosPendientes(UnidadProcesadora up);
+    void mostrarPedidosPendientes(Collection<Pedido> pedidos);
 
-    void mostrarPedidosTomados(DefaultTableModel dtm,Gestor gestor);
+    void mostrarPedidosTomados(List<Object[]> filas);
     
+    void tomarPedido();
+    
+    void finalizarPedido();
+    
+    void entregarPedido();
 }

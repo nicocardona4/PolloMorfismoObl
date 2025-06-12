@@ -6,46 +6,26 @@ package iu;
 
 import dominio.Gestor;
 import dominio.Pedido;
-import dominio.Servicio;
-import dominio.UnidadProcesadora;
 import iu.controladores.ControladorProcesarPedidos;
+import java.util.Collection;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
-import servicios.Fachada;
-
 /**
  *
  * @author maurizio
  */
 public class ProcesarPedidosVistaImpl extends BaseVistaImpl implements ProcesarPedidosVista{
 
-//    private Gestor gestor;
-//    private Fachada f = Fachada.getInstancia();
-//    private UnidadProcesadora up;
-//    private Sesion sesion;
-//    private DefaultTableModel dtm;
-//    private Object[] o = new Object[6];
     private ControladorProcesarPedidos controlador;
-    /**
-     * Creates new form ProcesarPedidosVista
-     */
+
     public ProcesarPedidosVistaImpl(java.awt.Frame parent, Gestor gestor) {
-//        super(parent, false);
         initComponents();
-        controlador = new ControladorProcesarPedidos(this, gestor);
-//        this.gestor = gestor;
-//        this.up = gestor.getUp();
-//        crearSesion();
-//        dtm = (DefaultTableModel) tblPedidos.getModel();
-//        mostrarInfoGestor();
-//         //Sobre los pedidos pendientes. 
-//        //1: traer de fachada todos los pedidos pendientes de la up asignada al gestor.
-//        mostrarPedidosPendientes();
-//        //ToDo: en tblPedidos mostrar los pedidos que tenga el gestor
-//        mostrarPedidosTomados();
-//        tblPedidos.getColumnModel().getColumn(5).setMinWidth(0);
-//        tblPedidos.getColumnModel().getColumn(5).setMaxWidth(0);
-//        tblPedidos.getColumnModel().getColumn(5).setWidth(0);
-//        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        DefaultTableModel dtm = (DefaultTableModel) tblPedidos.getModel();
+        controlador = new ControladorProcesarPedidos(this, dtm, gestor);
+        tblPedidos.getColumnModel().getColumn(5).setMinWidth(0);
+        tblPedidos.getColumnModel().getColumn(5).setMaxWidth(0);
+        tblPedidos.getColumnModel().getColumn(5).setWidth(0);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
 
     /**
@@ -190,7 +170,7 @@ public class ProcesarPedidosVistaImpl extends BaseVistaImpl implements ProcesarP
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTomarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTomarActionPerformed
-//        tomarPedido();
+        tomarPedido();
     }//GEN-LAST:event_btnTomarActionPerformed
 
     private void lstPedidosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstPedidosMouseClicked
@@ -200,12 +180,12 @@ public class ProcesarPedidosVistaImpl extends BaseVistaImpl implements ProcesarP
 
     private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
         // TODO add your handling code here:
-//        finalizarPedido();
+        finalizarPedido();
     }//GEN-LAST:event_btnFinalizarActionPerformed
 
     private void btnEntregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntregarActionPerformed
         // TODO add your handling code here:
-//        entregarPedido();
+        entregarPedido();
     }//GEN-LAST:event_btnEntregarActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -216,7 +196,6 @@ public class ProcesarPedidosVistaImpl extends BaseVistaImpl implements ProcesarP
      * @param args the command line arguments
      */
     
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEntregar;
     private javax.swing.JButton btnFinalizar;
@@ -231,132 +210,44 @@ public class ProcesarPedidosVistaImpl extends BaseVistaImpl implements ProcesarP
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void mostrarInfoGestor(Gestor gestor) {
+    public void mostrarInfoGestor(String infoGestor) {
         //Todo: agregar unidad procesadora
-        txtInfo.setText("Gestor: " + gestor.getNombreCompleto() + " | Unidad Procesadora: " + gestor.getUp().getNombre());
+        txtInfo.setText(infoGestor);
     }
 
-    public void tomarPedido(Gestor gestor) {
+    @Override
+    public void tomarPedido() {
         Pedido p = (Pedido) lstPedidos.getSelectedValue();
-        if (p != null){
-            try {
-                limpiarMensajeDeError();
-                p.tomarPedido(gestor);
-            }catch(IllegalStateException ex){
-                mostrarMensajeDeError(ex.getMessage());
-            }
-        }else{
-            mostrarMensajeDeError("Debe seleccionar un pedido");
-        }
+        controlador.tomarPedido(p);
     }
     
-    public void finalizarPedido(DefaultTableModel dtm, Gestor gestor){
+    @Override
+    public void finalizarPedido() {
         int fila = tblPedidos.getSelectedRow();
-        Pedido p = null;
-        if (fila>=0){
-            p = (Pedido) dtm.getValueAt(fila, 5);
-        }
-        if(p!=null){
-            try{
-                limpiarMensajeDeError();
-                p.finalizarPedido();
-                //despues agregar que solo muestre los que estan en proceso/finalizados? asi se pueden entregar?
-                mostrarPedidosTomados(dtm,gestor);
-            }catch(IllegalStateException ex){
-                mostrarMensajeDeError(ex.getMessage());
-            }
-            
-        }else{
-            mostrarMensajeDeError("Debe seleccionar un pedido");
-        }
+        controlador.finalizarPedido(fila);
     }
         
-//    @Override
-//    public void actualizar(Observable origen, Object evento) {
-//        if (EventosRestaurante.ASIGNACION_PEDIDO.equals(evento)) {
-//            //Refrescar la lista de pendientes, en este caso se asigno alguno
-//            //de los pedidos pendientes a este u otro gestor. Por lo tanto se debe borrar
-//            //y cargar de nuevo la lista
-//            mostrarPedidosPendientes();
-//            mostrarPedidosTomados();
-//        }
-//    }
-
     @Override
-    public void mostrarPedidosPendientes(UnidadProcesadora up) {
-//        no tienen que haber referencias a fachada!!
-        Fachada f = Fachada.getInstancia();
-        //suscribir como observador
-        lstPedidos.setListData(f.getPedidosPorUp(up).toArray());
+    public void mostrarPedidosPendientes(Collection<Pedido> pedidos) {
+        lstPedidos.setListData(pedidos.toArray());
     }
-    
-//    private void suscribirComoObservador(UnidadProcesadora up){
-//        up.removerObservador(this);
-//        up.agregarObservador(this);
-//    }
 
     @Override
-    public void mostrarPedidosTomados(DefaultTableModel dtm,Gestor gestor) {
-        dtm.setRowCount(0);
-        for(Pedido pedido : gestor.getPedidosAsignados()){
-            Servicio srv = pedido.getServicio();
-            Object[] fila = new Object[6];
-            fila[0] = pedido.getItem().getNombre();
-            fila[1] = pedido.getDescripcion();
-            fila[2] = srv.getCliente().getNombreCompleto();
-            fila[3] = pedido.getFechaCreacion();
-            fila[4] = pedido.getEstadoActual();
-            fila[5] = pedido;
-            dtm.addRow(fila);
+    public void mostrarPedidosTomados(List<Object[]> filas) {
+        DefaultTableModel dtm = (DefaultTableModel) tblPedidos.getModel();
+        dtm.setRowCount(0); // Limpia la tabla
+
+        for (Object[] fila : filas) {
+            dtm.addRow(fila); // Agrega cada fila
         }
     }
 
-    private void entregarPedido(DefaultTableModel dtm,Gestor gestor) {
-        Pedido p = null;
+    @Override
+    public void entregarPedido() {
         int fila = tblPedidos.getSelectedRow();
-        if (fila>=0)
-          p = (Pedido) dtm.getValueAt(fila, 5);
+        controlador.entregarPedido(fila);
         
-        if(p!=null){
-            try{
-                limpiarMensajeDeError();
-                p.entregarPedido();
-                //despues agregar que solo muestre los que estan en proceso/finalizados? asi se pueden entregar?
-                mostrarPedidosTomados(dtm,gestor);
-            }catch(IllegalStateException ex){
-                mostrarMensajeDeError(ex.getMessage());
-            }
-        }else{
-            mostrarMensajeDeError("Debe seleccionar un pedido");
-        }
     }
-
-//    private void crearSesion() {
-//        this.sesion = new Sesion(this.gestor);
-//        f.agregar(sesion);
-//        suscribirComoObservador(up);
-//    }
-    
-//    private void cerrarSesion() {
-//        //Validar si tiene pedidos por entregar
-//        DefaultTableModel model = (DefaultTableModel) tblPedidos.getModel();
-//        int rowCount = model.getRowCount();
-//        boolean hayPedidosPorEntregar=false;
-//        for (int i = 0; i < rowCount; i++) {
-//            Pedido p = (Pedido) model.getValueAt(i, 5); // columna 0 tiene el Pedido
-//            if (!p.getEstadoActual().equalsIgnoreCase("Entregado")) {
-//                hayPedidosPorEntregar = true;
-//                break; 
-//            }
-//        }
-//        if (!hayPedidosPorEntregar) {
-//            this.up.removerObservador(this);
-//            f.remover(sesion); 
-//            dispose(); // cierra la ventana de forma manual
-//        } else {
-//            mostrarMensajeDeError("Tiene pedidos pendientes"); // ventana sigue abierta
-//        }
-//    }
 
     @Override
     protected void avisarAlControladorDelPedidoDeCierre() {

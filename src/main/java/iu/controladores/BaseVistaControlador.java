@@ -10,11 +10,11 @@ import iu.BaseVista;
  *
  * @author maurizio
  */
-public abstract class ControladorBaseVista <TVista extends BaseVista> {
+public abstract class BaseVistaControlador <TVista extends BaseVista> {
 
     protected TVista vista;
 
-    public ControladorBaseVista(TVista vista) {
+    public BaseVistaControlador(TVista vista) {
         this.vista = vista;
     }
     

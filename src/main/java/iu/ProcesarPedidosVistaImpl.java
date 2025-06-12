@@ -6,7 +6,7 @@ package iu;
 
 import dominio.Gestor;
 import dominio.Pedido;
-import iu.controladores.ControladorProcesarPedidos;
+import iu.controladores.ProcesarPedidosControlador;
 import java.util.Collection;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -16,12 +16,12 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ProcesarPedidosVistaImpl extends BaseVistaImpl implements ProcesarPedidosVista{
 
-    private ControladorProcesarPedidos controlador;
+    private ProcesarPedidosControlador controlador;
 
     public ProcesarPedidosVistaImpl(java.awt.Frame parent, Gestor gestor) {
         initComponents();
         DefaultTableModel dtm = (DefaultTableModel) tblPedidos.getModel();
-        controlador = new ControladorProcesarPedidos(this, dtm, gestor);
+        controlador = new ProcesarPedidosControlador(this, dtm, gestor);
         tblPedidos.getColumnModel().getColumn(5).setMinWidth(0);
         tblPedidos.getColumnModel().getColumn(5).setMaxWidth(0);
         tblPedidos.getColumnModel().getColumn(5).setWidth(0);
@@ -49,11 +49,6 @@ public class ProcesarPedidosVistaImpl extends BaseVistaImpl implements ProcesarP
         lstPedidos = new javax.swing.JList();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                formWindowClosing(evt);
-            }
-        });
 
         txtInfo.setEditable(false);
         txtInfo.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
@@ -109,11 +104,6 @@ public class ProcesarPedidosVistaImpl extends BaseVistaImpl implements ProcesarP
 
         lstPedidos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstPedidos.setCellRenderer(new PedidoListCellRenderer());
-        lstPedidos.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lstPedidosMouseClicked(evt);
-            }
-        });
         jScrollPane1.setViewportView(lstPedidos);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -173,11 +163,6 @@ public class ProcesarPedidosVistaImpl extends BaseVistaImpl implements ProcesarP
         tomarPedido();
     }//GEN-LAST:event_btnTomarActionPerformed
 
-    private void lstPedidosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstPedidosMouseClicked
-        // TODO add your handling code here:
-        //obtenerPedido();
-    }//GEN-LAST:event_lstPedidosMouseClicked
-
     private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
         // TODO add your handling code here:
         finalizarPedido();
@@ -187,10 +172,6 @@ public class ProcesarPedidosVistaImpl extends BaseVistaImpl implements ProcesarP
         // TODO add your handling code here:
         entregarPedido();
     }//GEN-LAST:event_btnEntregarActionPerformed
-
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-//        cerrarSesion();
-    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -251,6 +232,6 @@ public class ProcesarPedidosVistaImpl extends BaseVistaImpl implements ProcesarP
 
     @Override
     protected void avisarAlControladorDelPedidoDeCierre() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        controlador.cerrarVista();
     }
 }

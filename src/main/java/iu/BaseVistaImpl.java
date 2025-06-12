@@ -32,6 +32,11 @@ public abstract class BaseVistaImpl extends javax.swing.JDialog implements BaseV
         lblMensajeError = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         lblMensajeError.setForeground(new java.awt.Color(255, 102, 102));
 
@@ -53,6 +58,11 @@ public abstract class BaseVistaImpl extends javax.swing.JDialog implements BaseV
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        avisarAlControladorDelPedidoDeCierre();
+    }//GEN-LAST:event_formWindowClosing
     @Override
     public void mostrarMensajeDeError(String mensaje) {
         lblMensajeError.setText(mensaje);

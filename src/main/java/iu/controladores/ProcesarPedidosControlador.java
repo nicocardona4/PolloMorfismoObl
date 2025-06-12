@@ -22,7 +22,7 @@ import servicios.Fachada;
  *
  * @author maurizio
  */
-public class ControladorProcesarPedidos extends ControladorBaseVista<ProcesarPedidosVista> implements Observador{
+public class ProcesarPedidosControlador extends BaseVistaControlador<ProcesarPedidosVista> implements Observador{
 
     private ProcesarPedidosVista vista;
     private Gestor gestor;
@@ -31,7 +31,7 @@ public class ControladorProcesarPedidos extends ControladorBaseVista<ProcesarPed
     private DefaultTableModel dtm;
     private Object[] o = new Object[6];
     
-    public ControladorProcesarPedidos(ProcesarPedidosVista vista,DefaultTableModel dtm,Gestor gestor) {
+    public ProcesarPedidosControlador(ProcesarPedidosVista vista,DefaultTableModel dtm,Gestor gestor) {
         super(vista);
         this.vista = vista;
         this.gestor = gestor;
@@ -53,12 +53,8 @@ public class ControladorProcesarPedidos extends ControladorBaseVista<ProcesarPed
 
     @Override
     public void cerrarVista() {
-        up.removerObservador(this);
         cerrarSesion();
-        super.cerrarVista(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
     }
-    
-    
     
     private void suscribirComoObservador(UnidadProcesadora up){
         up.removerObservador(this);
@@ -71,25 +67,26 @@ public class ControladorProcesarPedidos extends ControladorBaseVista<ProcesarPed
         suscribirComoObservador(up);
     }
     
-        private void cerrarSesion() {
-//        //Validar si tiene pedidos por entregar
-//        DefaultTableModel model = (DefaultTableModel) tblPedidos.getModel();
-//        int rowCount = model.getRowCount();
-//        boolean hayPedidosPorEntregar=false;
-//        for (int i = 0; i < rowCount; i++) {
-//            Pedido p = (Pedido) model.getValueAt(i, 5); // columna 0 tiene el Pedido
-//            if (!p.getEstadoActual().equalsIgnoreCase("Entregado")) {
-//                hayPedidosPorEntregar = true;
-//                break; 
-//            }
-//        }
-//        if (!hayPedidosPorEntregar) {
-//            this.up.removerObservador(this);
-//            f.remover(sesion); 
-//            dispose(); // cierra la ventana de forma manual
-//        } else {
-//            mostrarMensajeDeError("Tiene pedidos pendientes"); // ventana sigue abierta
-//        }
+    public void cerrarSesion() {
+        //Validar si tiene pedidos por entregar
+        mostrarPedidosTomados();
+        boolean hayPedidosPorEntregar=false;
+        int rowCount = dtm.getRowCount();
+        for (int i = 0; i < rowCount; i++) {
+            Pedido p = (Pedido) dtm.getValueAt(i, 5);
+            if (!p.getEstadoActual().equalsIgnoreCase("Entregado")) {
+                hayPedidosPorEntregar = true;
+                break; 
+            }
+        }
+
+        if (!hayPedidosPorEntregar) {
+            this.up.removerObservador(this);
+            Fachada.getInstancia().remover(sesion);
+            super.cerrarVista(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        } else {
+            mostrarMensajeDeError("Tiene pedidos pendientes"); // ventana sigue abierta
+        }
     }
 
     private void inicializarVista() {

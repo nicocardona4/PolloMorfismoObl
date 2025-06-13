@@ -20,7 +20,7 @@ public class PedidoConfirmado  extends EstadoPedido{
     
     @Override
     public void eliminarPedido(Pedido pedido) {
-        System.out.println("Eliminando pedido confirmado...");
+//        System.out.println("Eliminando pedido confirmado...");
         Fachada.getInstancia().EliminarPedido(pedido,pedido.getServicio());
     }
     
@@ -30,13 +30,13 @@ public class PedidoConfirmado  extends EstadoPedido{
     
     @Override
     public void cobrarPedido(Pedido pedido) {
-        System.out.println("Cobrando pedido confirmado...");
+  //      System.out.println("Cobrando pedido confirmado...");
         // Lógica de cobro
     }
     
     @Override
     public void tomarPedido(Gestor gestor) {
-        System.out.println("Tomando pedido para proceso...");
+  //      System.out.println("Tomando pedido para proceso...");
         Pedido p = this.getPedido();
         p.setEstado(new PedidoEnProceso(p,"En Proceso"));
         gestor.setPedido(p);

@@ -15,5 +15,10 @@ public class ServicioIniciado extends EstadoServicio{
     public void finalizarServicio(Servicio s) {
         s.setEstado(new ServicioFinalizado());
     }
+
+    @Override
+    public String getEstadoNombre() {
+        return "Iniciado";
+    }
     
 }

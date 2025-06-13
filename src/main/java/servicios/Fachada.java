@@ -16,6 +16,7 @@ import dominio.Sesion;
 import dominio.TipoCliente;
 import dominio.UnidadProcesadora;
 import excepciones.LoginException;
+import excepciones.StockInsuficienteException;
 import java.util.Collection;
 
 /**
@@ -145,6 +146,10 @@ public class Fachada {
     
     public void confirmarPedido(Pedido p){
         servicioPedidos.confirmarPedido(p);
+    }
+
+    public void consultarStock(Collection<Pedido> pedidos) throws StockInsuficienteException {
+        servicioPedidos.consultarStock(pedidos);
     }
 
 

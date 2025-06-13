@@ -16,5 +16,10 @@ public class ServicioFinalizado extends EstadoServicio{
     public void finalizarServicio(Servicio s) {
         throw new IllegalStateException("El servicio ya está finalizado");
     }
+
+    @Override
+    public String getEstadoNombre() {
+        return "Finalizado";
+    }
     
 }

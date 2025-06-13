@@ -107,7 +107,7 @@ public class PrecargaDatos {
         Insumo cafe = new Insumo("café", 25, 300);
         Insumo crema = new Insumo("Crema", 25, 300);
         Insumo frutilla = new Insumo("Frutilla", 25, 50);
-        Insumo agua = new Insumo("Agua", 10, 15);
+        Insumo agua = new Insumo("Agua", 10, 14);
         f.agregarInsumo(harina);
         f.agregarInsumo(azucar);
         f.agregarInsumo(huevos);

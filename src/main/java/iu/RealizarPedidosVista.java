@@ -13,7 +13,9 @@ import dominio.Insumo;
 import dominio.ItemMenu;
 import dominio.Pedido;
 import dominio.Servicio;
+import excepciones.LoginException;
 import excepciones.PedidoInvalidoException;
+import excepciones.StockInsuficienteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -47,12 +49,14 @@ public class RealizarPedidosVista  extends BaseVistaImpl implements Observador{
      */
     public RealizarPedidosVista(java.awt.Frame parent, Dispositivo d) {
 //        super(parent,false);
-        dispositivo = d;
-        initComponents();
         for(Insumo i: Fachada.getInstancia().getInsumos()){
             suscribirComoObservador(i);
         }
+        initComponents();
         iniciarModel();
+        dispositivo = d;
+ 
+
 
     }
 
@@ -68,21 +72,21 @@ public class RealizarPedidosVista  extends BaseVistaImpl implements Observador{
         return Fachada.getInstancia().loginCliente(clienteNro, password);
     }
         
-    private void login() {
+    private void login() throws LoginException {
         if(dispositivo.isEnUso()){
-            mostrarMensajeDeError("Debe primero finalizar el servicio actual");
+            throw new LoginException("Debe primero finalizar el servicio actual");
         }
         cliente = loginCliente(txtClienteNro.getText(), txtClientePassword.getText());
             if (cliente != null) {
                 if(!Fachada.getInstancia().TieneDispositivoEnUso(cliente)){
                     InicializarDispositivo();
                 }else{
-                   mostrarMensajeDeError("Ud. ya est{a identificado en otro dispositivo");
-
+                    throw new LoginException("Ud. ya está identificado en otro dispositivo");
                 }
             
             } else {
-            mostrarMensajeDeError("Identificador / clave inválido");
+            
+             throw new LoginException("Credenciales incorrectas");
             }   
     }
     
@@ -92,6 +96,7 @@ public class RealizarPedidosVista  extends BaseVistaImpl implements Observador{
     }
     
     private void pagoRealizado(){
+        servicio.finalizarServicio();
         txtPago.setText("");
         jCheckBox1.setVisible(false);
         dispositivo.setEnUso(false);
@@ -99,6 +104,7 @@ public class RealizarPedidosVista  extends BaseVistaImpl implements Observador{
         double descuento = cliente.calcularDescuento(servicio);
         total = total - descuento;
         String mensaje = cliente.getInvitaciones(servicio);
+        
         mostrarMensajeDeError(mensaje);
         iniciarModel();
     }
@@ -164,6 +170,9 @@ public class RealizarPedidosVista  extends BaseVistaImpl implements Observador{
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
@@ -487,7 +496,11 @@ public class RealizarPedidosVista  extends BaseVistaImpl implements Observador{
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLoginActionPerformed
-        login();
+        try {
+            login();
+        } catch (LoginException ex) {
+            mostrarMensajeDeError(ex.getMessage());
+        }
     }//GEN-LAST:event_txtLoginActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -527,10 +540,13 @@ public class RealizarPedidosVista  extends BaseVistaImpl implements Observador{
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
+            verificarCliente();
             agregarPedido();
-        } catch (PedidoInvalidoException ex) {
-            Logger.getLogger(RealizarPedidosVista.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }catch (LoginException ex) {
+            mostrarMensajeDeError(ex.getMessage());
+        }catch (PedidoInvalidoException ex) {
+            mostrarMensajeDeError(ex.getMessage());
+        } 
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -545,6 +561,10 @@ public class RealizarPedidosVista  extends BaseVistaImpl implements Observador{
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         pagoRealizado();
     }//GEN-LAST:event_jCheckBox1ActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        
+    }//GEN-LAST:event_formWindowClosed
 
 //    /**
 //     * @param args the command line arguments
@@ -649,13 +669,9 @@ private void mostrarCategorias() {
             throw new PedidoInvalidoException("Debe seleccionar un item");
         }
         ItemMenu itemSeleccionado = items.get(seleccion);
-
-        if(servicio!= null){
         Pedido p = Fachada.getInstancia().agregarPedido(itemSeleccionado,txtComentario.getText(), servicio);
         actualizarPedidos();
-    }else{
-            mostrarMensajeDeError("Debe iniciar sesión");
-        }
+    
  }
 
         
@@ -670,11 +686,19 @@ private void mostrarCategorias() {
             System.out.println("ACTUALIZACION DE STOCK RECIBIDA");
                 mostrarCategorias();
                 actualizarItems();
+                consultarStock();
+ 
+        }
+        if(EventosRestaurante.CONSULTA_STOCK.equals(evento)){
+                    actualizarPedidos();
+                    System.out.println("CONSULTA DE STOCKKKKK");
+
+
         }
         if(EventosRestaurante.ASIGNACION_PEDIDO.equals(evento)){
-            System.out.println("ASIGNACION DE PEDIDO RECIBIDA");
             actualizarPedidos();
         }
+        
     }
     
     private void suscribirComoObservador(Observable observable){
@@ -685,23 +709,30 @@ private void mostrarCategorias() {
     private void actualizarPedidos() {
         dtm.setRowCount(0);
         Gestor gestor = null;
-        for(Pedido pedido: servicio.getPedidos()){
-        gestor = Fachada.getInstancia().obtenerGestorDePedido(pedido);
-        Object[] fila = new Object[7];
-        fila[0] = pedido.getItem().getNombre();
-        fila[1] = pedido.getDescripcion();
-        fila[2] = pedido.getEstadoActual();
-        fila[3] = pedido.getUp().getNombre();
-        fila[4] = (gestor != null) ? gestor.getNombreCompleto() : "En espera";
-        fila[5] = pedido.getCostoPedido();
-        fila[6] = pedido;
+        if (servicio != null){
+            for(Pedido pedido: servicio.getPedidos()){
+                gestor = Fachada.getInstancia().obtenerGestorDePedido(pedido);
+                Object[] fila = new Object[7];
+                fila[0] = pedido.getItem().getNombre();
+                fila[1] = pedido.getDescripcion();
+                fila[2] = pedido.getEstadoActual();
+                fila[3] = pedido.getUp().getNombre();
+                fila[4] = (gestor != null) ? gestor.getNombreCompleto() : "En espera";
+                fila[5] = pedido.getCostoPedido();
+                fila[6] = pedido;
 
-        dtm.addRow(fila);   
-        
+                dtm.addRow(fila);   
+
+            }
         }
+        
     }
 
     private void iniciarModel() {
+    cliente = null;
+    servicio = null;
+    categorias = null;
+    pedidos = null;
     dtm = (DefaultTableModel) tblPedidos.getModel();
     dtm.setRowCount(0);
     tblPedidos.setModel(dtm);
@@ -739,6 +770,7 @@ private void mostrarCategorias() {
         }
         servicio.getTotal();
         actualizarPedidos();
+
     }
 
     private void actualizarItems() {
@@ -777,6 +809,22 @@ private void mostrarCategorias() {
     protected void avisarAlControladorDelPedidoDeCierre() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+    private void verificarCliente() throws LoginException {
+        if(cliente == null) throw new LoginException("Debe identificarse antes de realizar pedidos");
+    }
+
+    private void consultarStock() {
+        try {
+            Fachada.getInstancia().consultarStock(pedidos);
+        } catch (StockInsuficienteException ex) {
+            mostrarMensajeDeError(ex.getMessage());
+        }
+        
+        
+    }
+
+
 
 }
 

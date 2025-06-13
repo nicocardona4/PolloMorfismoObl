@@ -45,10 +45,16 @@ public class Insumo extends Observable{
     public void setActualStock(int actualStock) {
         avisar(EventosRestaurante.ACTUALIZACION_STOCK);
         this.actualStock = actualStock;
+
     }
     
     public Boolean hayStock(){
         return minStock <= actualStock;
+    }
+
+    public void consulta() {
+        System.out.println("CONSULTA STCOK");
+        avisar(EventosRestaurante.CONSULTA_STOCK);
     }
     
     

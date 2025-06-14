@@ -73,8 +73,6 @@ public class ServicioUsuario {
         
         //valido primero que no este logueado
         for(Sesion s:this.getSesiones()){
-            System.out.println("nombreusuario:"+s.getUsuario().getNombreDeUsuario());
-            System.out.println("nombreusuario:"+gestor.getNombreDeUsuario());
             if(s.getUsuario().getNombreDeUsuario().equals(gestor.getNombreDeUsuario())){
                 System.out.println("llego aca");
                 throw new LoginException("El gestor ya se encuentra logueado");

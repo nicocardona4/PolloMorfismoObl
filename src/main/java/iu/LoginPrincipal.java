@@ -129,7 +129,7 @@ public class LoginPrincipal extends javax.swing.JFrame {
         Collection<Dispositivo> disponibles = Fachada.getInstancia().getDispositivosDisponibles();
         for(Dispositivo d:disponibles)
         {
-            new RealizarPedidosVista(this,d).setVisible(true);
+            new RealizarPedidosVistaImpl(this,d).setVisible(true);
 
         }
     }

@@ -143,15 +143,10 @@ public class ServicioPedidos {
 
     void consultarStock(Servicio servicio) throws StockInsuficienteException {
         if (servicio != null){
-                    System.out.println(servicio.getCliente().getNombreCompleto());
-                     servicio.consultarStock();
+            servicio.consultarStock();
         }
 
-        
-            
-//            if (!msjStock.isEmpty()) {
-//            throw new StockInsuficienteException(msjStock);
-////            }
+
         }
         
 

@@ -12,7 +12,8 @@ import dominio.Servicio;
 public class ServicioIniciado extends EstadoServicio{
 
     @Override
-    public void finalizarServicio(Servicio s) {
+    public void finalizarServicio(Servicio s) throws IllegalStateException {
+        s.TienePedidosPendientes();
         s.setEstado(new ServicioFinalizado());
     }
 

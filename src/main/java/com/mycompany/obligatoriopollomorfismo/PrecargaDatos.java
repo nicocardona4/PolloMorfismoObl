@@ -41,14 +41,12 @@ public class PrecargaDatos {
         Collection<Beneficio> beneficios = new ArrayList();
         beneficios.add(montoFijo);
         juan.setTipoCliente(new TipoCliente("De La Casa", beneficios));
-        
 
         Cliente pedro = new Cliente("Pedro Picapiedra", "123","123");
         f.agregarCliente(pedro);
 
         Cliente pablo = new Cliente("Pablo Marmol", "pass3","304859");
         f.agregarCliente(pablo);
-
 
         UnidadProcesadora up1 = new UnidadProcesadora("Cocina");
         Gestor gestorComercial = new Gestor("carlosg", "pass123", "Carlos Gómez", "gestor comercial",up1);
@@ -63,7 +61,6 @@ public class PrecargaDatos {
         Gestor gestorSoporte2 = new Gestor("maurom", "pass1234", "Mauro Mendez", "gestor soporte 2",up2);
         f.agregarGestor(gestorSoporte2);
         f.agregarGestorUP(gestorSoporte2, up2);
-
 
         Dispositivo d1 = new Dispositivo();
         Dispositivo d2 = new Dispositivo();
@@ -91,8 +88,6 @@ public class PrecargaDatos {
         ItemMenu im3 = new ItemMenu("Agua", 120, catBebidas,up2);
         ItemMenu im4 = new ItemMenu("Chajá", 700, catPostres,up1);
         ItemMenu im5 = new ItemMenu("Vino blanco", 440, catVinos,up2);
-
-
         
         Insumo harina = new Insumo("Harina", 100, 200);
         Insumo azucar = new Insumo("Azúcar", 80, 150);
@@ -108,6 +103,7 @@ public class PrecargaDatos {
         Insumo crema = new Insumo("Crema", 25, 300);
         Insumo frutilla = new Insumo("Frutilla", 25, 50);
         Insumo agua = new Insumo("Agua", 10, 14);
+        
         f.agregarInsumo(harina);
         f.agregarInsumo(azucar);
         f.agregarInsumo(huevos);
@@ -122,9 +118,6 @@ public class PrecargaDatos {
         f.agregarInsumo(frutilla);
         f.agregarInsumo(agua);
 
-
-
-
         Ingrediente ingHarina = new Ingrediente("Harina", 2, harina);
         Ingrediente ingAzucar = new Ingrediente("Azúcar", 3, azucar);
         Ingrediente ingLeche = new Ingrediente("Leche", 1, leche);
@@ -136,7 +129,6 @@ public class PrecargaDatos {
         Ingrediente ingVainilla = new Ingrediente("Vainilla", 1, vainilla);
         Ingrediente ingFrutilla = new Ingrediente("Frutilla", 1, frutilla);
         Ingrediente ingAgua = new Ingrediente("Agua", 1, agua);
-
 
         // Ensalada
         im1.getIngredientes().add(ingLeche);      // Aderezo cremoso
@@ -152,7 +144,6 @@ public class PrecargaDatos {
         // Agua
         im3.getIngredientes().add(ingAgua);
 
-
         // Chajá (postre uruguayo típico)
         im4.getIngredientes().add(ingHarina);     // Bizcochuelo
         im4.getIngredientes().add(ingAzucar);     // Merengue
@@ -165,7 +156,6 @@ public class PrecargaDatos {
         im5.getIngredientes().add(ingVainilla);   // Nota aromática
         im5.getIngredientes().add(ingAzucar);     // Para suavidad
         im5.getIngredientes().add(ingFrutilla);   // Toque frutal
-
 
         f.agregarItem(im1);
         f.agregarItem(im2);
@@ -193,7 +183,6 @@ public class PrecargaDatos {
         
         f.agregarTipoCliente(juan, preferencial);
         
-        System.out.println("PRECARGA DE DATOS: "+juan.getNombreCompleto());
         Servicio sJuan = new Servicio(pablo);
         Pedido p1 = new Pedido(im1,"Ensalada de la casa",sJuan);
         Pedido p2 = new Pedido(im2,"Las papas bien crocantes",sJuan);
@@ -215,12 +204,6 @@ public class PrecargaDatos {
         p2.confirmarPedido();
         p3.confirmarPedido();
         p4.confirmarPedido();
-        
-//        gestorSoporte.setPedido(p4);
-//        gestorSoporte.setPedido(p3);
-
-        System.out.println("BENFICIO" + juan.getTipoNombre());
-        
         
     }   
 

@@ -42,12 +42,18 @@ public class ProcesarPedidosControlador extends BaseVistaControlador<ProcesarPed
 
    @Override
     public void actualizar(Observable origen, Object evento) {
-        if (EventosRestaurante.ASIGNACION_PEDIDO.equals(evento)) {
-            //Refrescar la lista de pendientes, en este caso se asigno alguno
-            //de los pedidos pendientes a este u otro gestor. Por lo tanto se debe borrar
-            //y cargar de nuevo la lista
-            mostrarPedidosPendientes();
-            mostrarPedidosTomados();
+        if (evento instanceof EventosRestaurante) {
+            switch ((EventosRestaurante) evento) {
+                case ASIGNACION_PEDIDO:
+                    mostrarPedidosPendientes();
+                    mostrarPedidosTomados();
+                    break;
+                case INSERCION_PEDIDO:
+                    mostrarPedidosPendientes();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 

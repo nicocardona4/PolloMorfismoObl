@@ -48,6 +48,8 @@ public class UnidadProcesadora extends Observable {
     public void setPedidosPendientesAsig(Pedido p){
         if(!pedidosPendientesAsig.contains(p)){
             this.pedidosPendientesAsig.add(p);
+            //Agregar observer 
+            avisar(EventosRestaurante.INSERCION_PEDIDO);
         }
     }
     

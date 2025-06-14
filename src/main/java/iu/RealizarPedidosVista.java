@@ -65,7 +65,7 @@ public class RealizarPedidosVista  extends BaseVistaImpl implements Observador{
          setTitle("Realizar Pedidos - Cliente: " + cliente.getNombreCompleto());
          servicio = new Servicio(cliente);
          Fachada.getInstancia().agregarServicio(servicio);
-        
+        suscribirComoObservador(servicio);
     }
 
     public Cliente loginCliente(String clienteNro, String password) {
@@ -689,9 +689,9 @@ private void mostrarCategorias() {
                 consultarStock();
  
         }
-        if(EventosRestaurante.CONSULTA_STOCK.equals(evento)){
+        if(EventosRestaurante.ACTUALIZACION_SERVICIO.equals(evento)){
                     actualizarPedidos();
-                    System.out.println("CONSULTA DE STOCKKKKK");
+                    System.out.println("ACTUIALÑIZACION DE SERVICIO");
 
 
         }
@@ -816,7 +816,7 @@ private void mostrarCategorias() {
 
     private void consultarStock() {
         try {
-            Fachada.getInstancia().consultarStock(pedidos);
+            Fachada.getInstancia().consultarStock(servicio);
         } catch (StockInsuficienteException ex) {
             mostrarMensajeDeError(ex.getMessage());
         }

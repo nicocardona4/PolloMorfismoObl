@@ -52,10 +52,10 @@ public class Insumo extends Observable{
         return minStock <= actualStock;
     }
 
-    public void consulta() {
-        System.out.println("CONSULTA STCOK");
-        avisar(EventosRestaurante.CONSULTA_STOCK);
-    }
+//    public void consulta() {
+////        System.out.println("CONSULTA STCOK");
+//        avisar(EventosRestaurante.CONSULTA_STOCK);
+//    }
     
     
 }

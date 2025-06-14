@@ -38,5 +38,7 @@ public class Ingrediente {
     public Insumo getInsumo(){
         return insumo;
     }
+
+
     
 }

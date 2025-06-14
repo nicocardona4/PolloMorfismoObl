@@ -6,14 +6,22 @@ package dominio;
 
 import dominio.EstadosServicio.EstadoServicio;
 import dominio.EstadosServicio.ServicioIniciado;
+import static dominio.TipoOperacionStock.CONSULTAR;
+import static dominio.TipoOperacionStock.CONSUMIR;
+import static dominio.TipoOperacionStock.DEVOLVER;
+import excepciones.StockInsuficienteException;
+import iu.EventosRestaurante;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import observer.Observable;
 
 /**
  *
  * @author nicoc
  */
-public class Servicio {
+public class Servicio extends Observable{
     private static int contadorServicioId = 0;
     
     private int servicioId;
@@ -21,6 +29,7 @@ public class Servicio {
     private float total=0;
     private Cliente cliente;
     private EstadoServicio estado;
+    private HashMap<Pedido, String> pedidosAEliminar = new HashMap();
 
     public EstadoServicio getEstado() {
         return estado;
@@ -66,4 +75,42 @@ public class Servicio {
     public void finalizarServicio(){
         this.estado.finalizarServicio(this);
     }
+
+    public void consultarStock() throws StockInsuficienteException {
+        String msj = "";
+        Collection<String> excepciones = new ArrayList();
+    if(pedidos != null){
+                for(Pedido p: pedidos){
+                    System.out.println(p.getEstadoPedido().getNombreEstado());
+                    if(p.getEstadoPedido().getNombreEstado() == "Sin confirmar"){
+                        msj = actualizarStock(p, TipoOperacionStock.CONSULTAR);
+                        if(!msj.isEmpty()){
+                            pedidosAEliminar.put(p, msj);
+                        }
+                    }
+                }
+                System.out.println(pedidosAEliminar.size());
+                for (Map.Entry<Pedido, String> entry : pedidosAEliminar.entrySet()) {
+                    Pedido p = entry.getKey();
+                    eliminarPedidoSinCambioDeStock(p);
+                    excepciones.add(entry.getValue());
+//                    p.ingredienteInsumoConsulta();
+
+            }   
+                throw new StockInsuficienteException(excepciones);
+        }
+    }
+    public String actualizarStock(Pedido pedido, TipoOperacionStock operacion) {
+       String msjStock = pedido.validarIngredientes(operacion);
+        
+       return msjStock;
+    }
+    
+    
+    public void eliminarPedidoSinCambioDeStock(Pedido p) {
+        this.getPedidos().remove(p);
+        p.getUp().removePedidoPorEliminacion(p);
+        avisar(EventosRestaurante.ACTUALIZACION_SERVICIO);
+    } 
 }
+

@@ -148,8 +148,8 @@ public class Fachada {
         servicioPedidos.confirmarPedido(p);
     }
 
-    public void consultarStock(Collection<Pedido> pedidos) throws StockInsuficienteException {
-        servicioPedidos.consultarStock(pedidos);
+    public void consultarStock(Servicio servicio) throws StockInsuficienteException {
+        servicioPedidos.consultarStock(servicio);
     }
 
 

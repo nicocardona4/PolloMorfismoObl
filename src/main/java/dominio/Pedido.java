@@ -6,7 +6,12 @@ package dominio;
 
 import dominio.EstadosPedidos.EstadoPedido;
 import dominio.EstadosPedidos.PedidoNoConfirmado;
+import static dominio.TipoOperacionStock.CONSULTAR;
+import static dominio.TipoOperacionStock.CONSUMIR;
+import static dominio.TipoOperacionStock.DEVOLVER;
 import iu.EventosRestaurante;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import observer.Observable;
 
@@ -113,6 +118,45 @@ public class Pedido extends Observable{
     public boolean esDeCategoria(Categoria categoria) {
         return this.item.getCategoria().equals(categoria);
     }
+
+//    public void ingredienteInsumoConsulta() {
+//        item.consultarInsumo();
+//    }
+
+    String validarIngredientes(TipoOperacionStock operacion) {
+        String msjStock = "";
+        for (Ingrediente ingrediente : getItem().getIngredientes()) {
+            int cantidad = ingrediente.getCantidad();
+            Insumo insumo = ingrediente.getInsumo();
+            int nuevoStock = insumo.getActualStock();
+
+            switch (operacion) {
+                case CONSUMIR:
+                    if (nuevoStock < insumo.getMinStock()) {
+                        throw new IllegalStateException("Stock insuficiente para el insumo: " + insumo.getNombre());
+                    }
+                    nuevoStock -= cantidad;
+                    break;
+
+                case DEVOLVER:
+                    nuevoStock += cantidad;
+                    break;
+
+                case CONSULTAR:
+                    if (nuevoStock <= insumo.getMinStock()) {
+                        msjStock = "Lo sentimos, nos hemos quedado sin stock de " + this.getItem().getNombre() + "por lo  que hemos quitado el pedido del servicio";
+//                        pedidosAEliminar.put(pedido, "Lo sentimos, nos hemos quedado sin stock de " + pedido.getItem().getNombre() + "por lo  que hemos quitado el pedido del servicio");
+//                        this.getServicio().eliminarPedidoSinCambioDeStock(this);
+//                        insumo.consulta();
+                    }
+            }
+            if(insumo.getActualStock() != nuevoStock){
+                insumo.setActualStock(nuevoStock);
+            }
+        }
+        return msjStock;
+    }
     
+    void insumoConsulta(){}
 }
 

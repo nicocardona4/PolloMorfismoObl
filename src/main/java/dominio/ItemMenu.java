@@ -61,6 +61,12 @@ public class ItemMenu {
     public void setUp(UnidadProcesadora up) {
         this.up = up;
     }
+
+//    void consultarInsumo() {
+//        for(Ingrediente i: ingredientes){
+//            i.getInsumo().consulta();
+//        }
+//    }
     
     
     

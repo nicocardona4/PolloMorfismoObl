@@ -464,8 +464,6 @@ public class RealizarPedidosVistaImpl extends BaseVistaImpl implements RealizarP
     }//GEN-LAST:event_lstCategoriasValueChanged
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-
-        System.out.println(lstItems.getSelectedIndex());
         controlador.agregarPedido(lstItems.getSelectedIndex(), txtComentario.getText());
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -480,8 +478,7 @@ public class RealizarPedidosVistaImpl extends BaseVistaImpl implements RealizarP
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         controlador.pagoRealizado();
-        txtPago.setText("");
-        jCheckBox1.setVisible(false);
+
         iniciarModel();
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
@@ -575,6 +572,11 @@ public class RealizarPedidosVistaImpl extends BaseVistaImpl implements RealizarP
     }
 
     private void iniciarModel() {
+        txtPago.setText("");
+        txtClienteNro.setText("");
+        txtClientePassword.setText("");
+        jCheckBox1.setVisible(false);
+        actualizarPedidos(null);
         TableColumnModel columnModel = tblPedidos.getColumnModel();
         columnModel.getColumn(6).setMinWidth(0);
         columnModel.getColumn(6).setMaxWidth(0);
@@ -615,8 +617,11 @@ public class RealizarPedidosVistaImpl extends BaseVistaImpl implements RealizarP
         DefaultTableModel dtm = (DefaultTableModel) tblPedidos.getModel();
         dtm.setRowCount(0); // Limpia la tabla
 
-        for (Object[] fila : filas) {
-            dtm.addRow(fila); // Agrega cada fila
+        if (filas != null) {
+            for (Object[] fila : filas) {
+                dtm.addRow(fila); 
+            }
         }
+
     }
 }

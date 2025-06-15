@@ -31,7 +31,7 @@ public class BeneficioPorcentual implements Beneficio {
 
     @Override
     public String invitacion(Servicio servicio) {
-    String inv = "Descuento del " + porcentaje;
+    String inv = "Descuento del " + porcentaje + "%. ";
     return inv;    
     }
     

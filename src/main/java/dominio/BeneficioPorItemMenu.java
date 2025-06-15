@@ -44,7 +44,7 @@ public class BeneficioPorItemMenu implements Beneficio  {
     public String invitacion(Servicio servicio) {
         for (Pedido p : servicio.getPedidos()) {
             if (itemsGratis.contains(p.getItem())) {
-                return  p.getItem().getNombre() + " invitación!";
+                return  p.getItem().getNombre() + " invitación! ";
             }
         }
         return ""; 

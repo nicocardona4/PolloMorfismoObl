@@ -25,7 +25,7 @@ public class BeneficioMontoFijo implements Beneficio {
 
     @Override
     public String invitacion(Servicio servicio) {
-        return "Descuento de $" + montoDescuento; 
+        return "Descuento de $" + montoDescuento + ". "; 
     }
     
 }

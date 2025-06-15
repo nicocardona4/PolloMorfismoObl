@@ -25,6 +25,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
 import observer.Observable;
@@ -45,7 +47,6 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
     private List<ItemMenu> itemsVisibles = new ArrayList<>();
     private DefaultTableModel dtm;
     private Collection<Pedido> pedidos = new ArrayList<Pedido>();
-    
 
     public RealizarPedidosControlador(RealizarPedidosVistaImpl vista, Dispositivo d, DefaultTableModel dtm, Servicio servicio1) {
         super(vista);
@@ -106,10 +107,10 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
             consultarStock();
 
         }
-        if(EventosRestaurante.FINALIZACION_PEDIDO.equals(evento)){
+        if (EventosRestaurante.FINALIZACION_PEDIDO.equals(evento)) {
             actualizarPedidos();
             mostrarMensajeDeError("Teiene pedido para retirar");
-            
+
         }
         if (EventosRestaurante.ACTUALIZACION_SERVICIO.equals(evento)) {
             actualizarPedidos();
@@ -117,7 +118,7 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
 
         }
         if (EventosRestaurante.ASIGNACION_PEDIDO.equals(evento)) {
-           actualizarPedidos();
+            actualizarPedidos();
         }
 
     }
@@ -144,35 +145,56 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
             p = (Pedido) dtm.getValueAt(fila, 6);
         }
         try {
+            verificarCliente("eliminar pedidos");
+            validarIndice(fila, "pedido");
             p.eliminarPedido();
             actualizarPedidos();
+        } catch (LoginException ex) {
+            mostrarMensajeDeError(ex.getMessage());
+        } catch (PedidoInvalidoException ex) {
+            mostrarMensajeDeError(ex.getMessage());
         } catch (IllegalStateException ex) {
             mostrarMensajeDeError(ex.getMessage());
         }
     }
 
     public void pagoRealizado() {
-        servicio.finalizarServicio();
-        dispositivo.setEnUso(false);
-        double total = servicio.getTotal();
-        double descuento = cliente.calcularDescuento(servicio);
-        total = total - descuento;
-        String mensaje = cliente.getInvitaciones(servicio);
-        mostrarMensajeDeError(mensaje);
-        
+        try {
+            verificarCliente("confirmar el servicio");
+            servicio.finalizarServicio();
+            dispositivo.setEnUso(false);
+            double total = servicio.getTotal();
+            double descuento = cliente.calcularDescuento(servicio);
+            total = total - descuento;
+            String mensaje = cliente.getInvitaciones(servicio);
+            mensaje += "Monto total: $" + total + " - " + "beneficio: $" + descuento + " --CLIENTETIPO:" + cliente.getTipoNombre();
+            mostrarMensajeDeError(mensaje);
+
+        } catch (LoginException ex) {
+            mostrarMensajeDeError(ex.getMessage());
+
+        }
     }
 
     public void confirmarPedidos() {
         pedidos = servicio.getPedidos();
+        Boolean algunoConfirmado = false;
         for (Pedido p : pedidos) {
-            p.confirmarPedido();
-            suscribirComoObservador(p.getUp());
+            try {
+                p.confirmarPedido();
+                suscribirComoObservador(p.getUp());
+                algunoConfirmado = true;
+            } catch (IllegalStateException ex) {
+                mostrarMensajeDeError(ex.getMessage());
+            }
         }
+        if (!algunoConfirmado) {
+            mostrarMensajeDeError("No hay pedidos para confirmar");
+        }
+
         servicio.getTotal();
         actualizarPedidos();
-
     }
-
 
     public void consultarStock() {
         try {
@@ -185,8 +207,9 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
 
     public void agregarPedido(int itemIndex, String comentario) {
         try {
-            verificarCliente();
+            verificarCliente("realizar pedidos");
             agregarPedidoIniciar(obtenerItemSeleccionado(itemIndex), comentario);
+            calcularMonto();
         } catch (LoginException ex) {
             mostrarMensajeDeError(ex.getMessage());
         } catch (PedidoInvalidoException ex) {
@@ -194,9 +217,9 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
         }
     }
 
-    private void verificarCliente() throws LoginException {
+    private void verificarCliente(String accion) throws LoginException {
         if (cliente == null) {
-            throw new LoginException("Debe identificarse antes de realizar pedidos");
+            throw new LoginException("Debe identificarse antes " + accion);
         }
     }
 
@@ -219,11 +242,17 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
     }
 
     private ItemMenu obtenerItemSeleccionado(int index) throws PedidoInvalidoException {
-        if (index < 0) {
-            throw new PedidoInvalidoException("Debe seleccionar un item");
-        }
+
+        validarIndice(index, "item");
+
         return itemsVisibles.get(index);
 
+    }
+
+    private void validarIndice(int index, String seleccionado) throws PedidoInvalidoException {
+        if (index < 0) {
+            throw new PedidoInvalidoException("Debe seleccionar un " + seleccionado);
+        }
     }
 
     private void actualizarPedidos() {
@@ -250,8 +279,8 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
     }
 
     public void calcularMonto() {
-        vista.calcularMonto(String.format("Total: $%.2f", servicio.getTotal()));
+        String monto = String.format("%.2f", servicio.getTotal());
+        System.out.println("MONTO: " + monto);
+        vista.calcularMonto(monto);
     }
 }
-
-

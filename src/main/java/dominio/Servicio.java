@@ -56,6 +56,7 @@ public class Servicio extends Observable {
     }
 
     public float getTotal() {
+        total = 0;
         for (Pedido p : pedidos) {
             total += p.getCostoPedido();
         }

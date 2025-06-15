@@ -59,6 +59,7 @@ public class Pedido extends Observable{
     
     public void entregarPedido() {
         estadoPedido.entregarPedido();
+        avisar(EventosRestaurante.ENTREGA_PEDIDO);
     }
     
     public void finalizarPedido() {

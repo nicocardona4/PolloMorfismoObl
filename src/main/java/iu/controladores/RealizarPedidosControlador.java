@@ -101,25 +101,20 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
     @Override
     public void actualizar(Observable origen, Object evento) {
         if (EventosRestaurante.ACTUALIZACION_STOCK.equals(evento)) {
-            System.out.println("ACTUALIZACION DE STOCK RECIBIDA");
             vista.mostrarCategorias(categorias);
-//            actualizarItems();
             consultarStock();
 
         }
         if (EventosRestaurante.FINALIZACION_PEDIDO.equals(evento)) {
             actualizarPedidos();
-            mostrarMensajeDeError("Teiene pedido para retirar");
+            mostrarMensajeDeError("Un pedido ha finalizado, ya lo puede retirar");
+        }
+        if (EventosRestaurante.ACTUALIZACION_SERVICIO.equals(evento) || EventosRestaurante.ASIGNACION_PEDIDO.equals(evento) 
+                || EventosRestaurante.ENTREGA_PEDIDO.equals(evento)) {
+            actualizarPedidos();
 
         }
-        if (EventosRestaurante.ACTUALIZACION_SERVICIO.equals(evento)) {
-            actualizarPedidos();
-            System.out.println("ACTUIALÑIZACION DE SERVICIO");
 
-        }
-        if (EventosRestaurante.ASIGNACION_PEDIDO.equals(evento)) {
-            actualizarPedidos();
-        }
 
     }
 
@@ -167,7 +162,7 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
             double descuento = cliente.calcularDescuento(servicio);
             total = total - descuento;
             String mensaje = cliente.getInvitaciones(servicio);
-            mensaje += "Monto total: $" + total + " - " + "beneficio: $" + descuento + " --CLIENTETIPO:" + cliente.getTipoNombre();
+            mensaje += "Monto total: $" + servicio.getTotal() + " - " + "beneficio: $" + descuento + " --CLIENTETIPO:" + cliente.getTipoNombre();
             mostrarMensajeDeError(mensaje);
 
         } catch (LoginException ex) {
@@ -180,6 +175,7 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
         pedidos = servicio.getPedidos();
         Boolean algunoConfirmado = false;
         for (Pedido p : pedidos) {
+            suscribirComoObservador(p);
             try {
                 p.confirmarPedido();
                 suscribirComoObservador(p.getUp());
@@ -266,7 +262,7 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
                 fila[0] = pedido.getItem().getNombre();
                 fila[1] = pedido.getDescripcion();
                 fila[2] = pedido.getEstadoActual();
-                fila[3] = pedido.getUp().getNombre();
+                fila[3] = (pedido.getEstadoActual() != "Sin confirmar") ? pedido.getUp().getNombre() : "En espera";
                 fila[4] = (gestor != null) ? gestor.getNombreCompleto() : "En espera";
                 fila[5] = pedido.getCostoPedido();
                 fila[6] = pedido;

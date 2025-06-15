@@ -572,6 +572,7 @@ public class RealizarPedidosVistaImpl extends BaseVistaImpl implements RealizarP
     }
 
     private void iniciarModel() {
+        lblMonto.setText("");
         txtPago.setText("");
         txtClienteNro.setText("");
         txtClientePassword.setText("");
@@ -583,6 +584,7 @@ public class RealizarPedidosVistaImpl extends BaseVistaImpl implements RealizarP
         columnModel.getColumn(6).setPreferredWidth(0);
         columnModel.getColumn(6).setResizable(false);
         setTitle("Realizar Pedidos");
+        lstItems.setModel(new DefaultListModel<>());
         controlador.cargarCategorias();
     }
 

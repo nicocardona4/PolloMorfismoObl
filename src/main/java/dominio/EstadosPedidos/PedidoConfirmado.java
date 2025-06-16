@@ -19,7 +19,7 @@ public class PedidoConfirmado  extends EstadoPedido{
     }
     
     @Override
-    public void eliminarPedido(Pedido pedido) {
+    public void eliminarPedido(Pedido pedido) throws IllegalStateException{
 //        System.out.println("Eliminando pedido confirmado...");
         Fachada.getInstancia().EliminarPedido(pedido,pedido.getServicio());
     }

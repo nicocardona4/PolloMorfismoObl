@@ -140,7 +140,7 @@ public class Fachada {
         return servicioPedidos.agregarPedido(itemSeleccionado, comentario,servicio);
     }
 
-    public void EliminarPedido(Pedido p, Servicio servicio) {
+    public void EliminarPedido(Pedido p, Servicio servicio) throws IllegalStateException {
         servicioPedidos.eliminarPedido(p,servicio);
     }
     

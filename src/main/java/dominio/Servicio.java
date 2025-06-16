@@ -36,6 +36,9 @@ public class Servicio extends Observable {
         return estado;
     }
 
+    public String getEstadoNombre() {
+        return estado.getEstadoNombre();
+    }
     public void setEstado(EstadoServicio estado) {
         this.estado = estado;
     }

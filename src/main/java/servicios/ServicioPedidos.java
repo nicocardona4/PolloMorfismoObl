@@ -125,10 +125,12 @@ public class ServicioPedidos {
     }
 
     void eliminarPedido(Pedido p, Servicio servicio) {
-        servicio.getPedidos().remove(p);
-        p.getUp().removePedidoPorEliminacion(p);
-        actualizarStock(p, TipoOperacionStock.DEVOLVER);
-
+        if(servicio.getEstadoNombre() == "Finalizado"){
+            throw new IllegalStateException("No se puede eliminar pedidos, el servicio ha finalizado");
+        }
+            servicio.getPedidos().remove(p);
+            p.getUp().removePedidoPorEliminacion(p);
+            actualizarStock(p, TipoOperacionStock.DEVOLVER);
     }
 
     void consultarStock(Servicio servicio) throws StockInsuficienteException {

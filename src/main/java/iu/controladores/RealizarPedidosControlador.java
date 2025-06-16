@@ -32,7 +32,7 @@ import servicios.Fachada;
  */
 public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPedidosVista> implements Observador {
 
-    private RealizarPedidosVistaImpl vista;
+    private RealizarPedidosVista vista;
     private Dispositivo dispositivo;
     private Servicio servicio = new Servicio();
     private Cliente cliente;
@@ -42,7 +42,7 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
     private Collection<Pedido> pedidos = new ArrayList<Pedido>();
 
 
-    public RealizarPedidosControlador(RealizarPedidosVistaImpl vista, Dispositivo d, DefaultTableModel dtm, Servicio servicio1) {
+    public RealizarPedidosControlador(RealizarPedidosVista vista, Dispositivo d, DefaultTableModel dtm, Servicio servicio1) {
         super(vista);
         this.vista = vista;
         this.dtm = dtm;

@@ -12,12 +12,14 @@ import java.util.Collection;
  * @author maurizio
  */
 public class TipoCliente {
+
     private String nombre;
     private Collection<Beneficio> beneficios;
 
     public TipoCliente(String nombre, Collection<Beneficio> beneficios) {
         this.nombre = nombre;
         this.beneficios = beneficios;
+        validar();
     }
 
     public double calcularDescuento(Servicio servicio) {
@@ -27,18 +29,25 @@ public class TipoCliente {
     public String getNombre() {
         return nombre;
     }
-    
-    public String getInvitaciones(Servicio servicio) {
-    StringBuilder sb = new StringBuilder();
 
-    for (Beneficio b : beneficios) {
-        String invitacion = b.invitacion(servicio);
-        if (invitacion != null && !invitacion.isBlank()) {
-            sb.append(invitacion).append("\n");
+    public String getInvitaciones(Servicio servicio) {
+        StringBuilder sb = new StringBuilder();
+
+        for (Beneficio b : beneficios) {
+            String invitacion = b.invitacion(servicio);
+            if (invitacion != null && !invitacion.isBlank()) {
+                sb.append(invitacion).append("\n");
+            }
         }
+
+        return sb.toString().trim();
     }
 
-    return sb.toString().trim();
-}
+    private void validar() {
+
+        if (this.nombre.isEmpty() || this.nombre.isBlank()) {
+            throw new IllegalArgumentException("Debe ingresar un nombre de cliente tipo");
+        }
+    }
 
 }

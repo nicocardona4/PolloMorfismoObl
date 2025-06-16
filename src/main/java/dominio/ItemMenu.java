@@ -12,6 +12,7 @@ import java.util.Collection;
  * @author maurizio
  */
 public class ItemMenu {
+
     private String nombre;
     private float precio;
     private Collection<Ingrediente> ingredientes;
@@ -28,6 +29,7 @@ public class ItemMenu {
         this.categoria = c;
         this.ingredientes = new ArrayList<>();
         this.up = uni;
+        validar();
     }
 
     public String getNombre() {
@@ -67,7 +69,20 @@ public class ItemMenu {
 //            i.getInsumo().consulta();
 //        }
 //    }
-    
-    
-    
+    private void validar() {
+        if (this.nombre.isBlank() || this.nombre.isEmpty()) {
+            throw new IllegalArgumentException("Debe ingresar un nombre de item");
+        }
+        if (this.categoria == null) {
+            throw new IllegalArgumentException("Debe ingresar una categoria valida");
+        }
+        if (this.precio < 1) {
+            throw new IllegalArgumentException("Debe ingresar un precio de item");
+        }
+        if (this.up == null) {
+            throw new IllegalArgumentException("Debe ingresar una UP valida");
+        }
+
+    }
+
 }

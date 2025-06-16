@@ -18,6 +18,7 @@ public class Sesion {
     public Sesion(Gestor usuario) {
         this.usuario = usuario;
         this.ingreso = LocalDateTime.now();
+        validar();
     }
 
     public Gestor getUsuario() {
@@ -26,5 +27,11 @@ public class Sesion {
 
     public LocalDateTime getIngreso() {
         return ingreso;
+    }
+
+    private void validar() {
+        if (usuario == null) {
+            throw new IllegalArgumentException("Debe ingresar un gestor");
+        }
     }
 }

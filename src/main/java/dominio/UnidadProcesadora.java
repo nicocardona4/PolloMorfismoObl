@@ -22,6 +22,7 @@ public class UnidadProcesadora extends Observable {
         this.nombre = nombre;
         this.gestores = new ArrayList<>();
         this.pedidosPendientesAsig = new ArrayList<>();
+        validar();
     }
 
     public String getNombre() {
@@ -67,6 +68,10 @@ public class UnidadProcesadora extends Observable {
             this.pedidosPendientesAsig.remove(p);
         }
         
+    }
+
+    private void validar() {
+        if (nombre.isBlank() || nombre.isEmpty()) throw new IllegalArgumentException("Ingrese un nobmre de UP");
     }
     
     

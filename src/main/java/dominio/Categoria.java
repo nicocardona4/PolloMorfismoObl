@@ -6,16 +6,18 @@ package dominio;
 
 import java.util.Objects;
 
-
 /**
  *
  * @author nicoc
  */
 public class Categoria {
+
     private String nombre;
 
     public Categoria(String nombre) {
         this.nombre = nombre;
+        validar();
+
     }
 
     @Override
@@ -42,5 +44,11 @@ public class Categoria {
     public String getNombre() {
         return nombre;
     }
-    
+
+    private void validar() {
+        if (nombre.isEmpty() || nombre.isBlank()) {
+            throw new IllegalArgumentException("El nombre de la categoría no puede ser vacío (\"" + nombre + "\")");
+        }
+    }
+
 }

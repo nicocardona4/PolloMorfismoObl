@@ -19,7 +19,8 @@ import observer.Observable;
  *
  * @author nicoc
  */
-public class Pedido extends Observable{
+public class Pedido extends Observable {
+
     private static int contadorPedidoId = 0;
     private int pedidoId;
     private EstadoPedido estadoPedido;
@@ -29,9 +30,9 @@ public class Pedido extends Observable{
     private Date fechaCreacion;
     private Servicio servicio;
     private UnidadProcesadora up;
-            
-    public Pedido(ItemMenu item, String descripcion,Servicio servicio){
-        this.estadoPedido = new PedidoNoConfirmado(this,"No Confirmado");
+
+    public Pedido(ItemMenu item, String descripcion, Servicio servicio) {
+        this.estadoPedido = new PedidoNoConfirmado(this, "No Confirmado");
         this.item = item;
         this.descripcion = descripcion;
         this.costoPëdido = item.getPrecio();
@@ -39,43 +40,44 @@ public class Pedido extends Observable{
         this.fechaCreacion = new Date();
         this.servicio = servicio;
         this.up = item.getUp();
+        validar();
     }
-    
-    public float getCostoPedido(){
-    return costoPëdido;
+
+    public float getCostoPedido() {
+        return costoPëdido;
     }
-    
+
     public void confirmarPedido() {
         estadoPedido.confirmarPedido();
     }
-    
+
     public void eliminarPedido() {
         estadoPedido.eliminarPedido(this);
     }
-    
+
     public void cobrarPedido() {
         estadoPedido.cobrarPedido(this);
     }
-    
+
     public void entregarPedido() {
         estadoPedido.entregarPedido();
         avisar(EventosRestaurante.ENTREGA_PEDIDO);
     }
-    
+
     public void finalizarPedido() {
         estadoPedido.finalizarPedido();
         avisar(EventosRestaurante.FINALIZACION_PEDIDO);
 
     }
-    
-    public void tomarPedido(Gestor gestor){
+
+    public void tomarPedido(Gestor gestor) {
         estadoPedido.tomarPedido(gestor);
     }
-    
+
     public void setEstado(EstadoPedido estado) {
         this.estadoPedido = estado;
     }
-    
+
     public String getEstadoActual() {
         return estadoPedido.getNombreEstado();
     }
@@ -95,8 +97,8 @@ public class Pedido extends Observable{
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    
-    public int getPedidoId(){
+
+    public int getPedidoId() {
         return this.pedidoId;
     }
 
@@ -123,7 +125,6 @@ public class Pedido extends Observable{
 //    public void ingredienteInsumoConsulta() {
 //        item.consultarInsumo();
 //    }
-
     String validarIngredientes(TipoOperacionStock operacion) {
         String msjStock = "";
         for (Ingrediente ingrediente : getItem().getIngredientes()) {
@@ -151,13 +152,32 @@ public class Pedido extends Observable{
 //                        insumo.consulta();
                     }
             }
-            if(insumo.getActualStock() != nuevoStock){
+            if (insumo.getActualStock() != nuevoStock) {
                 insumo.setActualStock(nuevoStock);
             }
         }
         return msjStock;
     }
-    
-    void insumoConsulta(){}
-}
 
+    void insumoConsulta() {
+    }
+
+    private void validar() {
+        if (this.item == null) {
+            throw new IllegalArgumentException("Debe ingresar un item valido");
+        }
+        if (this.servicio == null) {
+            throw new IllegalArgumentException("Debe servicio un item valido");
+        }
+        if (this.up == null) {
+            throw new IllegalArgumentException("Debe ingresar una UP valida");
+        }
+        if (this.descripcion.isBlank() || this.descripcion.isEmpty()) {
+            throw new IllegalArgumentException("Debe ingresar una descripcion");
+        }
+        if (this.descripcion.isBlank() || this.descripcion.isEmpty()) {
+            throw new IllegalArgumentException("Debe ingresar una descripcion");
+        }
+
+    }
+}

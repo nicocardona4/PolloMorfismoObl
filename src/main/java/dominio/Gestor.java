@@ -25,6 +25,7 @@ public class Gestor extends Usuario {
         this.gestorId = ++contadorGestorId;
         this.up = up;
         this.pedidosAsignados= new ArrayList<>();
+        validar();
     }
 
     public String getNombreDeUsuario() {
@@ -55,15 +56,7 @@ public class Gestor extends Usuario {
             this.getUp().removePedidoPorAsignacion(p);
        }
     }
-    
-//    public void removePedido(Pedido p){
-//        if(pedidosAsignados.contains(p)){
-//            pedidosAsignados.remove(p);
-//            //Se va a tener que suscribir el usuario que hizo el pedido.
-//            avisar(EventosRestaurante.FINALIZACION_PEDIDO);
-//        }
-//    }
-    
+       
     public Collection<Pedido> getPedidosAsignados(){
         return pedidosAsignados;
     }
@@ -72,4 +65,12 @@ public class Gestor extends Usuario {
         //ToDo:Agregar la excepcion
         return identificador.matches("[a-zA-Z0-9]+");
     }
+
+    private void validar() {
+        if(!esValidoIdentificador(nombreDeUsuario) || this.nombreDeUsuario.isBlank() || this.tipoGestor.isEmpty() || this.up == null){
+            throw new IllegalArgumentException("Gestor no valido, revise los datos ingresados " + this.nombreDeUsuario);
+        }
+    }
+    
+    
 }

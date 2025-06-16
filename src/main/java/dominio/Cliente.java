@@ -25,6 +25,7 @@ public class Cliente extends Usuario {
         this.clienteNro = clienteNro;
         this.tipoCliente = new TipoCliente("Comun", List.of()); // Por defecto
         //todo: prceso de asignacion de dispositivo
+        validar();
     }
 
     public void setTipoCliente(TipoCliente tipoCliente) {
@@ -64,6 +65,15 @@ public class Cliente extends Usuario {
         if (obj == null || getClass() != obj.getClass()) return false;
         Cliente other = (Cliente) obj;
         return this.clienteNro.equals(other.clienteNro);
+    }
+
+    private void validar() {
+        if (!esValidoIdentificador(clienteNro)){
+            throw new IllegalArgumentException("Numero de cliente invalido");
+        }
+        if(this.tipoCliente == null){
+            throw new IllegalArgumentException("Ingrese un tipo de cliente valido");
+        }
     }
     
 }

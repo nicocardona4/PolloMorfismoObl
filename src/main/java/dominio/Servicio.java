@@ -32,6 +32,14 @@ public class Servicio extends Observable {
     private EstadoServicio estado;
     private HashMap<Pedido, String> pedidosAEliminar = new HashMap();
 
+    public Servicio(Cliente cliente) {
+        this.servicioId = ++contadorServicioId;
+        System.out.println("dominio.Servicio.<init>() " + cliente.getClienteNro() + " servicioId " + servicioId);
+        this.cliente = cliente;
+        this.estado = new ServicioIniciado();
+        validar();
+    }
+
     public EstadoServicio getEstado() {
         return estado;
     }
@@ -39,19 +47,13 @@ public class Servicio extends Observable {
     public String getEstadoNombre() {
         return estado.getEstadoNombre();
     }
+
     public void setEstado(EstadoServicio estado) {
         this.estado = estado;
     }
 
     public Servicio() {
         this.servicioId = ++contadorServicioId;
-    }
-
-    public Servicio(Cliente cliente) {
-        this.servicioId = ++contadorServicioId;
-        System.out.println("dominio.Servicio.<init>() " + cliente.getClienteNro() + " servicioId " + servicioId);
-        this.cliente = cliente;
-        this.estado = new ServicioIniciado();
     }
 
     public int getServicioId() {
@@ -123,9 +125,15 @@ public class Servicio extends Observable {
 
         }
     }
-    
-    public void FinalizarServicio(){
+
+    public void FinalizarServicio() {
         estado.finalizarServicio(this);
+    }
+
+    private void validar() {
+        if (this.cliente == null) {
+            throw new IllegalArgumentException("Debe ingresar un cliente");
+        }
     }
 
 }

@@ -7,30 +7,14 @@ package iu;
 import dominio.Categoria;
 import dominio.Cliente;
 import dominio.Dispositivo;
-import dominio.Gestor;
-import dominio.Ingrediente;
-import dominio.Insumo;
 import dominio.ItemMenu;
-import dominio.Pedido;
 import dominio.Servicio;
-import excepciones.LoginException;
-import excepciones.PedidoInvalidoException;
-import excepciones.StockInsuficienteException;
-import iu.controladores.ProcesarPedidosControlador;
 import iu.controladores.RealizarPedidosControlador;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
-import observer.Observable;
-import observer.Observador;
-import servicios.Fachada;
+
 
 /**
  *
@@ -45,8 +29,6 @@ public class RealizarPedidosVistaImpl extends BaseVistaImpl implements RealizarP
      * Creates new form RealizarPedidosVista
      */
     public RealizarPedidosVistaImpl(java.awt.Frame parent, Dispositivo d) {
-//        super(parent,false);
-
         initComponents();
         controlador = new RealizarPedidosControlador(this, d, (DefaultTableModel) tblPedidos.getModel(), servicio);
         iniciarModel();
@@ -463,7 +445,6 @@ public class RealizarPedidosVistaImpl extends BaseVistaImpl implements RealizarP
     private void lstCategoriasValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstCategoriasValueChanged
         if (lstCategorias.getSelectedIndex() >= 0) {
             controlador.categoriaSeleccionada(lstCategorias.getSelectedIndex());
-
         }
     }//GEN-LAST:event_lstCategoriasValueChanged
 
@@ -472,7 +453,6 @@ public class RealizarPedidosVistaImpl extends BaseVistaImpl implements RealizarP
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
         finalizarServicio();
     }//GEN-LAST:event_jButton5ActionPerformed
 
@@ -484,12 +464,10 @@ public class RealizarPedidosVistaImpl extends BaseVistaImpl implements RealizarP
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         controlador.pagoRealizado();
-
         iniciarModel();
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-
     }//GEN-LAST:event_formWindowClosed
 
 //    /**
@@ -604,13 +582,11 @@ public class RealizarPedidosVistaImpl extends BaseVistaImpl implements RealizarP
         DefaultListModel<String> modeloCategorias = new DefaultListModel<>();
         for (Categoria c : categorias) {
             modeloCategorias.addElement(c.getNombre());
-
         }
         lstCategorias.setModel(modeloCategorias);
     }
 
     public void mostrarItems(List<ItemMenu> itemsVisibles) {
-
         DefaultListModel<String> modeloItems = new DefaultListModel<>();
         for (ItemMenu item : itemsVisibles) {
             modeloItems.addElement(item.getNombre() + " - " + item.getPrecio());
@@ -621,13 +597,11 @@ public class RealizarPedidosVistaImpl extends BaseVistaImpl implements RealizarP
     public void actualizarPedidos(List<Object[]> filas) {
         DefaultTableModel dtm = (DefaultTableModel) tblPedidos.getModel();
         dtm.setRowCount(0); // Limpia la tabla
-
         if (filas != null) {
             for (Object[] fila : filas) {
                 dtm.addRow(fila); 
             }
         }
-
     }
 
     @Override

@@ -11,7 +11,8 @@ import observer.Observable;
  *
  * @author maurizio
  */
-public class Insumo extends Observable{
+public class Insumo extends Observable {
+
     private String nombre; //Idem nombre de ingrediente
     private int minStock;
     private int actualStock;
@@ -20,6 +21,7 @@ public class Insumo extends Observable{
         this.nombre = nombre;
         this.minStock = minStock;
         this.actualStock = actualStock;
+        validar();
     }
 
     public String getNombre() {
@@ -47,15 +49,18 @@ public class Insumo extends Observable{
         this.actualStock = actualStock;
 
     }
-    
-    public Boolean hayStock(){
+
+    public Boolean hayStock() {
         return minStock <= actualStock;
     }
 
-//    public void consulta() {
-////        System.out.println("CONSULTA STCOK");
-//        avisar(EventosRestaurante.CONSULTA_STOCK);
-//    }
-    
-    
+    private void validar() {
+        if(this.nombre.isBlank() || this.nombre.isEmpty()){
+            throw new IllegalArgumentException("Nombre de insumo invalido");
+        }
+        if(minStock < 1) throw new IllegalArgumentException("el stock minimo debe ser mayor a 0");
+        if(this.actualStock < 0) throw new IllegalArgumentException("el stock actual debe ser positivo");
+
+    }
+
 }

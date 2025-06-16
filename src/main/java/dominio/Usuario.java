@@ -16,6 +16,7 @@ public abstract class Usuario extends Observable{
     public Usuario(String nombreCompleto, String password) {
         this.password = password;
         this.nombreCompleto = nombreCompleto;
+        validar();
     }
 
 
@@ -37,4 +38,9 @@ public abstract class Usuario extends Observable{
     }
     
     public abstract boolean esValidoIdentificador(String identificador);
+
+    private void validar() {
+        if(this.nombreCompleto.isBlank() || nombreCompleto.isEmpty())throw new IllegalArgumentException("Ingrese nombre completo");
+        if(this.password.isBlank() || this.password.isEmpty())throw new IllegalArgumentException("ingrese una password");
+    }
 }

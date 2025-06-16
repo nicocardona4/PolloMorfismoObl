@@ -145,7 +145,7 @@ public class Pedido extends Observable{
 
                 case CONSULTAR:
                     if (nuevoStock <= insumo.getMinStock()) {
-                        msjStock = "Lo sentimos, nos hemos quedado sin stock de " + this.getItem().getNombre() + "por lo  que hemos quitado el pedido del servicio";
+                        msjStock = "Lo sentimos, nos hemos quedado sin stock de " + this.getItem().getNombre() + " por lo  que hemos quitado el pedido del servicio";
 //                        pedidosAEliminar.put(pedido, "Lo sentimos, nos hemos quedado sin stock de " + pedido.getItem().getNombre() + "por lo  que hemos quitado el pedido del servicio");
 //                        this.getServicio().eliminarPedidoSinCambioDeStock(this);
 //                        insumo.consulta();

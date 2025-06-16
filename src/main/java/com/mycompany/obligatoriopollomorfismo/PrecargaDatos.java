@@ -49,7 +49,7 @@ public class PrecargaDatos {
         f.agregarCliente(pablo);
 
         UnidadProcesadora up1 = new UnidadProcesadora("Cocina");
-        Gestor gestorComercial = new Gestor("carlosg", "pass123", "Carlos Gómez", "gestor comercial",up1);
+        Gestor gestorComercial = new Gestor("carlosg", "pass1234", "Carlos Gómez", "gestor comercial",up1);
         f.agregarGestor(gestorComercial);
         f.agregarGestorUP(gestorComercial, up1);
 
@@ -84,10 +84,11 @@ public class PrecargaDatos {
         f.agregarCategoria(catCafes);
 
         ItemMenu im1 = new ItemMenu("Ensalada", 300, catEntradas,up1);
-        ItemMenu im2 = new ItemMenu("Picada completa", 1550, catEntradas,up1);
-        ItemMenu im3 = new ItemMenu("Agua", 120, catBebidas,up2);
+        ItemMenu im2 = new ItemMenu("Picada completa", 1500, catEntradas,up1);
+        ItemMenu im3 = new ItemMenu("Agua", 100, catBebidas,up2);
         ItemMenu im4 = new ItemMenu("Chajá", 700, catPostres,up1);
-        ItemMenu im5 = new ItemMenu("Vino blanco", 440, catVinos,up2);
+        ItemMenu im5 = new ItemMenu("Vino blanco", 500, catVinos,up2);
+        ItemMenu im6 = new ItemMenu("Cortado", 500, catCafes,up2);
         
         Insumo harina = new Insumo("Harina", 100, 200);
         Insumo azucar = new Insumo("Azúcar", 80, 150);
@@ -156,12 +157,15 @@ public class PrecargaDatos {
         im5.getIngredientes().add(ingVainilla);   // Nota aromática
         im5.getIngredientes().add(ingAzucar);     // Para suavidad
         im5.getIngredientes().add(ingFrutilla);   // Toque frutal
+        
+        im6.getIngredientes().add(ingCafé);
 
         f.agregarItem(im1);
         f.agregarItem(im2);
         f.agregarItem(im3);
         f.agregarItem(im4);
         f.agregarItem(im5);
+        f.agregarItem(im6);
         
         Set<ItemMenu> itemsGratis = Set.of(im3);
         
@@ -181,7 +185,7 @@ public class PrecargaDatos {
         TipoCliente comun = new TipoCliente("Comun", List.of(
         ));  
         
-        f.agregarTipoCliente(juan, preferencial);
+        f.agregarTipoCliente(juan, frecuentes);
         
         Servicio sJuan = new Servicio(pablo);
         Pedido p1 = new Pedido(im1,"Ensalada de la casa",sJuan);

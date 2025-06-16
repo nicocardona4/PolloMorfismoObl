@@ -120,5 +120,9 @@ public class Servicio extends Observable {
 
         }
     }
+    
+    public void FinalizarServicio(){
+        estado.finalizarServicio(this);
+    }
 
 }

@@ -54,10 +54,12 @@ public class RealizarPedidosVistaImpl extends BaseVistaImpl implements RealizarP
     }
 
     private void finalizarServicio() {
-        jCheckBox1.setVisible(true);
-        txtPago.setText("Pago realizado");
+        controlador.finalizarServicio();
     }
-
+    
+    public void servicioFinalizadoConExito(Boolean pago){
+        jCheckBox1.setVisible(pago);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -377,6 +379,7 @@ public class RealizarPedidosVistaImpl extends BaseVistaImpl implements RealizarP
 
         jLabel8.setText("Pedidos del servicio");
 
+        txtPago.setEditable(false);
         txtPago.setColumns(20);
         txtPago.setRows(5);
         jScrollPane6.setViewportView(txtPago);
@@ -401,8 +404,8 @@ public class RealizarPedidosVistaImpl extends BaseVistaImpl implements RealizarP
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 740, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 728, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
                                 .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 704, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -445,6 +448,7 @@ public class RealizarPedidosVistaImpl extends BaseVistaImpl implements RealizarP
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLoginActionPerformed
+        mostrarMensaje("");
         controlador.loginIniciar(txtClienteNro.getText(), txtClientePassword.getText());
     }//GEN-LAST:event_txtLoginActionPerformed
 
@@ -474,6 +478,8 @@ public class RealizarPedidosVistaImpl extends BaseVistaImpl implements RealizarP
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         controlador.eliminarPedido(tblPedidos.getSelectedRow());
+        lstItems.setModel(new DefaultListModel<>());
+        txtComentario.setText("");
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
@@ -572,8 +578,8 @@ public class RealizarPedidosVistaImpl extends BaseVistaImpl implements RealizarP
     }
 
     private void iniciarModel() {
-        lblMonto.setText("");
-        txtPago.setText("");
+        System.out.println("ENTREEEWEE");
+        lblMonto.setText("0");
         txtClienteNro.setText("");
         txtClientePassword.setText("");
         jCheckBox1.setVisible(false);
@@ -588,10 +594,7 @@ public class RealizarPedidosVistaImpl extends BaseVistaImpl implements RealizarP
         controlador.cargarCategorias();
     }
 
-    @Override
-    protected void avisarAlControladorDelPedidoDeCierre() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+
 
     public void mostrarCliente(Cliente cliente) {
         setTitle("Realizar Pedidos - Cliente: " + cliente.getNombreCompleto());
@@ -625,5 +628,14 @@ public class RealizarPedidosVistaImpl extends BaseVistaImpl implements RealizarP
             }
         }
 
+    }
+
+    @Override
+    protected void avisarAlControladorDelPedidoDeCierre() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void mostrarMensaje(String mensaje) {
+        txtPago.setText(mensaje);
     }
 }

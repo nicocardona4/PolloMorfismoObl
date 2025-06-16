@@ -8,7 +8,6 @@ import dominio.Categoria;
 import dominio.Cliente;
 import dominio.Dispositivo;
 import dominio.Gestor;
-import dominio.Ingrediente;
 import dominio.Insumo;
 import dominio.ItemMenu;
 import dominio.Pedido;
@@ -17,17 +16,11 @@ import excepciones.LoginException;
 import excepciones.PedidoInvalidoException;
 import excepciones.StockInsuficienteException;
 import iu.EventosRestaurante;
-import iu.ProcesarPedidosVista;
 import iu.RealizarPedidosVista;
 import iu.RealizarPedidosVistaImpl;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
 import observer.Observable;
 import observer.Observador;
@@ -48,6 +41,7 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
     private DefaultTableModel dtm;
     private Collection<Pedido> pedidos = new ArrayList<Pedido>();
 
+
     public RealizarPedidosControlador(RealizarPedidosVistaImpl vista, Dispositivo d, DefaultTableModel dtm, Servicio servicio1) {
         super(vista);
         this.vista = vista;
@@ -56,10 +50,12 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
         for (Insumo i : Fachada.getInstancia().getInsumos()) {
             suscribirComoObservador(i);
         }
+        vista.servicioFinalizadoConExito(false);
     }
 
     public void loginIniciar(String clienteNro, String password) {
         try {
+            limpiarMensajeDeError();
             login(clienteNro, password);
         } catch (LoginException ex) {
             mostrarMensajeDeError(ex.getMessage());
@@ -109,12 +105,11 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
             actualizarPedidos();
             mostrarMensajeDeError("Un pedido ha finalizado, ya lo puede retirar");
         }
-        if (EventosRestaurante.ACTUALIZACION_SERVICIO.equals(evento) || EventosRestaurante.ASIGNACION_PEDIDO.equals(evento) 
+        if (EventosRestaurante.ACTUALIZACION_SERVICIO.equals(evento) || EventosRestaurante.ASIGNACION_PEDIDO.equals(evento)
                 || EventosRestaurante.ENTREGA_PEDIDO.equals(evento)) {
             actualizarPedidos();
 
         }
-
 
     }
 
@@ -140,46 +135,42 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
             p = (Pedido) dtm.getValueAt(fila, 6);
         }
         try {
+            limpiarMensajeDeError();
             verificarCliente("eliminar pedidos");
             validarIndice(fila, "pedido");
             p.eliminarPedido();
             actualizarPedidos();
-        } catch (LoginException ex) {
-            mostrarMensajeDeError(ex.getMessage());
-        } catch (PedidoInvalidoException ex) {
-            mostrarMensajeDeError(ex.getMessage());
-        } catch (IllegalStateException ex) {
+            calcularMonto();
+        } catch (LoginException | PedidoInvalidoException | IllegalStateException ex) {
             mostrarMensajeDeError(ex.getMessage());
         }
     }
 
     public void pagoRealizado() {
-        try {
-            verificarCliente("confirmar el servicio");
-            servicio.finalizarServicio();
-            dispositivo.setEnUso(false);
-            double total = servicio.getTotal();
-            double descuento = cliente.calcularDescuento(servicio);
-            total = total - descuento;
-            String mensaje = cliente.getInvitaciones(servicio);
-            mensaje += "Monto total: $" + servicio.getTotal() + " - " + "beneficio: $" + descuento + " --CLIENTETIPO:" + cliente.getTipoNombre();
-            mostrarMensajeDeError(mensaje);
-
-        } catch (LoginException ex) {
-            mostrarMensajeDeError(ex.getMessage());
-
-        }
+        limpiarMensajeDeError();
+        dispositivo.setEnUso(false);
+        double total = servicio.getTotal();
+        double descuento = cliente.calcularDescuento(servicio);
+        total = total - descuento;
+        String mensaje = cliente.getInvitaciones(servicio);
+        mensaje += "Monto subtotal : $" + servicio.getTotal() + " - " + "beneficio: $" + descuento + " Monto a pagar: $" + total;
+        vista.mostrarMensaje(mensaje);
+        cerrarSesion();
     }
 
     public void confirmarPedidos() {
         pedidos = servicio.getPedidos();
         Boolean algunoConfirmado = false;
         for (Pedido p : pedidos) {
+            if(p.getEstadoActual() == "Sin confirmar"){
+                algunoConfirmado = true;
+            }
             suscribirComoObservador(p);
             try {
+                limpiarMensajeDeError();
                 p.confirmarPedido();
                 suscribirComoObservador(p.getUp());
-                algunoConfirmado = true;
+                
             } catch (IllegalStateException ex) {
                 mostrarMensajeDeError(ex.getMessage());
             }
@@ -194,6 +185,7 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
 
     public void consultarStock() {
         try {
+            limpiarMensajeDeError();
             Fachada.getInstancia().consultarStock(servicio);
         } catch (StockInsuficienteException ex) {
             mostrarMensajeDeError(ex.getMessage());
@@ -203,12 +195,11 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
 
     public void agregarPedido(int itemIndex, String comentario) {
         try {
+            limpiarMensajeDeError();
             verificarCliente("realizar pedidos");
             agregarPedidoIniciar(obtenerItemSeleccionado(itemIndex), comentario);
             calcularMonto();
-        } catch (LoginException ex) {
-            mostrarMensajeDeError(ex.getMessage());
-        } catch (PedidoInvalidoException ex) {
+        } catch (LoginException | PedidoInvalidoException ex) {
             mostrarMensajeDeError(ex.getMessage());
         }
     }
@@ -278,5 +269,23 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
         String monto = String.format("%.2f", servicio.getTotal());
         System.out.println("MONTO: " + monto);
         vista.calcularMonto(monto);
+    }
+
+    private void cerrarSesion() {
+        cliente = null;
+        servicio = null;
+        pedidos = null;
+    }
+
+    public void finalizarServicio() {
+        try {
+            limpiarMensajeDeError();
+            verificarCliente("finalizar el servicio");
+            servicio.finalizarServicio();
+            vista.mostrarMensaje("Pago realizado");
+            vista.servicioFinalizadoConExito(true);
+        } catch (LoginException | IllegalStateException ex) {
+            mostrarMensajeDeError(ex.getMessage());
+        }
     }
 }

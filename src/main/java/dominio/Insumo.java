@@ -45,8 +45,8 @@ public class Insumo extends Observable {
     }
 
     public void setActualStock(int actualStock) {
-        avisar(EventosRestaurante.ACTUALIZACION_STOCK);
         this.actualStock = actualStock;
+        avisar(EventosRestaurante.ACTUALIZACION_STOCK);
 
     }
 
@@ -55,11 +55,15 @@ public class Insumo extends Observable {
     }
 
     private void validar() {
-        if(this.nombre.isBlank() || this.nombre.isEmpty()){
+        if (this.nombre.isBlank() || this.nombre.isEmpty()) {
             throw new IllegalArgumentException("Nombre de insumo invalido");
         }
-        if(minStock < 1) throw new IllegalArgumentException("el stock minimo debe ser mayor a 0");
-        if(this.actualStock < 0) throw new IllegalArgumentException("el stock actual debe ser positivo");
+        if (minStock < 1) {
+            throw new IllegalArgumentException("el stock minimo debe ser mayor a 0");
+        }
+        if (this.actualStock < 0) {
+            throw new IllegalArgumentException("el stock actual debe ser positivo");
+        }
 
     }
 

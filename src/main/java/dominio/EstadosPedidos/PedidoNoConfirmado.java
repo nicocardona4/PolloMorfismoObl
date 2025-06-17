@@ -21,8 +21,9 @@ public class PedidoNoConfirmado extends EstadoPedido {
     public void confirmarPedido() {
         System.out.println("Confirmando pedido...");
         Pedido p = this.getPedido();
-        p.setEstado(new PedidoConfirmado(p,"Confirmado"));
         Fachada.getInstancia().confirmarPedido(p);
+        p.setEstado(new PedidoConfirmado(p,"Confirmado"));
+
     }
     
     @Override

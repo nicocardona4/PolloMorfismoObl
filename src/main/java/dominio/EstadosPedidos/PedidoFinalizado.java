@@ -44,5 +44,8 @@ public class PedidoFinalizado extends EstadoPedido {
         throw new IllegalStateException("El pedido ya está finalizado");
     }
     
-    
+    @Override
+    public Boolean estaFinalizado(){
+        return true;
+    }
 }

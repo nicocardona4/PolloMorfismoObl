@@ -21,5 +21,10 @@ public class ServicioFinalizado extends EstadoServicio{
     public String getEstadoNombre() {
         return "Finalizado";
     }
+
+    @Override
+    public Boolean estaFinalizado() {
+        return true;
+    }
     
 }

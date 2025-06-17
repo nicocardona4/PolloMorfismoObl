@@ -94,6 +94,10 @@ public class Pedido extends Observable {
         return descripcion;
     }
 
+    public Boolean estaFinalizado(){
+        return estadoPedido.estaFinalizado();
+    }
+    
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
@@ -172,12 +176,7 @@ public class Pedido extends Observable {
         if (this.up == null) {
             throw new IllegalArgumentException("Debe ingresar una UP valida");
         }
-        if (this.descripcion.isBlank() || this.descripcion.isEmpty()) {
-            throw new IllegalArgumentException("Debe ingresar una descripcion");
-        }
-        if (this.descripcion.isBlank() || this.descripcion.isEmpty()) {
-            throw new IllegalArgumentException("Debe ingresar una descripcion");
-        }
+
 
     }
 }

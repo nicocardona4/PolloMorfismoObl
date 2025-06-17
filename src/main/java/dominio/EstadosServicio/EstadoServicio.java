@@ -13,4 +13,5 @@ import dominio.Servicio;
 public abstract class EstadoServicio {
         public abstract void finalizarServicio(Servicio s);
         public abstract String getEstadoNombre();
+        public abstract Boolean estaFinalizado();
 }

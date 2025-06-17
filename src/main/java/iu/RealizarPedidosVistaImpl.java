@@ -30,7 +30,7 @@ public class RealizarPedidosVistaImpl extends BaseVistaImpl implements RealizarP
      */
     public RealizarPedidosVistaImpl(java.awt.Frame parent, Dispositivo d) {
         initComponents();
-        controlador = new RealizarPedidosControlador(this, d, (DefaultTableModel) tblPedidos.getModel(), servicio);
+        controlador = new RealizarPedidosControlador(this, d, (DefaultTableModel) tblPedidos.getModel());
         iniciarModel();
 
     }
@@ -101,7 +101,7 @@ public class RealizarPedidosVistaImpl extends BaseVistaImpl implements RealizarP
         ));
         jScrollPane4.setViewportView(jTable1);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);

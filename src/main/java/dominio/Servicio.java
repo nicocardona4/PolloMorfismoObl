@@ -34,7 +34,6 @@ public class Servicio extends Observable {
 
     public Servicio(Cliente cliente) {
         this.servicioId = ++contadorServicioId;
-        System.out.println("dominio.Servicio.<init>() " + cliente.getClienteNro() + " servicioId " + servicioId);
         this.cliente = cliente;
         this.estado = new ServicioIniciado();
         validar();

@@ -20,13 +20,13 @@ public class ServicioMenu {
     
     private Menu menu;
     private Collection<Categoria> categorias = new ArrayList<>();
-    private Collection<ItemMenu> items = new ArrayList<>();
+    
     private Collection<Insumo> insumos = new ArrayList<>();    
 
 
      Collection<ItemMenu> getItemDeCategoria(Categoria c) {
         Collection<ItemMenu> resultado = new ArrayList<ItemMenu>();
-        for(ItemMenu im: items)
+        for(ItemMenu im: menu.getInstancia().getItems())
         {
             if(im.getCategoria().equals(c))
             {
@@ -50,7 +50,7 @@ public class ServicioMenu {
     
 
     void agregarItem(ItemMenu im) {
-        items.add(im);
+        menu.getInstancia().getItems().add(im);
     }
 
     Collection<Insumo> getInsumos(){

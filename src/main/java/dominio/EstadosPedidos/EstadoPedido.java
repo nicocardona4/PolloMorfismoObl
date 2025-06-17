@@ -53,6 +53,10 @@ public abstract class EstadoPedido {
         throw new IllegalStateException("No se puede finalizar el pedido en estado: " + 
                                       this.getClass().getSimpleName());
     }
+    
+     public Boolean estaFinalizado(){
+         return false;
+     }
         
     public abstract String getNombreEstado();
 }

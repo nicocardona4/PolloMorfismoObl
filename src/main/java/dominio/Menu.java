@@ -13,7 +13,16 @@ import java.util.Collection;
  */
 public class Menu {
     private Collection<ItemMenu> items = new ArrayList<ItemMenu>();
+    private static Menu instancia = new Menu();
 
+    private Menu() {
+    }
+    
+    public static Menu getInstancia(){
+        return instancia;
+    }
+    
+    
     public Collection<ItemMenu> getItems() {
         return items;
     }

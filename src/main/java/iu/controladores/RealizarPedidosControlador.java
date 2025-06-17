@@ -17,7 +17,6 @@ import excepciones.PedidoInvalidoException;
 import excepciones.StockInsuficienteException;
 import iu.EventosRestaurante;
 import iu.RealizarPedidosVista;
-import iu.RealizarPedidosVistaImpl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -40,9 +39,9 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
     private List<ItemMenu> itemsVisibles = new ArrayList<>();
     private DefaultTableModel dtm;
     private Collection<Pedido> pedidos = new ArrayList<Pedido>();
+    private int indiceCategoriaSeleccionada;
 
-
-    public RealizarPedidosControlador(RealizarPedidosVista vista, Dispositivo d, DefaultTableModel dtm, Servicio servicio1) {
+    public RealizarPedidosControlador(RealizarPedidosVista vista, Dispositivo d, DefaultTableModel dtm) {
         super(vista);
         this.vista = vista;
         this.dtm = dtm;
@@ -86,9 +85,7 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
 
     public void InicializarDispositivo() {
         dispositivo.setEnUso(true);
-        servicio = new Servicio(cliente);
-        System.out.println(servicio.getServicioId());
-        System.out.println(cliente);
+        this.servicio = new Servicio(cliente);
         Fachada.getInstancia().agregarServicio(servicio);
         suscribirComoObservador(servicio);
         vista.mostrarCliente(cliente);
@@ -97,18 +94,18 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
     @Override
     public void actualizar(Observable origen, Object evento) {
         if (EventosRestaurante.ACTUALIZACION_STOCK.equals(evento)) {
-            vista.mostrarCategorias(categorias);
             consultarStock();
-
+            //vista.mostrarCategorias(categorias);
+            categoriaSeleccionada(indiceCategoriaSeleccionada);
+            System.out.println(indiceCategoriaSeleccionada + "INDEX + servicioid" + servicio.getServicioId());
         }
         if (EventosRestaurante.FINALIZACION_PEDIDO.equals(evento)) {
             actualizarPedidos();
             mostrarMensajeDeError("Un pedido ha finalizado, ya lo puede retirar");
         }
         if (EventosRestaurante.ACTUALIZACION_SERVICIO.equals(evento) || EventosRestaurante.ASIGNACION_PEDIDO.equals(evento)
-                || EventosRestaurante.ENTREGA_PEDIDO.equals(evento)) {
+                || EventosRestaurante.ENTREGA_PEDIDO.equals(evento) || EventosRestaurante.CONSULTA_STOCK.equals(evento)){
             actualizarPedidos();
-
         }
 
     }
@@ -159,29 +156,38 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
     }
 
     public void confirmarPedidos() {
-        pedidos = servicio.getPedidos();
-        Boolean algunoConfirmado = false;
-        for (Pedido p : pedidos) {
-            if(p.getEstadoActual() == "Sin confirmar"){
-                algunoConfirmado = true;
-            }
-            suscribirComoObservador(p);
-            try {
-                limpiarMensajeDeError();
-                p.confirmarPedido();
-                suscribirComoObservador(p.getUp());
-                
-            } catch (IllegalStateException ex) {
-                mostrarMensajeDeError(ex.getMessage());
-            }
-        }
-        if (!algunoConfirmado) {
-            mostrarMensajeDeError("No hay pedidos para confirmar");
+    List<Pedido> pedidos = new ArrayList<>(servicio.getPedidos());
+    boolean algunoConfirmado = false;
+
+    int i = 0;
+    while (i < pedidos.size()) {
+        Pedido p = pedidos.get(i);
+
+        if (p.getEstadoActual().equals("Sin confirmar")) {
+            algunoConfirmado = true;
         }
 
-        servicio.getTotal();
-        actualizarPedidos();
+        suscribirComoObservador(p);
+
+        try {
+            limpiarMensajeDeError();
+            p.confirmarPedido();  // si modifica la lista, no rompe el while
+            suscribirComoObservador(p.getUp());
+        } catch (IllegalStateException ex) {
+            mostrarMensajeDeError(ex.getMessage());
+        }
+
+        i++;
     }
+
+    if (!algunoConfirmado) {
+        mostrarMensajeDeError("No hay pedidos para confirmar");
+    }
+
+    servicio.getTotal();
+    actualizarPedidos();
+}
+
 
     public void consultarStock() {
         try {
@@ -211,6 +217,7 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
     }
 
     public void categoriaSeleccionada(int index) {
+        indiceCategoriaSeleccionada = index;
         Categoria categoria = categorias.get(index);
         Collection<ItemMenu> itemsAux = Fachada.getInstancia().getItemsDeCategoria(categoria);
 
@@ -219,8 +226,8 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
         for (ItemMenu item : itemsAux) {
             boolean todosConStock = item.getIngredientes().stream()
                     .allMatch(i -> i.getInsumo().hayStock());
-
             if (todosConStock) {
+                System.out.println(item.getNombre());
                 itemsVisibles.add(item);
             }
         }
@@ -278,14 +285,30 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
     }
 
     public void finalizarServicio() {
+        int pedidosParaRetirar = 0;
         try {
             limpiarMensajeDeError();
             verificarCliente("finalizar el servicio");
-            servicio.finalizarServicio();
-            vista.mostrarMensaje("Pago realizado");
-            vista.servicioFinalizadoConExito(true);
+            if (verificarPedidos()) {
+                servicio.finalizarServicio();
+                for(Pedido p:pedidos){
+                    if(p.getEstadoActual() == "Confirmado"){
+                        pedidosParaRetirar++;
+                    }
+                }
+                mostrarMensajeDeError("Tienes " + pedidosParaRetirar + " pedidos en proceso, recuerda ir a retirarlos!");
+                vista.mostrarMensaje("Pago realizado");
+                vista.servicioFinalizadoConExito(true);
+            }
         } catch (LoginException | IllegalStateException ex) {
             mostrarMensajeDeError(ex.getMessage());
         }
+    }
+
+    private Boolean verificarPedidos() {
+        if (pedidos.size() == 0 || pedidos == null) {
+            return false;
+        }
+        return true;
     }
 }

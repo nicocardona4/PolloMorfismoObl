@@ -15,11 +15,17 @@ public class ServicioIniciado extends EstadoServicio{
     public void finalizarServicio(Servicio s) throws IllegalStateException {
         s.TienePedidosPendientes();
         s.setEstado(new ServicioFinalizado());
+        System.out.println("PEDIDO FINALIZADO CON EXITO");
     }
 
     @Override
     public String getEstadoNombre() {
         return "Iniciado";
+    }
+
+    @Override
+    public Boolean estaFinalizado() {
+        return false;
     }
     
 }

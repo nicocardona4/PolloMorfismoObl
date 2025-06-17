@@ -106,7 +106,7 @@ public class ServicioPedidos {
         Pedido p = new Pedido(itemSeleccionado, comentario, servicio);
         pedidos.add(p);
 
-        //Servicio servicio = getServicioById(servicioId);
+        
         if (servicio != null) {
             servicio.getPedidos().add(p);
         }

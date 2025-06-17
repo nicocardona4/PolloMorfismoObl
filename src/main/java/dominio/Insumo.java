@@ -46,6 +46,8 @@ public class Insumo extends Observable {
 
     public void setActualStock(int actualStock) {
         this.actualStock = actualStock;
+        System.out.println(this.getNombre() +"INSUMO ACTUAL " +this.getActualStock() + "-- STOCK DESPUES");
+
         avisar(EventosRestaurante.ACTUALIZACION_STOCK);
 
     }

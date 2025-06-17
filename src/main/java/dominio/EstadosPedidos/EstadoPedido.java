@@ -59,4 +59,8 @@ public abstract class EstadoPedido {
      }
         
     public abstract String getNombreEstado();
+
+    public boolean esNoConfirmado() {
+        return false;
+    }
 }

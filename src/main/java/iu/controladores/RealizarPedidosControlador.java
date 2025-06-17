@@ -97,14 +97,13 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
             consultarStock();
             //vista.mostrarCategorias(categorias);
             categoriaSeleccionada(indiceCategoriaSeleccionada);
-            System.out.println(indiceCategoriaSeleccionada + "INDEX + servicioid" + servicio.getServicioId());
         }
         if (EventosRestaurante.FINALIZACION_PEDIDO.equals(evento)) {
             actualizarPedidos();
             mostrarMensajeDeError("Un pedido ha finalizado, ya lo puede retirar");
         }
         if (EventosRestaurante.ACTUALIZACION_SERVICIO.equals(evento) || EventosRestaurante.ASIGNACION_PEDIDO.equals(evento)
-                || EventosRestaurante.ENTREGA_PEDIDO.equals(evento) || EventosRestaurante.CONSULTA_STOCK.equals(evento)){
+                || EventosRestaurante.ENTREGA_PEDIDO.equals(evento)){
             actualizarPedidos();
         }
 
@@ -227,7 +226,6 @@ public class RealizarPedidosControlador extends BaseVistaControlador<RealizarPed
             boolean todosConStock = item.getIngredientes().stream()
                     .allMatch(i -> i.getInsumo().hayStock());
             if (todosConStock) {
-                System.out.println(item.getNombre());
                 itemsVisibles.add(item);
             }
         }

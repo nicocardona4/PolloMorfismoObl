@@ -103,6 +103,7 @@ public class Servicio extends Observable {
             throw new StockInsuficienteException(excepciones);
         }
     }
+    
 
     public String actualizarStock(Pedido pedido, TipoOperacionStock operacion) {
         String msjStock = pedido.validarIngredientes(operacion);

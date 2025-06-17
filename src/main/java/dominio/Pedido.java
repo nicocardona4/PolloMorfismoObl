@@ -131,9 +131,11 @@ public class Pedido extends Observable {
 //    }
     String validarIngredientes(TipoOperacionStock operacion) {
         String msjStock = "";
+        System.out.println("OPERACION - " + operacion);
         for (Ingrediente ingrediente : getItem().getIngredientes()) {
             int cantidad = ingrediente.getCantidad();
             Insumo insumo = ingrediente.getInsumo();
+            System.out.println(insumo.getNombre() +"INSUMO ACTUAL " +insumo.getActualStock() + "-- STOCKMINIMO: " + insumo.getMinStock());
             int nuevoStock = insumo.getActualStock();
 
             switch (operacion) {
@@ -156,6 +158,7 @@ public class Pedido extends Observable {
 //                        insumo.consulta();
                     }
             }
+
             if (insumo.getActualStock() != nuevoStock) {
                 insumo.setActualStock(nuevoStock);
             }
@@ -179,4 +182,8 @@ public class Pedido extends Observable {
 
 
     }
+
+
+    boolean esNoConfirmado() {
+ return estadoPedido.esNoConfirmado();    }
 }
